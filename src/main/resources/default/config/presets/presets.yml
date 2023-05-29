@@ -1,0 +1,22 @@
+default-preset:
+   # Optional. Defines the default content inside this tooltip
+   content:
+      # The max amount of lines here, is the amount of lines in the themes settings
+      text:
+      - 'Test Tooltip'
+      - 'Price: 500{gem}'
+      - '(Click to buy)'
+   # Settings related to how this tooltips is displayed
+   display:
+      # Which theme to use
+      theme: default-three-line
+      # The color of the theme (background)
+      color: white
+      # Where should the tooltip be aligned to (horizontally)
+      horizontal-shift: 0
+   # Condition related settings
+   conditions:
+      # List of conditions
+      conditions:
+      - op
+      - lookingatblock{type=bedrock}

@@ -1,0 +1,46 @@
+default-one-line:
+    path: "tooltips:tooltips/default/default-one-line.png"
+    height: 10
+    padding: 1
+    lines: 1
+    ascents:
+        theme-ascent: 0
+        text-start-ascent: -3
+        text-line-spacing: 5
+default-two-line:
+    path: "tooltips:tooltips/default/default-two-line.png"
+    height: 13
+    padding: 1
+    lines: 2
+    ascents:
+        theme-ascent: 0
+        text-start-ascent: -2
+        text-line-spacing: 5
+default-three-line:
+    path: "tooltips:tooltips/default/default-three-line.png"
+    height: 18
+    padding: 1
+    lines: 3
+    ascents:
+        theme-ascent: 0
+        text-start-ascent: -2
+        text-line-spacing: 5
+default-four-line:
+    path: "tooltips:tooltips/default/default-four-line.png"
+    height: 23
+    padding: 1
+    lines: 4
+    ascents:
+        theme-ascent: 0
+        text-start-ascent: -2
+        text-line-spacing: 5
+default-five-line:
+    path: "tooltips:tooltips/default/default-five-line.png"
+    height: 28
+    padding: 1
+    lines: 5
+    ascents:
+        theme-ascent: 0
+        text-start-ascent: -2
+        text-line-spacing: 5
+      

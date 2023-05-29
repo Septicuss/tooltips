@@ -1,0 +1,16 @@
+# How often, in ticks the plugin will attempt to check the conditions
+condition-check-frequency: 3
+
+# Copy the resource packs namespaces to a given directory
+# The parent directory is the plugins folder
+copy-resource-pack:
+   enabled: false
+   path: ''
+
+# Which furniture plugin is used if there are multiple
+# Options: Automatic, Oraxen, ItemsAdder, MythicCrucible
+furniture-plugin: automatic 
+
+# This determines, which negative space mode is used. Set to 'false' for versions before 
+# 1.19 and 'true' for 1.19+
+use-spaces: true

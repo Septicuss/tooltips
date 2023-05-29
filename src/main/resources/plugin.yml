@@ -1,0 +1,13 @@
+name: Tooltips
+main: fi.septicuss.tooltips.Tooltips
+version: ${project.version}
+api-version: 1.16
+
+author: Septicuss
+
+depend: [ ProtocolLib ]
+softdepend: [ PlaceholderAPI, ItemsAdder, Oraxen, WorldGuard, WorldEdit, MythicCrucible, MythicMobs, Citizens ]
+
+commands:
+   tooltips:
+      aliases: [tooltip, tt]
