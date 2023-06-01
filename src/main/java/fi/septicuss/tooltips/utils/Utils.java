@@ -10,6 +10,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 
+import fi.septicuss.tooltips.integrations.FurnitureProvider;
+import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
 import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
@@ -42,6 +44,10 @@ public class Utils {
 			if (ch == character)
 				amount++;
 		return amount;
+	}
+	
+	public static String getFurnitureDisplayName(FurnitureProvider provider, String id) {
+		return ChatColor.stripColor(FurnitureCache.getFurniture(id).displayName());
 	}
 
 	public static boolean sameAmountOfCharsIn(String string, char first, char second) {

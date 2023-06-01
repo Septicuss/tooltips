@@ -12,14 +12,14 @@ import fi.septicuss.tooltips.integrations.papi.PAPI;
 
 public class Placeholders {
 
-	private static Map<String, Placeholder> LOCAL_PLACEHOLDERS = new HashMap<>();
+	private static Map<String, PlaceholderParser> LOCAL_PLACEHOLDERS = new HashMap<>();
 
 	public static String replacePlaceholders(Player player, String str) {
 
 		if (!str.contains("%")) {
 			return str;
 		}
-		
+
 		StringBuilder builder = new StringBuilder();
 
 		for (int i = 0; i < str.length(); i++) {
@@ -39,17 +39,19 @@ public class Placeholders {
 				int to = i + nextPercent + 1;
 				String placeholder = str.substring(from, to);
 
-				if (!LOCAL_PLACEHOLDERS.containsKey(placeholder)) {
-					builder.append(character);
-					continue;
+				String result = null;
+
+				for (var parser : LOCAL_PLACEHOLDERS.values()) {
+					result = parser.parse(player, placeholder);
+					if (result != null) break; // Found first
 				}
 
-				String replaceWith = LOCAL_PLACEHOLDERS.get(placeholder).getValue(player, placeholder);
-				builder.append(replaceWith);
-
-				i = to;
+				if (result != null) {
+					builder.append(result);
+					i = to;
+				}
+				
 				continue;
-
 			}
 
 			builder.append(character);
@@ -66,8 +68,8 @@ public class Placeholders {
 		return result;
 	}
 
-	public static void addLocal(String key, Placeholder placeholder) {
-		LOCAL_PLACEHOLDERS.put(key, placeholder);
+	public static void addLocal(String key, PlaceholderParser placeholderParser) {
+		LOCAL_PLACEHOLDERS.put(key, placeholderParser);
 	}
 
 	public static void removeLocal(String key) {

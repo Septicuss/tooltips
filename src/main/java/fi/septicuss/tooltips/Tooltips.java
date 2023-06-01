@@ -81,8 +81,8 @@ import fi.septicuss.tooltips.utils.cache.player.LookingAtCache;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
-import fi.septicuss.tooltips.utils.placeholder.Placeholder;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
+import fi.septicuss.tooltips.utils.placeholder.impl.SimplePlaceholderParser;
 import fi.septicuss.tooltips.utils.variable.Variables;
 
 public class Tooltips extends JavaPlugin implements Listener {
@@ -351,7 +351,14 @@ public class Tooltips extends JavaPlugin implements Listener {
 	private void addLocalPlaceholders() {
 
 		if (furnitureProvider != null) {
-			Placeholders.addLocal("furniture_id", new Placeholder((p, s) -> {
+			Placeholders.addLocal("furniture", new SimplePlaceholderParser((p, s) -> {
+				
+				if (!s.equalsIgnoreCase("furniture_id") && !s.equalsIgnoreCase("furniture_name")) {
+					return null;
+				}
+
+				final boolean name = s.equalsIgnoreCase("furniture_name");
+				
 				Block block = p.getTargetBlockExact(10);
 
 				if (block != null && furnitureProvider.isFurniture(block)) {
@@ -362,7 +369,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 					String id = furnitureProvider.getFurnitureId(block);
 					LookingAtCache.put(p, id);
 
-					return id;
+					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
 
 				Entity entity = Utils.getEntityPlayerIsLookingAt(p, 10, 0, FURNITURE_ENTITIES);
@@ -375,29 +382,12 @@ public class Tooltips extends JavaPlugin implements Listener {
 					String id = furnitureProvider.getFurnitureId(entity);
 					LookingAtCache.put(p, id);
 
-					return id;
+					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
-
+				
 				return "None";
 			}));
 
-			Placeholders.addLocal("furniture_name", new Placeholder((p, s) -> {
-				Block block = p.getTargetBlockExact(10);
-
-				if (block != null && furnitureProvider.isFurniture(block)) {
-					return ChatColor.stripColor(
-							FurnitureCache.getFurniture(furnitureProvider.getFurnitureId(block)).displayName());
-				}
-
-				Entity entity = Utils.getEntityPlayerIsLookingAt(p, 10, 0, FURNITURE_ENTITIES);
-
-				if (entity != null && furnitureProvider.isFurniture(entity)) {
-					return ChatColor.stripColor(
-							FurnitureCache.getFurniture(furnitureProvider.getFurnitureId(entity)).displayName());
-				}
-
-				return "None";
-			}));
 		}
 
 	}
