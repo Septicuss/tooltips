@@ -49,6 +49,8 @@ public class Placeholders {
 				if (result != null) {
 					builder.append(result);
 					i = to;
+				} else {
+					builder.append(character);
 				}
 				
 				continue;
