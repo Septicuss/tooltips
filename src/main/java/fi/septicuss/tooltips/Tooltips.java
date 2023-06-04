@@ -43,11 +43,13 @@ import fi.septicuss.tooltips.listener.PlayerMovementListener;
 import fi.septicuss.tooltips.object.icon.IconManager;
 import fi.septicuss.tooltips.object.preset.PresetManager;
 import fi.septicuss.tooltips.object.preset.condition.ConditionManager;
+import fi.septicuss.tooltips.object.preset.condition.impl.BlockNbtEquals;
 import fi.septicuss.tooltips.object.preset.condition.impl.Compare;
 import fi.septicuss.tooltips.object.preset.condition.impl.Day;
 import fi.septicuss.tooltips.object.preset.condition.impl.EntityNbtEquals;
 import fi.septicuss.tooltips.object.preset.condition.impl.Equipped;
 import fi.septicuss.tooltips.object.preset.condition.impl.Gamemode;
+import fi.septicuss.tooltips.object.preset.condition.impl.InCuboid;
 import fi.septicuss.tooltips.object.preset.condition.impl.ItemNbtEquals;
 import fi.septicuss.tooltips.object.preset.condition.impl.Location;
 import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtBlock;
@@ -77,7 +79,6 @@ import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
-import fi.septicuss.tooltips.utils.cache.player.LookingAtCache;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
@@ -359,30 +360,19 @@ public class Tooltips extends JavaPlugin implements Listener {
 				}
 
 				final boolean name = s.equalsIgnoreCase("furniture_name");
-
-				Block block = p.getTargetBlockExact(10);
-
-				if (block != null && furnitureProvider.isFurniture(block)) {
-					if (LookingAtCache.contains(p)) {
-						return LookingAtCache.get(p);
-					}
-
-					String id = furnitureProvider.getFurnitureId(block);
-					LookingAtCache.put(p, id);
-
+				final var rayTrace = Utils.getRayTraceResult(p, 10, FURNITURE_ENTITIES);
+				
+				final Block hitBlock = rayTrace.getHitBlock();
+				
+				if (hitBlock != null && furnitureProvider.isFurniture(hitBlock)) {
+					final String id = furnitureProvider.getFurnitureId(hitBlock);
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
-
-				Entity entity = Utils.getEntityPlayerIsLookingAt(p, 10, 0, FURNITURE_ENTITIES);
-
-				if (entity != null && furnitureProvider.isFurniture(entity)) {
-					if (LookingAtCache.contains(p)) {
-						return LookingAtCache.get(p);
-					}
-
-					String id = furnitureProvider.getFurnitureId(entity);
-					LookingAtCache.put(p, id);
-
+				
+				final Entity hitEntity = rayTrace.getHitEntity();
+				
+				if (hitEntity != null && furnitureProvider.isFurniture(hitEntity)) {
+					final String id = furnitureProvider.getFurnitureId(hitEntity);
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
 

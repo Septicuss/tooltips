@@ -10,6 +10,7 @@ import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.preset.condition.type.EnumOptions;
 import fi.septicuss.tooltips.object.preset.condition.type.LocationArgument;
 import fi.septicuss.tooltips.object.validation.Validity;
+import fi.septicuss.tooltips.utils.Utils;
 
 public class LookingAtBlock implements Condition {
 
@@ -32,7 +33,12 @@ public class LookingAtBlock implements Condition {
 		if (args.has(LOCATION_ALIASES))
 			location = args.get(LOCATION_ALIASES).getAsLocationArgument(player);
 
-		Block target = player.getTargetBlockExact(distance);
+		var rayTrace = Utils.getRayTraceResult(player, distance);
+		
+		if (rayTrace == null)
+			return false;
+		
+		Block target = rayTrace.getHitBlock();
 
 		if (target == null) {
 			if (materials == null)

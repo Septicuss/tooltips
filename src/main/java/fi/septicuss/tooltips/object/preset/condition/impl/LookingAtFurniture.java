@@ -32,15 +32,20 @@ public class LookingAtFurniture implements Condition {
 
 		if (args.has(ID))
 			id = args.get(ID).getAsString();
-
-		Block block = player.getTargetBlockExact(distance);
+		
+		var rayTrace = Utils.getRayTraceResult(player, distance, Tooltips.FURNITURE_ENTITIES);
+		
+		if (rayTrace == null)
+			return false;
+		
+		Block block = rayTrace.getHitBlock();
 
 		if (block != null && provider.isFurniture(block)) {
 			if (id != null) return provider.getFurnitureId(block).equals(id);
 			return true;
 		}
 		
-		Entity entity = Utils.getEntityPlayerIsLookingAt(player, distance, 0, Tooltips.FURNITURE_ENTITIES);
+		Entity entity = rayTrace.getHitEntity();
 
 		if (entity != null && provider.isFurniture(entity)) {
 			if (id != null) return provider.getFurnitureId(entity).equals(id);

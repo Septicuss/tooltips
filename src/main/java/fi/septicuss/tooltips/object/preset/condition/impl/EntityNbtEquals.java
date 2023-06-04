@@ -3,8 +3,6 @@ package fi.septicuss.tooltips.object.preset.condition.impl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
-
 import fi.septicuss.tooltips.integrations.IntegratedPlugin;
 import fi.septicuss.tooltips.integrations.nbtapi.NBTEntityWrapper;
 import fi.septicuss.tooltips.object.preset.condition.Condition;
@@ -26,10 +24,12 @@ public class EntityNbtEquals implements Condition {
 		if (args.has(DISTANCE))
 			distance = args.get(DISTANCE).getAsInt();
 
-		Entity entity = Utils.getEntityPlayerIsLookingAt(player, distance, 0, Lists.newArrayList());
-
-		if (entity == null)
+		var rayTrace = Utils.getRayTraceResult(player, distance);
+		
+		if (rayTrace == null || rayTrace.getHitEntity() == null)
 			return false;
+		
+		Entity entity = rayTrace.getHitEntity();
 
 		String key = args.get(KEY).getAsString();
 		var compound = new NBTEntityWrapper(entity).getCompound();

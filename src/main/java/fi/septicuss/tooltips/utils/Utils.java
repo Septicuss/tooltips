@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 
 import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
@@ -49,7 +51,7 @@ public class Utils {
 				amount++;
 		return amount;
 	}
-	
+
 	public static String getFurnitureDisplayName(FurnitureProvider provider, String id) {
 		return ChatColor.stripColor(FurnitureCache.getFurniture(id).displayName());
 	}
@@ -57,17 +59,21 @@ public class Utils {
 	public static boolean sameAmountOfCharsIn(String string, char first, char second) {
 		return (count(string, first) == count(string, second));
 	}
-	public static Entity getEntityPlayerIsLookingAt(Player player, double maxDistance, double raySize,
-			List<EntityType> validEntities) {
-		RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(),
-				player.getEyeLocation().getDirection(), maxDistance, e -> {
-					if (e.equals(player))
-						return false;
-					if (validEntities == null || validEntities.isEmpty())
-						return true;
-					return (validEntities.contains(e.getType()));
-				});
-		return result == null ? null : result.getHitEntity();
+
+	public static RayTraceResult getRayTraceResult(Player player, double maxDistance) {
+		return getRayTraceResult(player, maxDistance, null);
+	}
+	
+	public static RayTraceResult getRayTraceResult(Player player, double maxDistance, List<EntityType> validEntities) {
+		final Location eyeLocation = player.getEyeLocation();
+		final Vector direction = eyeLocation.getDirection();
+
+		return player.getWorld().rayTrace(eyeLocation, direction, maxDistance, FluidCollisionMode.NEVER, false, 0, entity -> {
+			if (entity == null) return false;
+			if (entity.equals(player)) return false;
+			if (validEntities == null || validEntities.isEmpty()) return true;
+			return (validEntities.contains(entity.getType()));
+		});
 	}
 
 	public static List<String> color(List<String> message) {

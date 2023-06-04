@@ -4,8 +4,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
-
 import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.preset.condition.type.EnumOptions;
@@ -29,12 +27,16 @@ public class LookingAtEntity implements Condition {
 		if (args.has(TYPE))
 			entities = args.get(TYPE).getAsEnumOptions(EntityType.class);
 		
-		if (entities == null) {
-			Entity entity = Utils.getEntityPlayerIsLookingAt(player, distance, 0, Lists.newArrayList());
-			return entity != null;
-		}
+		var rayTrace = Utils.getRayTraceResult(player, distance);
+		
+		if (rayTrace == null || rayTrace.getHitEntity() == null) 
+			return false;
+		
+		if (entities == null)
+			return true;
 
-		Entity entity = Utils.getEntityPlayerIsLookingAt(player, distance, 0, Lists.newArrayList());
+		Entity entity = rayTrace.getHitEntity();
+		
 		if (entity == null) return false;
 		return entities.contains(entity.getType());
 	}

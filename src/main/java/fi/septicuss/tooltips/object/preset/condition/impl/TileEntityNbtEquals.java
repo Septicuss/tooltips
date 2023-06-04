@@ -9,6 +9,7 @@ import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.validation.Validity;
+import fi.septicuss.tooltips.utils.Utils;
 
 public class TileEntityNbtEquals implements Condition {
 
@@ -22,11 +23,13 @@ public class TileEntityNbtEquals implements Condition {
 
 		if (args.has(DISTANCE))
 			distance = args.get(DISTANCE).getAsInt();
-
-		Block block = player.getTargetBlockExact(distance);
-
-		if (block == null)
+		
+		var rayTrace = Utils.getRayTraceResult(player, distance);
+		
+		if (rayTrace == null || rayTrace.getHitBlock() == null)
 			return false;
+		
+		Block block = rayTrace.getHitBlock();
 
 		String key = args.get(KEY).getAsString();
 		var compound = new NBTTileEntityWrapper(block.getState()).getCompound();
