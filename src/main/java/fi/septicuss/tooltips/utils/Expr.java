@@ -213,7 +213,7 @@ public interface Expr {
 		private final static int PAREN_FORBIDDEN = 2;
 
 		@SuppressWarnings("serial")
-		final static Map<String, Op> OPS = new HashMap<String, Op>() {
+		public final static Map<String, Op> OPS = new HashMap<String, Op>() {
 			{
 				put("-u", Op.UNARY_MINUS);
 				put("!u", Op.UNARY_LOGICAL_NOT);
@@ -242,7 +242,7 @@ public interface Expr {
 			}
 		};
 
-		List<String> tokenize(String input) {
+		public List<String> tokenize(String input) {
 			int pos = 0;
 			int expected = TOK_OPEN | TOK_NUMBER | TOK_WORD;
 			List<String> tokens = new ArrayList<>();

@@ -162,19 +162,20 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 		// Reload the plugin
 		reload();
-
 	}
 
 	@Override
 	public void onDisable() {
 		if (this.runnableManager != null)
 			this.runnableManager.stop();
+		
+		Variables.PERSISTENT.save();
 	}
 
 	// ------------------------------------------------------
 
 	private void loadVariables() {
-		File variablesDirectory = new File(getDataFolder(), "data/variables");
+		File variablesDirectory = getVariablesDirectory();
 		Variables.PERSISTENT.load(variablesDirectory);
 	}
 
@@ -350,15 +351,15 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 	private void addLocalPlaceholders() {
 
+		// TODO: Fix constant updating
 		if (furnitureProvider != null) {
 			Placeholders.addLocal("furniture", new SimplePlaceholderParser((p, s) -> {
-				
 				if (!s.equalsIgnoreCase("furniture_id") && !s.equalsIgnoreCase("furniture_name")) {
 					return null;
 				}
 
 				final boolean name = s.equalsIgnoreCase("furniture_name");
-				
+
 				Block block = p.getTargetBlockExact(10);
 
 				if (block != null && furnitureProvider.isFurniture(block)) {
@@ -384,12 +385,53 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
-				
+
 				return "None";
 			}));
-
 		}
 
+		Placeholders.addLocal("var", new SimplePlaceholderParser((p, s) -> {
+			if (!s.startsWith("var_"))
+				return null;
+			boolean global = s.startsWith("var_global_");
+			int cutIndex = (global ? 11 : 4);
+			
+			String variableName = s.substring(cutIndex);
+			
+			if (!Variables.LOCAL.hasVar(variableName) && !Variables.LOCAL.hasVar(p, variableName)) {
+				return null;
+			}
+			
+			if (global) {
+				return Variables.LOCAL.getVar(variableName).getAsString();
+			} else {
+				return Variables.LOCAL.getVar(p, variableName).getAsString();
+			}
+		}));
+
+		Placeholders.addLocal("persistentvar", new SimplePlaceholderParser((p, s) -> {
+			if (!s.startsWith("persistentvar_"))
+				return null;
+			boolean global = s.startsWith("persistentvar_global_");
+			int cutIndex = (global ? 21 : 14);
+			
+			String variableName = s.substring(cutIndex);
+			
+			if (!Variables.PERSISTENT.hasVar(variableName) && !Variables.PERSISTENT.hasVar(p, variableName)) {
+				return null;
+			}
+			
+			if (global) {
+				return Variables.PERSISTENT.getVar(variableName).getAsString();
+			} else {
+				return Variables.PERSISTENT.getVar(p, variableName).getAsString();
+			}
+		}));
+
+	}
+	
+	private File getVariablesDirectory() {
+		return new File(getDataFolder(), "data/variables");
 	}
 
 	// ------------------------------------------------------

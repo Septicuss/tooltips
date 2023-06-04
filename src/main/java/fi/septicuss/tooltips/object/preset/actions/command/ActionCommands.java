@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.object.preset.actions.command.impl.MessageCommand;
 import fi.septicuss.tooltips.object.preset.actions.command.impl.SoundCommand;
+import fi.septicuss.tooltips.object.preset.actions.command.impl.vars.ClearVarCommand;
+import fi.septicuss.tooltips.object.preset.actions.command.impl.vars.ClearVarsCommand;
+import fi.septicuss.tooltips.object.preset.actions.command.impl.vars.SavePersistentVarsCommand;
+import fi.septicuss.tooltips.object.preset.actions.command.impl.vars.SetVarCommand;
 import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.validation.Validity;
@@ -21,8 +25,20 @@ public class ActionCommands {
 		COMMANDS = new HashMap<>();
 		COMMANDS.put("sound", new SoundCommand());
 		COMMANDS.put("message", new MessageCommand());
-//		COMMANDS.put("setvar", new SetVarCommand(false));
-//		COMMANDS.put("setpersistentvar", new SetVarCommand(true));
+		
+		// Variables
+		
+		//  Persistent
+		COMMANDS.put("setpersistentvar", new SetVarCommand(true));
+		COMMANDS.put("clearpersistentvar", new ClearVarCommand(true));
+		COMMANDS.put("clearpersistentvars", new ClearVarsCommand(true));
+		COMMANDS.put("savepersistentvars", new SavePersistentVarsCommand());
+		
+		//  Non-persistent
+		COMMANDS.put("setvar", new SetVarCommand(false));
+		COMMANDS.put("clearvar", new ClearVarCommand(false));
+		COMMANDS.put("clearvars", new ClearVarsCommand(false));
+		
 	}
 
 	public static boolean isValidCommand(String fullCommand) {

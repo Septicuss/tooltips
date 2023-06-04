@@ -36,12 +36,12 @@ public class Variables {
 			FileUtils.createFileIfNotExists(GLOBAL_FILE);
 			FileUtils.createFileIfNotExists(PLAYER_FILE);
 
-			YamlConfiguration.loadConfiguration(GLOBAL_FILE);
-			YamlConfiguration.loadConfiguration(PLAYER_FILE);
+			GLOBAL_VARIABLE_CONFIG = YamlConfiguration.loadConfiguration(GLOBAL_FILE);
+			PLAYER_VARIABLE_CONFIG = YamlConfiguration.loadConfiguration(PLAYER_FILE);
 		}
 
 		@Override
-		public void save(File directory) {
+		public void save() {
 			try {
 				GLOBAL_VARIABLE_CONFIG.save(GLOBAL_FILE);
 			} catch (IOException e) {
@@ -186,6 +186,7 @@ public class Variables {
 			}
 
 			args.add(varName, new Argument(value));
+			PLAYER_VARIABLES.put(uuid, args);
 		}
 
 		@Override
@@ -198,6 +199,7 @@ public class Variables {
 
 			Arguments args = PLAYER_VARIABLES.get(uuid);
 			args.remove(varName);
+			PLAYER_VARIABLES.put(uuid, args);
 		}
 
 		@Override
@@ -208,7 +210,7 @@ public class Variables {
 
 	}
 
-	private static interface VariableProvider {
+	public static interface VariableProvider {
 
 		public Argument getVar(String varName);
 
@@ -236,7 +238,7 @@ public class Variables {
 
 		public void load(T from);
 
-		public void save(T to);
+		public void save();
 
 	}
 

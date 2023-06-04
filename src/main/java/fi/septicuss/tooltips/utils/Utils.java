@@ -38,6 +38,10 @@ public class Utils {
 		return "\"" + message + "\"";
 	}
 
+	public static boolean isNumeric(String str) {
+		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional '-' and decimal.
+	}
+
 	public static int count(String string, char character) {
 		int amount = 0;
 		for (var ch : string.toCharArray())
@@ -53,7 +57,6 @@ public class Utils {
 	public static boolean sameAmountOfCharsIn(String string, char first, char second) {
 		return (count(string, first) == count(string, second));
 	}
-
 	public static Entity getEntityPlayerIsLookingAt(Player player, double maxDistance, double raySize,
 			List<EntityType> validEntities) {
 		RayTraceResult result = player.getWorld().rayTraceEntities(player.getEyeLocation(),
