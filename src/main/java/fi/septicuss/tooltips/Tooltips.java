@@ -43,6 +43,7 @@ import fi.septicuss.tooltips.listener.PlayerMovementListener;
 import fi.septicuss.tooltips.object.icon.IconManager;
 import fi.septicuss.tooltips.object.preset.PresetManager;
 import fi.septicuss.tooltips.object.preset.condition.ConditionManager;
+import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
 import fi.septicuss.tooltips.object.preset.condition.impl.BlockNbtEquals;
 import fi.septicuss.tooltips.object.preset.condition.impl.Compare;
 import fi.septicuss.tooltips.object.preset.condition.impl.Day;
@@ -169,7 +170,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 	public void onDisable() {
 		if (this.runnableManager != null)
 			this.runnableManager.stop();
-		
+
 		Variables.PERSISTENT.save();
 	}
 
@@ -361,16 +362,16 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 				final boolean name = s.equalsIgnoreCase("furniture_name");
 				final var rayTrace = Utils.getRayTraceResult(p, 10, FURNITURE_ENTITIES);
-				
+
 				final Block hitBlock = rayTrace.getHitBlock();
-				
+
 				if (hitBlock != null && furnitureProvider.isFurniture(hitBlock)) {
 					final String id = furnitureProvider.getFurnitureId(hitBlock);
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
-				
+
 				final Entity hitEntity = rayTrace.getHitEntity();
-				
+
 				if (hitEntity != null && furnitureProvider.isFurniture(hitEntity)) {
 					final String id = furnitureProvider.getFurnitureId(hitEntity);
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
@@ -385,18 +386,21 @@ public class Tooltips extends JavaPlugin implements Listener {
 				return null;
 			boolean global = s.startsWith("var_global_");
 			int cutIndex = (global ? 11 : 4);
-			
+
 			String variableName = s.substring(cutIndex);
 			
-			if (!Variables.LOCAL.hasVar(variableName) && !Variables.LOCAL.hasVar(p, variableName)) {
-				return null;
+			Argument returnArgument = null;
+
+			if (global) {
+				returnArgument = Variables.LOCAL.getVar(variableName);
+			} else {
+				returnArgument = Variables.LOCAL.getVar(p, variableName);
 			}
 			
-			if (global) {
-				return Variables.LOCAL.getVar(variableName).getAsString();
-			} else {
-				return Variables.LOCAL.getVar(p, variableName).getAsString();
-			}
+			if (returnArgument == null || returnArgument.getAsString() == null)
+				return "0";
+
+			return returnArgument.getAsString();
 		}));
 
 		Placeholders.addLocal("persistentvar", new SimplePlaceholderParser((p, s) -> {
@@ -404,22 +408,25 @@ public class Tooltips extends JavaPlugin implements Listener {
 				return null;
 			boolean global = s.startsWith("persistentvar_global_");
 			int cutIndex = (global ? 21 : 14);
-			
+
 			String variableName = s.substring(cutIndex);
-			
-			if (!Variables.PERSISTENT.hasVar(variableName) && !Variables.PERSISTENT.hasVar(p, variableName)) {
-				return null;
-			}
-			
+
+			Argument returnArgument = null;
+
 			if (global) {
-				return Variables.PERSISTENT.getVar(variableName).getAsString();
+				returnArgument = Variables.PERSISTENT.getVar(variableName);
 			} else {
-				return Variables.PERSISTENT.getVar(p, variableName).getAsString();
+				returnArgument = Variables.PERSISTENT.getVar(p, variableName);
 			}
+
+			if (returnArgument == null || returnArgument.getAsString() == null)
+				return "0";
+
+			return returnArgument.getAsString();
 		}));
 
 	}
-	
+
 	private File getVariablesDirectory() {
 		return new File(getDataFolder(), "data/variables");
 	}
