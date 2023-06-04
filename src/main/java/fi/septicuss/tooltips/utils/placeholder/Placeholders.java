@@ -19,6 +19,8 @@ public class Placeholders {
 		if (!str.contains("%")) {
 			return str;
 		}
+		
+		str = str.replace("%player%", player.getName());
 
 		StringBuilder builder = new StringBuilder();
 
@@ -29,7 +31,7 @@ public class Placeholders {
 				int from = i + 1;
 
 				String sub = str.substring(from);
-				int nextPercent = sub.indexOf('%');
+				int nextPercent = sub.lastIndexOf('%');
 
 				if (nextPercent == -1) {
 					builder.append(character);
