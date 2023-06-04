@@ -254,13 +254,13 @@ public class Tooltips extends JavaPlugin implements Listener {
 		event.register("lookingatfurniture", new LookingAtFurniture(this.furnitureProvider));
 		event.register("lookingatentity", new LookingAtEntity());
 		event.register("region", new Region());
-//		event.register("incuboid", new InCuboid());
+		event.register("incuboid", new InCuboid());
 		event.register("location", new Location());
 		event.register("standingon", new StandingOn());
 		event.register("itemnbtequals", new ItemNbtEquals());
 		event.register("entitynbtequals", new EntityNbtEquals());
 		event.register("tileentitynbtequals", new TileEntityNbtEquals());
-//		event.register("blocknbtequals", new BlockNbtEquals());
+		event.register("blocknbtequals", new BlockNbtEquals());
 		event.register("time", new Time());
 		event.register("equipped", new Equipped());
 		event.register("op", new Op());
