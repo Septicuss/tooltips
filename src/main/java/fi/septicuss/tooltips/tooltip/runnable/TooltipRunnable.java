@@ -75,6 +75,8 @@ public class TooltipRunnable extends BukkitRunnable {
 
 						if (!data.getCurrentText().equals(Placeholders.replacePlaceholders(player, preset.getText()))) {
 							// Text has changed
+							data.setTextJustUpdated(true);
+							
 							handleFalse(player, id, preset, preset.getShowProperties());
 
 							data.removeCooldown(CooldownType.FADE_IN);
@@ -87,10 +89,12 @@ public class TooltipRunnable extends BukkitRunnable {
 						} else {
 							// Text has not changed
 							handleTrue(player, id, preset, preset.getShowProperties());
+							data.setTextJustUpdated(false);
 						}
 					} else {
 						// We're handling a new preset
 						handleTrue(player, id, preset, preset.getShowProperties());
+						data.setTextJustUpdated(false);
 					}
 
 					continue outer;
@@ -210,7 +214,7 @@ public class TooltipRunnable extends BukkitRunnable {
 			data.addCooldown(CooldownType.STAY, activeStay - MAGIC_NUMBER);
 			data.setCurrentPreset(presetId);
 
-			if (firstTime)
+			if (firstTime && !data.hasTextJustUpdated())
 				runActions(TooltipAction.ON_SHOW, player);
 
 		} else {
@@ -229,7 +233,8 @@ public class TooltipRunnable extends BukkitRunnable {
 			data.addCooldown(CooldownType.FADE_OUT, total);
 			data.setCurrentPreset(presetId);
 
-			runActions(TooltipAction.ON_SHOW, player);
+			if (!data.hasTextJustUpdated())
+				runActions(TooltipAction.ON_SHOW, player);
 
 		}
 
@@ -288,7 +293,8 @@ public class TooltipRunnable extends BukkitRunnable {
 			if (properties.hasCooldown())
 				data.addCooldown(CooldownType.COOLDOWN, properties.getCooldown());
 
-			runActions(TooltipAction.ON_STOP_SHOWING, player);
+			if (!data.hasTextJustUpdated())
+				runActions(TooltipAction.ON_STOP_SHOWING, player);
 			
 			data.setCurrentPreset(null);
 			data.setCurrentText(null);
@@ -304,7 +310,8 @@ public class TooltipRunnable extends BukkitRunnable {
 			if (properties.hasCooldown())
 				data.addCooldown(CooldownType.COOLDOWN, properties.getCooldown());
 
-			runActions(TooltipAction.ON_STOP_SHOWING, player);
+			if (!data.hasTextJustUpdated())
+				runActions(TooltipAction.ON_STOP_SHOWING, player);
 
 			data.removeCooldown(CooldownType.STAY);
 			data.setCurrentPreset(null);

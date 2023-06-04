@@ -14,6 +14,7 @@ public class TooltipData {
 	private String currentPreset;
 	private List<String> currentText;
 	private Map<CooldownType, Long> cooldowns;
+	private boolean textJustUpdated = false;
 
 	public TooltipData(Player player) {
 		this(player.getUniqueId());
@@ -76,6 +77,14 @@ public class TooltipData {
 	
 	private long ticksToMilliseconds(long ticks) {
 		return (long) (((double) ticks / (double) 20) * 1000);
+	}
+	
+	public void setTextJustUpdated(boolean textJustUpdated) {
+		this.textJustUpdated = textJustUpdated;
+	}
+	
+	public boolean hasTextJustUpdated() {
+		return this.textJustUpdated;
 	}
 
 	public enum CooldownType {
