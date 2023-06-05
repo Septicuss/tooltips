@@ -126,8 +126,6 @@ public class Preset implements Validatable {
 		fadeOut = section.getInt("fade.fadeout", (fadeOut == 0 ? 0 : fadeOut));
 
 		
-		System.out.println(id + " stay = " + stay);
-		
 		/* CONDITIONS */
 		var conditionsSection = section.getConfigurationSection("conditions");
 		if (conditionsSection != null) {
