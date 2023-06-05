@@ -17,61 +17,118 @@ import fi.septicuss.tooltips.object.validation.Validatable;
 
 public class Preset implements Validatable {
 
-	// Preset
-	private String id;
+	private static final int DEFAULT_STAY = (5 * 20); // 5 seconds
 
-	// Content
+	/**
+	 * PRESET
+	 */
+	private String id;
 	private List<String> text;
 
-	// Display
+	/**
+	 * DISPLAY
+	 */
 	private Theme theme;
 	private String color;
 	private int horizontalShift;
-	private boolean interruptable;
+	private boolean interruptable = false;
 
-	// Fade
+	/**
+	 * FADE
+	 */
 	private int fadeIn;
 	private int stay;
 	private int fadeOut;
 
-	// Conditions
+	/**
+	 * CONDITIONS
+	 */
 	private int checkFrequency;
 	private StatementHolder statementHolder;
 
-	// Show
+	/**
+	 * PROPERTIES
+	 */
 	private ShowProperties showProperties;
-	
-	// Actions
 	private ActionProperties actionProperties;
 
-	// Validatable
+	/**
+	 * VALIDATION
+	 */
 	private boolean valid = false;
 
-	public Preset(Tooltips plugin, ConfigurationSection section) {
-		var conditionManager = plugin.getConditionManager();
-		var themeManager = plugin.getThemeManager();
+	public Preset(Tooltips plugin, Preset parent, ConfigurationSection section) {
 
-		// Tooltip
+		/* PARENT */
+		if (parent != null) {
+			this.text = parent.getText();
+			this.theme = parent.getTheme();
+			this.color = parent.getColor();
+			this.horizontalShift = parent.getHorizontalShift();
+			this.interruptable = parent.interruptable;
+			this.fadeIn = parent.getFadeIn();
+			this.stay = parent.getStay();
+			this.fadeOut = parent.getFadeOut();
+			this.checkFrequency = parent.getConditionCheckFrequency();
+			this.statementHolder = parent.getStatementHolder();
+			this.showProperties = parent.getShowProperties();
+			this.actionProperties = parent.getActionProperties();
+		}
+
+		/* TOOLTIP */
 		id = section.getName();
 
-		// Content
-		boolean hasText = section.contains("content.text");
-		text = (hasText ? section.getStringList("content.text") : Lists.newArrayList());
+		/* TEXT */
+		final var contentSection = section.getConfigurationSection("content");
 
-		// Display
-		String themeId = section.getString("display.theme");
-		boolean validTheme = themeManager.doesThemeExist(themeId);
-		theme = (validTheme ? themeManager.getTheme(themeId) : themeManager.getTheme("default"));
-		color = section.getString("display.color", "white");
-		horizontalShift = section.getInt("display.horizontal-shift", 0);
-		interruptable = section.getBoolean("display.interruptable", false);
+		if (contentSection != null && contentSection.contains("text"))
+			text = contentSection.getStringList("text");
+		
+		if (text == null)
+			text = Lists.newArrayList();
+		
+		/* DISPLAY */
+		final var displaySection = section.getConfigurationSection("display");
+		
+		if (displaySection == null && theme == null) {
+			Tooltips.warn(String.format("Preset by the name of \"%s\" does not define a theme.", id));
+			return;
+		}
 
-		// Fade
-		fadeIn = section.getInt("fade.fadein", 0);
-		stay = section.getInt("fade.stay", 5 * 20);
-		fadeOut = section.getInt("fade.fadeout", 0);
+		if (displaySection != null) {
+			/* Theme */
+			String themeName = displaySection.getString("theme", null);
+			var themeManager = plugin.getThemeManager();
 
-		// Conditions
+			if (themeName == null && theme == null) {
+				Tooltips.warn(String.format("Preset by the name of \"%s\" does not define a theme.", id));
+				return;
+			}
+			
+			if (!themeManager.doesThemeExist(themeName) && theme == null) {
+				Tooltips.warn(String.format("Preset by the name of \"%s\" is using an unknown theme \"%s\"", id, themeName));
+				return;
+			}
+			
+			if (themeName != null)
+				if (themeManager.doesThemeExist(themeName))
+					theme = themeManager.getTheme(themeName);
+			
+			/* Other */
+			color = displaySection.getString("color", (color == null ? "white" : color));
+			horizontalShift = displaySection.getInt("horizontal-shift", (horizontalShift == 0 ? 0 : horizontalShift));
+			interruptable = displaySection.getBoolean("display.interruptable", interruptable);
+		}
+		
+		/* FADE */
+		fadeIn = section.getInt("fade.fadein", (fadeIn == 0 ? 0 : fadeIn));
+		stay = section.getInt("fade.stay", (stay == 0 ? DEFAULT_STAY : stay));
+		fadeOut = section.getInt("fade.fadeout", (fadeOut == 0 ? 0 : fadeOut));
+
+		
+		System.out.println(id + " stay = " + stay);
+		
+		/* CONDITIONS */
 		var conditionsSection = section.getConfigurationSection("conditions");
 		if (conditionsSection != null) {
 			var conditionLines = conditionsSection.getStringList("conditions");
@@ -80,7 +137,7 @@ public class Preset implements Validatable {
 				statementHolder = new StatementHolder();
 
 				for (var line : conditionLines) {
-					Statement statement = conditionManager.getStatementParser().parse(id, line);
+					Statement statement = plugin.getConditionManager().getStatementParser().parse(id, line);
 					statementHolder.addStatement(statement);
 				}
 			}
@@ -90,22 +147,19 @@ public class Preset implements Validatable {
 
 		// Show
 		var showSection = section.getConfigurationSection("conditions.show");
-		this.showProperties = ShowProperties.of(showSection);
-
+		if (showSection != null || showProperties == null)
+			showProperties = ShowProperties.of(showSection);
+		
 		// Actions
 		var actionsSection = section.getConfigurationSection("conditions.actions");
-		this.actionProperties = ActionProperties.of(actionsSection);
-		
-		// Validate
-		
-		if (!validTheme) {
-			Tooltips.warn(String.format(
-					"Preset by the name of \"%s\" is using an unknown theme \"%s\"", id,
-					themeId));
-			return;
-		}
+		if (actionsSection != null || actionProperties == null)
+			actionProperties = ActionProperties.of(actionsSection);
 
 		valid = true;
+	}
+
+	public Preset(Tooltips plugin, ConfigurationSection section) {
+		this(plugin, null, section);
 	}
 
 	public String getId() {
@@ -161,7 +215,7 @@ public class Preset implements Validatable {
 	public ShowProperties getShowProperties() {
 		return showProperties;
 	}
-	
+
 	public ActionProperties getActionProperties() {
 		return actionProperties;
 	}

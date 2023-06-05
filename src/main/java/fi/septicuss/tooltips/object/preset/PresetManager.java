@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
 public class PresetManager {
@@ -32,7 +33,22 @@ public class PresetManager {
 			for (FileConfiguration config : presetConfigs) {
 				for (String name : config.getRoot().getKeys(false)) {
 					final ConfigurationSection section = config.getRoot().getConfigurationSection(name);
-					final Preset preset = new Preset(plugin, section);
+					
+					Preset preset = null;
+					
+					if (section.isSet("parent")) {
+						String parentId = section.getString("parent");
+						
+						if (!presets.containsKey(parentId)) {
+							Tooltips.warn("Unable to define preset " + Utils.quote(name) + ", due to unknown parent " + Utils.quote(parentId));
+							continue;
+						}
+						
+						preset = new Preset(plugin, presets.get(parentId), section);
+					} else {
+						preset = new Preset(plugin, section);
+					}
+					
 
 					if (!preset.isValid()) {
 						continue;
