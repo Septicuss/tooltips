@@ -7,6 +7,7 @@ import fi.septicuss.tooltips.object.preset.actions.command.ActionCommand;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.validation.Validity;
 import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import fi.septicuss.tooltips.utils.variable.Variables.VariableProvider;
 
@@ -26,13 +27,14 @@ public class ClearVarCommand extends VarCommand implements ActionCommand {
 
 		// Determine scope & name
 		final String scopeArgument = args[0];
-		final String variableName = args[1];
 
 		final boolean global = isGlobal(scopeArgument);
 		Player target = getTarget(scopeArgument);
 
 		if (target == null)
 			target = player;
+
+		final String variableName = Placeholders.replacePlaceholders(target, args[1]);
 
 		// Clearing the variable
 		VariableProvider provider = (persistent ? Variables.PERSISTENT : Variables.LOCAL);

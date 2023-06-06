@@ -58,7 +58,7 @@ public class ActionCommands {
 	}
 
 	public static void runCommand(Player player, String presetId, String fullCommand) {
-		String[] split = fullCommand.split(" ");
+		String[] split = fullCommand.replace("%player%", player.getName()).split(" ");
 		String first = split[0].toLowerCase();
 
 		ActionCommand command = COMMANDS.get(first);

@@ -36,14 +36,15 @@ public class SetVarCommand extends VarCommand implements ActionCommand {
 		String[] args = convertArgumentsToArray(arguments);
 
 		// Determine variables scope & name
-		final String scopeArgument = args[0];
-		final String variableName = args[1];
+		final String scopeArgument = replacePlaceholders(player, args[0]);
 
 		boolean global = isGlobal(scopeArgument);
 		Player target = getTarget(scopeArgument);
 
 		if (target == null)
 			target = player;
+
+		final String variableName = replacePlaceholders(target, args[1]);
 
 		// Value is the value that this variable will take on
 		String value = appendFrom(args, 2);
