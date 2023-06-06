@@ -7,7 +7,7 @@ import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.validation.Validity;
 import fi.septicuss.tooltips.utils.variable.Variables;
 
-public class SavePersistentVarsCommand implements ActionCommand {
+public class SavePersistentVarsCommand extends VarCommand implements ActionCommand {
 
 	@Override
 	public void run(Player player, Arguments arguments) {
