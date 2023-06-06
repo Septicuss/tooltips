@@ -1,7 +1,9 @@
 package fi.septicuss.tooltips.object.preset.actions.command;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
 
@@ -49,6 +51,10 @@ public class ActionCommands {
 				return true;
 
 		return false;
+	}
+	
+	public static Set<Map.Entry<String, ActionCommand>> getEntries() {
+		return Collections.unmodifiableSet(COMMANDS.entrySet());
 	}
 
 	public static void runCommand(Player player, String presetId, String fullCommand) {
