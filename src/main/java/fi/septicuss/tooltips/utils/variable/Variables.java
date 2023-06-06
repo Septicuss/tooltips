@@ -79,7 +79,8 @@ public class Variables {
 
 		@Override
 		public void clearAllVars() {
-			GLOBAL_VARIABLE_CONFIG.set("", null);
+			for (var key : GLOBAL_VARIABLE_CONFIG.getKeys(false))
+				GLOBAL_VARIABLE_CONFIG.set(key, null);
 		}
 
 		@Override
