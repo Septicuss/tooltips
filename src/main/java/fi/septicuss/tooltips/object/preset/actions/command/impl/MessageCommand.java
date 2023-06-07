@@ -13,13 +13,9 @@ public class MessageCommand implements ActionCommand {
 	@Override
 	public void run(Player player, Arguments arguments) {
 		
-		StringBuilder builder = new StringBuilder();
+		String message = appendFrom(convertArgumentsToArray(arguments), 0);
+		message = Utils.color(Placeholders.replacePlaceholders(player, message));
 		
-		for (int i = 1; i <= arguments.size(); i++) {
-			builder.append(arguments.get(String.valueOf(1)).getAsString());
-		}
-		
-		String message = Utils.color(Placeholders.replacePlaceholders(player, builder.toString()));
 		player.sendMessage(message);
 		
 	}
