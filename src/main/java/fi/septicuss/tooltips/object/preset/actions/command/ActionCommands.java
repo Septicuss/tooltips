@@ -8,6 +8,7 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.object.preset.actions.command.impl.DelayCommand;
 import fi.septicuss.tooltips.object.preset.actions.command.impl.MessageCommand;
 import fi.septicuss.tooltips.object.preset.actions.command.impl.SoundCommand;
 import fi.septicuss.tooltips.object.preset.actions.command.impl.vars.ClearVarCommand;
@@ -27,6 +28,7 @@ public class ActionCommands {
 		COMMANDS = new HashMap<>();
 		COMMANDS.put("sound", new SoundCommand());
 		COMMANDS.put("message", new MessageCommand());
+		COMMANDS.put("delay", new DelayCommand());
 		
 		// Variables
 		
