@@ -25,7 +25,7 @@ public class DelayCommand implements ActionCommand {
 		List<String> commandList = new ArrayList<>();
 
 		for (var command : commandString.split(";")) {
-			commandList.add(Placeholders.replacePlaceholders(player, command));
+			commandList.add(Placeholders.replacePlaceholders(player, command.strip()));
 		}
 		
 		Bukkit.getScheduler().runTaskLater(Tooltips.get(), () -> {
