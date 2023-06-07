@@ -19,7 +19,7 @@ public class Placeholders {
 		if (!str.contains("%")) {
 			return str;
 		}
-		
+
 		str = str.replace("%player%", player.getName());
 
 		StringBuilder builder = new StringBuilder();
@@ -31,7 +31,7 @@ public class Placeholders {
 				int from = i + 1;
 
 				String sub = str.substring(from);
-				int nextPercent = sub.lastIndexOf('%');
+				int nextPercent = sub.indexOf('%');
 
 				if (nextPercent == -1) {
 					builder.append(character);
@@ -45,7 +45,8 @@ public class Placeholders {
 
 				for (var parser : LOCAL_PLACEHOLDERS.values()) {
 					result = parser.parse(player, placeholder);
-					if (result != null) break; // Found first
+					if (result != null)
+						break; // Found first
 				}
 
 				if (result != null) {
@@ -54,7 +55,7 @@ public class Placeholders {
 				} else {
 					builder.append(character);
 				}
-				
+
 				continue;
 			}
 
