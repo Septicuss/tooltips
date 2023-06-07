@@ -45,6 +45,7 @@ import fi.septicuss.tooltips.object.preset.PresetManager;
 import fi.septicuss.tooltips.object.preset.condition.ConditionManager;
 import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
 import fi.septicuss.tooltips.object.preset.condition.impl.BlockNbtEquals;
+import fi.septicuss.tooltips.object.preset.condition.impl.BlockStateEquals;
 import fi.septicuss.tooltips.object.preset.condition.impl.Compare;
 import fi.septicuss.tooltips.object.preset.condition.impl.Day;
 import fi.septicuss.tooltips.object.preset.condition.impl.EntityNbtEquals;
@@ -262,6 +263,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 		event.register("entitynbtequals", new EntityNbtEquals());
 		event.register("tileentitynbtequals", new TileEntityNbtEquals());
 		event.register("blocknbtequals", new BlockNbtEquals());
+		event.register("blockstateequals", new BlockStateEquals());
 		event.register("time", new Time());
 		event.register("equipped", new Equipped());
 		event.register("op", new Op());
