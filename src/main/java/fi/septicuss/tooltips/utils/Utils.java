@@ -2,11 +2,14 @@ package fi.septicuss.tooltips.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
@@ -60,6 +63,23 @@ public class Utils {
 		return (count(string, first) == count(string, second));
 	}
 
+	public static RayTraceResult getRayTrace(Player player, double maxDistance, Predicate<Block> validBlock,
+			Predicate<Entity> entityFilter) {
+		final Location eyeLocation = player.getEyeLocation();
+		final Vector direction = eyeLocation.getDirection();
+
+		var blockRay = player.getWorld().rayTraceBlocks(eyeLocation, direction, maxDistance, FluidCollisionMode.NEVER,
+				false);
+
+		if (blockRay == null || blockRay.getHitBlock() == null || !validBlock.test(blockRay.getHitBlock())) {
+			var entityRay = player.getWorld().rayTraceEntities(eyeLocation, direction, maxDistance, 0, entityFilter);
+			return entityRay;
+		}
+
+		return blockRay;
+
+	}
+	
 	public static RayTraceResult getRayTraceResult(Player player, double maxDistance) {
 		return getRayTraceResult(player, maxDistance, null);
 	}

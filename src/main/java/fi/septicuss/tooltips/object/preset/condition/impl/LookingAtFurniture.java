@@ -1,5 +1,7 @@
 package fi.septicuss.tooltips.object.preset.condition.impl;
 
+import java.util.function.Predicate;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,24 +34,42 @@ public class LookingAtFurniture implements Condition {
 
 		if (args.has(ID))
 			id = args.get(ID).getAsString();
+
+		final String finalizedId = id;
+
+		Predicate<Block> blockPredicate = (block -> {
+			if (block == null) return false;
+			if (!provider.isFurniture(block)) return false;
+			return (!provider.getFurnitureId(block).equals(finalizedId));
+		});
 		
-		var rayTrace = Utils.getRayTraceResult(player, distance, Tooltips.FURNITURE_ENTITIES);
+		Predicate<Entity> entityFilter = (entity -> {
+			if (entity == null) return false;
+			if (entity.equals(player)) return false;
+			return Tooltips.FURNITURE_ENTITIES.contains(entity.getType());
+		});
 		
+		var rayTrace = Utils.getRayTrace(player, distance, blockPredicate, entityFilter);
+
 		if (rayTrace == null)
 			return false;
 		
-		Block block = rayTrace.getHitBlock();
-
-		if (block != null && provider.isFurniture(block)) {
-			if (id != null) return provider.getFurnitureId(block).equals(id);
+		// Block
+		if (rayTrace.getHitBlock() != null) {
+			final Block block = rayTrace.getHitBlock();
+			if (finalizedId != null)
+				return provider.getFurnitureId(block).equals(finalizedId);
 			return true;
 		}
 		
-		Entity entity = rayTrace.getHitEntity();
-
-		if (entity != null && provider.isFurniture(entity)) {
-			if (id != null) return provider.getFurnitureId(entity).equals(id);
-			return true;
+		// Entity
+		if (rayTrace.getHitEntity() != null) {
+			final Entity entity = rayTrace.getHitEntity();
+			if (entity != null && provider.isFurniture(entity)) {
+				if (id != null)
+					return provider.getFurnitureId(entity).equals(id);
+				return true;
+			}
 		}
 
 		return false;
@@ -57,8 +77,8 @@ public class LookingAtFurniture implements Condition {
 
 	@Override
 	public Validity valid(Arguments args) {
-		
-		if (provider  == null) {
+
+		if (provider == null) {
 			return Validity.of(false, "No furniture plugin present");
 		}
 

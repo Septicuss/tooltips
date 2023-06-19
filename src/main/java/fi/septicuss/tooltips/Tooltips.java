@@ -2,6 +2,7 @@ package fi.septicuss.tooltips;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -355,7 +356,6 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 	private void addLocalPlaceholders() {
 
-		// TODO: Fix constant updating
 		if (furnitureProvider != null) {
 			Placeholders.addLocal("furniture", new SimplePlaceholderParser((p, s) -> {
 				if (!s.equalsIgnoreCase("furniture_id") && !s.equalsIgnoreCase("furniture_name")) {
@@ -363,23 +363,36 @@ public class Tooltips extends JavaPlugin implements Listener {
 				}
 
 				final boolean name = s.equalsIgnoreCase("furniture_name");
-				final var rayTrace = Utils.getRayTraceResult(p, 10, FURNITURE_ENTITIES);
 
-				final Block hitBlock = rayTrace.getHitBlock();
+				Predicate<Block> blockPredicate = (block -> {
+					if (block == null) return false;
+					return furnitureProvider.isFurniture(block);
+				});
+				
+				Predicate<Entity> entityFilter = (entity -> {
+					if (entity == null) return false;
+					if (entity.equals(p)) return false;
+					return Tooltips.FURNITURE_ENTITIES.contains(entity.getType());
+				});
+				
+				var rayTrace = Utils.getRayTrace(p, 10, blockPredicate, entityFilter);
 
-				if (hitBlock != null && furnitureProvider.isFurniture(hitBlock)) {
+				if (rayTrace == null)
+					return null;
+				
+				if (rayTrace.getHitBlock() != null) {
+					final Block hitBlock = rayTrace.getHitBlock();
 					final String id = furnitureProvider.getFurnitureId(hitBlock);
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
 
-				final Entity hitEntity = rayTrace.getHitEntity();
-
-				if (hitEntity != null && furnitureProvider.isFurniture(hitEntity)) {
+				if (rayTrace.getHitEntity() != null) {
+					final Entity hitEntity = rayTrace.getHitEntity();
 					final String id = furnitureProvider.getFurnitureId(hitEntity);
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
 				}
 
-				return "None";
+				return null;
 			}));
 		}
 
