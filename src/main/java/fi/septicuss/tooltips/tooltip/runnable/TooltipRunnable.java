@@ -99,6 +99,7 @@ public class TooltipRunnable extends BukkitRunnable {
 
 					continue outer;
 				} else {
+					getPlayerData(player).setTextJustUpdated(false);
 					handleFalse(player, id, preset, preset.getShowProperties());
 				}
 
@@ -159,7 +160,8 @@ public class TooltipRunnable extends BukkitRunnable {
 		if (data.hasCurrentPreset() && !data.getCurrentPresetId().equals(presetId)) {
 			String previousId = data.getCurrentPresetId();
 			Preset previousPreset = presets.get(previousId);
-
+			
+			data.setTextJustUpdated(false);
 			handleFalse(player, previousId, previousPreset, previousPreset.getShowProperties());
 			return;
 		}
