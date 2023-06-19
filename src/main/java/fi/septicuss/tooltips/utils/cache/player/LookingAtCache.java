@@ -4,33 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class LookingAtCache {
 
-	private static final Map<LookingAtKey, String> yawMap = new HashMap<>();
+	private static final Map<UUID, String> lookingAtFurnitureIdMap = new HashMap<>();
 
 	public static boolean contains(Player player) {
-		return (yawMap.containsKey(getKey(player)));
+		return (lookingAtFurnitureIdMap.containsKey(player.getUniqueId()));
 	}
 
 	public static String get(Player player) {
-		return (yawMap.get(getKey(player)));
+		return (lookingAtFurnitureIdMap.get(player.getUniqueId()));
 	}
-	
+
 	public static void put(Player player, String value) {
-		yawMap.put(getKey(player), value);
+		lookingAtFurnitureIdMap.put(player.getUniqueId(), value);
 	}
 	
-	private static LookingAtKey getKey(Player player) {
-		UUID uuid = player.getUniqueId();
-		Location location = player.getLocation();
-		return new LookingAtKey(uuid, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-	}
-
-	private static record LookingAtKey(UUID uuid, double x, double y, double z, float yaw, float pitch) {
-
+	public static void remove(Player player) {
+		lookingAtFurnitureIdMap.remove(player.getUniqueId());
 	}
 
 }

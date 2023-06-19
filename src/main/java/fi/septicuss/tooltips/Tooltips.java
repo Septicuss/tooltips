@@ -82,6 +82,7 @@ import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
+import fi.septicuss.tooltips.utils.cache.player.LookingAtCache;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
@@ -364,6 +365,12 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 				final boolean name = s.equalsIgnoreCase("furniture_name");
 
+				// Already cached by LookingAtFurniture condition
+				if (LookingAtCache.contains(p)) {
+					final String cachedId = LookingAtCache.get(p);
+					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, cachedId) : cachedId);
+				}
+				
 				Predicate<Block> blockPredicate = (block -> {
 					if (block == null) return false;
 					return furnitureProvider.isFurniture(block);

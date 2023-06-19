@@ -12,6 +12,7 @@ import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.validation.Validity;
 import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.utils.cache.player.LookingAtCache;
 
 public class LookingAtFurniture implements Condition {
 
@@ -57,8 +58,12 @@ public class LookingAtFurniture implements Condition {
 		// Block
 		if (rayTrace.getHitBlock() != null) {
 			final Block block = rayTrace.getHitBlock();
+			final String furnitureId = provider.getFurnitureId(block);
+			
+			cache(player, provider.getFurnitureId(block));
+			
 			if (finalizedId != null)
-				return provider.getFurnitureId(block).equals(finalizedId);
+				return furnitureId.equals(finalizedId);
 			return true;
 		}
 		
@@ -66,8 +71,14 @@ public class LookingAtFurniture implements Condition {
 		if (rayTrace.getHitEntity() != null) {
 			final Entity entity = rayTrace.getHitEntity();
 			if (entity != null && provider.isFurniture(entity)) {
-				if (id != null)
-					return provider.getFurnitureId(entity).equals(id);
+				final String furnitureId = provider.getFurnitureId(entity);
+
+				cache(player, furnitureId);
+				
+				if (id != null) {
+					return furnitureId.equals(id);
+				}
+				
 				return true;
 			}
 		}
@@ -87,6 +98,10 @@ public class LookingAtFurniture implements Condition {
 		}
 
 		return Validity.TRUE;
+	}
+	
+	private void cache(Player player, String id) {
+		LookingAtCache.put(player, id);
 	}
 
 }
