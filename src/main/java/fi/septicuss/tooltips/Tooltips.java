@@ -410,6 +410,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 			int cutIndex = (global ? 11 : 4);
 
 			String variableName = s.substring(cutIndex);
+			variableName = Placeholders.replacePlaceholders(p, variableName);
 			
 			Argument returnArgument = null;
 
@@ -428,10 +429,12 @@ public class Tooltips extends JavaPlugin implements Listener {
 		Placeholders.addLocal("persistentvar", new SimplePlaceholderParser((p, s) -> {
 			if (!s.startsWith("persistentvar_"))
 				return null;
+			
 			boolean global = s.startsWith("persistentvar_global_");
 			int cutIndex = (global ? 21 : 14);
 
 			String variableName = s.substring(cutIndex);
+			variableName = Placeholders.replacePlaceholders(p, variableName);
 
 			Argument returnArgument = null;
 
