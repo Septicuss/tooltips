@@ -15,11 +15,19 @@ import fi.septicuss.tooltips.commands.TooltipsSubCommand;
 import fi.septicuss.tooltips.object.preset.actions.command.ActionCommand;
 import fi.septicuss.tooltips.object.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.object.preset.actions.command.impl.vars.VarCommand;
+import fi.septicuss.tooltips.utils.Colors;
+import fi.septicuss.tooltips.utils.Messaging;
 
 public class VarsCommand implements TooltipsSubCommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command command, String label, String[] args) {
+		
+		if (!(sender instanceof Player)) {
+			Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] Must be a player to use this command.");
+			return;
+		}
+		
 		Bukkit.getScheduler().runTask(Tooltips.get(), () -> {
 			StringBuilder stringBuilder = new StringBuilder();
 
