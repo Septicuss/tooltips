@@ -18,7 +18,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class TextLine {
 
 	private static FormatRetention RETENTION = FormatRetention.NONE;
-	public static Map<String, TextComponent> replaceables;
+	private static Map<String, TextComponent> REPLACEABLES;
 
 	private ComponentBuilder lineComponents;
 	private String processedText;
@@ -31,10 +31,10 @@ public class TextLine {
 			return;
 		}
 
-		if (replaceables == null) {
-			replaceables = new HashMap<>();
-			replaceables.putAll(iconManager.getIconPlaceholders());
-			replaceables.putAll(Spaces.getSpacePlaceholders());
+		if (REPLACEABLES == null || REPLACEABLES.isEmpty()) {
+			REPLACEABLES = new HashMap<>();
+			REPLACEABLES.putAll(iconManager.getIconPlaceholders());
+			REPLACEABLES.putAll(Spaces.getSpacePlaceholders());
 		}
 
 		final String line = Utils.color(Placeholders.replacePlaceholders(player, unprocessedText));
@@ -73,7 +73,7 @@ public class TextLine {
 				if (bracketsExist || openingBeforeClosure) {
 					String sub = plain.substring(j, j + nextClosure + 2);
 
-					if (replaceables.containsKey(sub)) {
+					if (REPLACEABLES.containsKey(sub)) {
 
 						final String textUntilNow = stringLineBuilder.toString();
 
@@ -83,7 +83,7 @@ public class TextLine {
 							lineComponents.append(text, RETENTION);
 						}
 
-						var replaceable = replaceables.get(sub);
+						var replaceable = REPLACEABLES.get(sub);
 						var replaceWith = replaceable.duplicate();
 						replaceWith.copyFormatting(baseComponent, false);
 						lineComponents.append(replaceWith, RETENTION);
@@ -117,7 +117,7 @@ public class TextLine {
 
 		processedText = lineBuilder.toString();
 	}
-
+	
 	public ComponentBuilder getLineComponents() {
 		return lineComponents;
 	}
@@ -126,4 +126,7 @@ public class TextLine {
 		return processedText;
 	}
 
+	public static void clearReplaceables() {
+		REPLACEABLES = null;
+	}
 }

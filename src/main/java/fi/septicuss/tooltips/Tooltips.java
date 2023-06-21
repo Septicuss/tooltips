@@ -180,55 +180,70 @@ public class Tooltips extends JavaPlugin implements Listener {
 	// ------------------------------------------------------
 
 	private void loadVariables() {
-		File variablesDirectory = getVariablesDirectory();
+		final File variablesDirectory = new File(getDataFolder(), "data/variables");
 		Variables.PERSISTENT.load(variablesDirectory);
 	}
 
 	private void loadIntegrations() {
 
 		PluginManager pluginManager = Bukkit.getPluginManager();
-		String preferredPlugin = getConfig().getString("furniture-plugin", "automatic");
 
-		boolean chooseAutomatically = preferredPlugin.equalsIgnoreCase("auto")
-				|| preferredPlugin.equalsIgnoreCase("automatic");
-
-		for (IntegratedPlugin plugin : IntegratedPlugin.values()) {
-			if (pluginManager.getPlugin(plugin.getName()) != null) {
-				plugin.setEnabled(true);
-			} else if (plugin.isRequired()) {
-				log(plugin.getName() + " is required to run Tooltips");
+		// For each IntegratedPlugin, check if enabled on the server
+		for (IntegratedPlugin integratedPlugin : IntegratedPlugin.values()) {
+			
+			final var bukkitPlugin = pluginManager.getPlugin(integratedPlugin.getName());
+			final boolean required = integratedPlugin.isRequired();
+			final boolean enabled = bukkitPlugin != null;
+			
+			// Required plugin not present
+			if (!enabled && required) {
+				log(integratedPlugin.getName() + " is required to run Tooltips");
 				pluginManager.disablePlugin(this);
 				return;
-			} else {
-				plugin.setEnabled(false);
 			}
+			
+			integratedPlugin.setEnabled(enabled);
 		}
 
+		final String preferredFurniturePlugin = getConfig().getString("furniture-plugin", "automatic").toLowerCase();
+		final boolean chooseAutomatically = (preferredFurniturePlugin.equals("auto") || preferredFurniturePlugin.equals("automatic"));
+
+		// Load providers for appropriate furniture plugins
 		for (IntegratedPlugin furniturePlugin : IntegratedPlugin.FURNITURE_PLUGINS) {
-			if (!furniturePlugin.isEnabled())
+			
+			if (!furniturePlugin.isEnabled()) {
 				continue;
-			if (chooseAutomatically || preferredPlugin.equalsIgnoreCase(furniturePlugin.getName())) {
+			}
+			
+			if (chooseAutomatically || preferredFurniturePlugin.equalsIgnoreCase(furniturePlugin.getName())) {
+				
 				this.furnitureProvider = switch (furniturePlugin) {
-				case ORAXEN -> new OraxenFurnitureProvider();
-				case ITEMSADDER -> new ItemsAdderFurnitureProvider();
-				case CRUCIBLE -> new CrucibleFurnitureProvider();
-				default -> null;
+					case ORAXEN -> new OraxenFurnitureProvider();
+					case ITEMSADDER -> new ItemsAdderFurnitureProvider();
+					case CRUCIBLE -> new CrucibleFurnitureProvider();
+					default -> null;
 				};
 
 				if (this.furnitureProvider != null) {
 					log("Used furniture plugin: " + this.furnitureProvider.getClass().getSimpleName());
 					break;
 				}
+				
 			}
 		}
 
+		// Load area provider for appropriate area plugins
 		for (IntegratedPlugin areaPlugin : IntegratedPlugin.AREA_PLUGINS) {
-			if (!areaPlugin.isEnabled())
+			
+			if (!areaPlugin.isEnabled()) {
 				continue;
+			}
+			
 			this.areaProvider = switch (areaPlugin) {
-			case WORLDGUARD -> new WorldGuardAreaProvider();
-			default -> null;
+				case WORLDGUARD -> new WorldGuardAreaProvider();
+				default -> null;
 			};
+			
 		}
 
 	}
@@ -237,12 +252,12 @@ public class Tooltips extends JavaPlugin implements Listener {
 		PluginManager pluginManager = Bukkit.getPluginManager();
 		pluginManager.registerEvents(this, this);
 
-		if (areaProvider != null)
-			pluginManager.registerEvents(new PlayerMovementListener(areaProvider), this);
-
-		playerInteractListener = new PlayerInteractListener();
-
-		pluginManager.registerEvents(playerInteractListener, this);
+		if (this.areaProvider != null) {
+			pluginManager.registerEvents(new PlayerMovementListener(this.areaProvider), this);
+		}
+		
+		this.playerInteractListener = new PlayerInteractListener();
+		pluginManager.registerEvents(this.playerInteractListener, this);
 		pluginManager.registerEvents(new PlayerConnectionListener(), this);
 	}
 
@@ -287,17 +302,13 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 	public void reload() {
 
-		// So that new icons may be added
-		TextLine.replaceables = null;
-
 		// Stop possible previous tooltip runnable
 		if (this.runnableManager != null)
 			this.runnableManager.stop();
 
 		this.reloadConfig();
 
-		TooltipCache.clear();
-		FurnitureCache.clear();
+		clearCache();
 		fillCache();
 
 		FileSetup.setup(this);
@@ -353,6 +364,12 @@ public class Tooltips extends JavaPlugin implements Listener {
 				FurnitureCache.cacheAll(furnitureProvider.getAllFurniture());
 			}
 		}, 40L);
+	}
+	
+	private void clearCache() {
+		TextLine.clearReplaceables();
+		TooltipCache.clear();
+		FurnitureCache.clear();
 	}
 
 	private void addLocalPlaceholders() {
@@ -450,10 +467,6 @@ public class Tooltips extends JavaPlugin implements Listener {
 			return returnArgument.getAsString();
 		}));
 
-	}
-
-	private File getVariablesDirectory() {
-		return new File(getDataFolder(), "data/variables");
 	}
 
 	// ------------------------------------------------------
