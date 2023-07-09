@@ -3,61 +3,107 @@ package fi.septicuss.tooltips.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.security.CodeSource;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import fi.septicuss.tooltips.Tooltips;
 
 public class FileSetup {
 
-	private static final String[] CONFIG_TYPES = { "presets", "themes", "icons" };
-	private static final Map<String, String> CONFIG_MAP;
+	private static final String[] SECONDARY_CONFIG_TYPES = { "presets", "themes", "icons" };
 
-	static {
-		CONFIG_MAP = new HashMap<>();
-		CONFIG_MAP.put("default/config/config.yml", "config.yml");
+	public static void setupFiles(Tooltips plugin) {
 
-		for (String configType : CONFIG_TYPES) {
-			final String fromPath = String.format("default/config/%1$s/%1$s.yml", configType);
-			final String toPath = String.format("%1$s/%1$s.yml", configType);
-			CONFIG_MAP.put(fromPath, toPath);
-		}
-	}
+		setupConfigs(plugin);
 
-	public static void setup(Tooltips plugin) {
 		try {
-			setupConfigs(plugin);
 			setupData(plugin);
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static void setupConfigs(Tooltips plugin) throws IOException {
+	public static void setupConfigs(Tooltips plugin) {
+
+		try {
+			setupMainConfig(plugin);
+		} catch (IOException e) {
+			Tooltips.warn("Failed to set up config.yml");
+			e.printStackTrace();
+		}
+
+		try {
+			setupSecondaryConfigs(plugin);
+		} catch (IOException e) {
+			Tooltips.warn("Failed to set up secondary configs");
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void setupMainConfig(Tooltips plugin) throws IOException {
+
+		final String internalPath = "default/config/config.yml";
+		final String targetPath = "config.yml";
 
 		final File dataFolder = plugin.getDataFolder();
+		final File existingConfigFile = new File(dataFolder, targetPath);
 
-		for (Map.Entry<String, String> entry : CONFIG_MAP.entrySet()) {
-			final String fromPath = entry.getKey();
-			final String toPath = entry.getValue();
-			final File file = new File(dataFolder, toPath);
+		if (!existingConfigFile.exists()) {
+			copyFromJar(plugin, internalPath, existingConfigFile);
+		}
 
-			if (!file.exists()) {
-				final InputStream stream = plugin.getResource(fromPath);
-				file.getParentFile().mkdirs();
-				Files.copy(stream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		// Update existing config if needed
+		final InputStreamReader reader = new InputStreamReader(plugin.getResource(internalPath));
+
+		final FileConfiguration existingConfig = YamlConfiguration.loadConfiguration(existingConfigFile);
+		final FileConfiguration internalConfig = YamlConfiguration.loadConfiguration(reader);
+
+		for (String key : internalConfig.getKeys(true)) {
+			if (!existingConfig.contains(key)) {
+				existingConfig.set(key, internalConfig.get(key));
 			}
 		}
 
 	}
 
+	private static void setupSecondaryConfigs(Tooltips plugin) throws IOException {
+
+		final File dataFolder = plugin.getDataFolder();
+
+		for (String configType : SECONDARY_CONFIG_TYPES) {
+			final String fromPath = String.format("default/config/%1$s/%1$s.yml", configType);
+			final String toPath = String.format("%1$s/%1$s.yml", configType);
+
+			final File file = new File(dataFolder, toPath);
+
+			if (!file.exists()) {
+				copyFromJar(plugin, fromPath, file);
+			}
+		}
+
+	}
+
+	private static void copyFromJar(Tooltips plugin, String internalPath, File targetFile) throws IOException {
+		final InputStream stream = plugin.getResource(internalPath);
+		if (stream == null)
+			return;
+
+		targetFile.getParentFile().mkdirs();
+
+		Files.copy(stream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	}
+
+	// Relocates from jar default/data to plugins/Tooltips/data
 	private static void setupData(Tooltips plugin) throws IOException, URISyntaxException {
 
 		final File dataFolder = plugin.getDataFolder();
@@ -89,10 +135,6 @@ public class FileSetup {
 				continue;
 			}
 
-			if (file.exists()) {
-				continue;
-			}
-			
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 			Files.copy(zipFile, file.toPath(), StandardCopyOption.REPLACE_EXISTING);

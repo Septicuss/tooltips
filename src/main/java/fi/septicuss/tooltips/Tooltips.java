@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -67,6 +66,7 @@ import fi.septicuss.tooltips.object.preset.condition.impl.StandingOn;
 import fi.septicuss.tooltips.object.preset.condition.impl.TileEntityNbtEquals;
 import fi.septicuss.tooltips.object.preset.condition.impl.Time;
 import fi.septicuss.tooltips.object.preset.condition.impl.World;
+import fi.septicuss.tooltips.object.schema.SchemaManager;
 import fi.septicuss.tooltips.object.theme.ThemeManager;
 import fi.septicuss.tooltips.pack.PackGenerator;
 import fi.septicuss.tooltips.pack.impl.IconGenerator;
@@ -99,6 +99,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 	private static Logger LOGGER;
 
 	private ProtocolManager protocolManager;
+	private SchemaManager schemaManager;
 	private IconManager iconManager;
 	private ThemeManager themeManager;
 	private PresetManager presetManager;
@@ -145,7 +146,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 
 		// Set up files (export them from the jar)
-		FileSetup.setup(this);
+		FileSetup.setupFiles(this);
 
 		// Load persistent variables
 		loadVariables();
@@ -190,60 +191,61 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 		// For each IntegratedPlugin, check if enabled on the server
 		for (IntegratedPlugin integratedPlugin : IntegratedPlugin.values()) {
-			
+
 			final var bukkitPlugin = pluginManager.getPlugin(integratedPlugin.getName());
 			final boolean required = integratedPlugin.isRequired();
 			final boolean enabled = bukkitPlugin != null;
-			
+
 			// Required plugin not present
 			if (!enabled && required) {
 				log(integratedPlugin.getName() + " is required to run Tooltips");
 				pluginManager.disablePlugin(this);
 				return;
 			}
-			
+
 			integratedPlugin.setEnabled(enabled);
 		}
 
 		final String preferredFurniturePlugin = getConfig().getString("furniture-plugin", "automatic").toLowerCase();
-		final boolean chooseAutomatically = (preferredFurniturePlugin.equals("auto") || preferredFurniturePlugin.equals("automatic"));
+		final boolean chooseAutomatically = (preferredFurniturePlugin.equals("auto")
+				|| preferredFurniturePlugin.equals("automatic"));
 
 		// Load providers for appropriate furniture plugins
 		for (IntegratedPlugin furniturePlugin : IntegratedPlugin.FURNITURE_PLUGINS) {
-			
+
 			if (!furniturePlugin.isEnabled()) {
 				continue;
 			}
-			
+
 			if (chooseAutomatically || preferredFurniturePlugin.equalsIgnoreCase(furniturePlugin.getName())) {
-				
+
 				this.furnitureProvider = switch (furniturePlugin) {
-					case ORAXEN -> new OraxenFurnitureProvider();
-					case ITEMSADDER -> new ItemsAdderFurnitureProvider();
-					case CRUCIBLE -> new CrucibleFurnitureProvider();
-					default -> null;
+				case ORAXEN -> new OraxenFurnitureProvider();
+				case ITEMSADDER -> new ItemsAdderFurnitureProvider();
+				case CRUCIBLE -> new CrucibleFurnitureProvider();
+				default -> null;
 				};
 
 				if (this.furnitureProvider != null) {
 					log("Used furniture plugin: " + this.furnitureProvider.getClass().getSimpleName());
 					break;
 				}
-				
+
 			}
 		}
 
 		// Load area provider for appropriate area plugins
 		for (IntegratedPlugin areaPlugin : IntegratedPlugin.AREA_PLUGINS) {
-			
+
 			if (!areaPlugin.isEnabled()) {
 				continue;
 			}
-			
+
 			this.areaProvider = switch (areaPlugin) {
-				case WORLDGUARD -> new WorldGuardAreaProvider();
-				default -> null;
+			case WORLDGUARD -> new WorldGuardAreaProvider();
+			default -> null;
 			};
-			
+
 		}
 
 	}
@@ -255,7 +257,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 		if (this.areaProvider != null) {
 			pluginManager.registerEvents(new PlayerMovementListener(this.areaProvider), this);
 		}
-		
+
 		this.playerInteractListener = new PlayerInteractListener();
 		pluginManager.registerEvents(this.playerInteractListener, this);
 		pluginManager.registerEvents(new PlayerConnectionListener(), this);
@@ -303,44 +305,32 @@ public class Tooltips extends JavaPlugin implements Listener {
 	public void reload() {
 
 		// Stop possible previous tooltip runnable
-		if (this.runnableManager != null)
+		if (this.runnableManager != null) {
 			this.runnableManager.stop();
+		}
 
 		this.reloadConfig();
 
 		clearCache();
 		fillCache();
 
-		FileSetup.setup(this);
-
-		File defaultFonts = new File(getDataFolder(), "data/schemas/font/default-fonts.yml");
-		Widths.loadFromSchemas(getDataFolder(), YamlConfiguration.loadConfiguration(defaultFonts));
+		FileSetup.setupFiles(this);
 
 		final boolean useSpaces = this.getConfig().getBoolean("use-spaces", true);
 		final int checkFrequency = this.getConfig().getInt("condition-check-frequency", 3);
 
-		SizedChar space = new SizedChar(' ');
-
-		if (useSpaces) {
-			space.setHeight(1);
-			space.setAbsoluteWidth(1);
-			space.setImageHeight(1);
-		} else {
-			space.setHeight(2);
-			space.setAbsoluteWidth(2);
-			space.setImageHeight(2);
-		}
-
-		Widths.add(space);
-
+		this.schemaManager = new SchemaManager();
 		this.iconManager = new IconManager();
 		this.themeManager = new ThemeManager();
 		this.presetManager = new PresetManager();
 		this.tooltipManager = new TooltipManager(this);
 
+		schemaManager.loadFrom(new File(getDataFolder(), "data/schemas"));
 		iconManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "icons"));
 		themeManager.loadFrom(FileUtils.getAllConfigsFrom(this, "themes"));
 		presetManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "presets"));
+
+		addSpaceCharWidth(useSpaces);
 
 		this.packGenerator = new PackGenerator(this);
 		this.packGenerator.registerGenerator(new SpacesGenerator(packGenerator, useSpaces));
@@ -365,11 +355,29 @@ public class Tooltips extends JavaPlugin implements Listener {
 			}
 		}, 40L);
 	}
-	
+
 	private void clearCache() {
 		TextLine.clearReplaceables();
 		TooltipCache.clear();
 		FurnitureCache.clear();
+	}
+
+	private void addSpaceCharWidth(boolean useSpaces) {
+
+		SizedChar space = new SizedChar(' ');
+
+		if (useSpaces) {
+			space.setHeight(1);
+			space.setAbsoluteWidth(1);
+			space.setImageHeight(1);
+		} else {
+			space.setHeight(2);
+			space.setAbsoluteWidth(2);
+			space.setImageHeight(2);
+		}
+
+		Widths.add(space);
+
 	}
 
 	private void addLocalPlaceholders() {
@@ -387,23 +395,26 @@ public class Tooltips extends JavaPlugin implements Listener {
 					final String cachedId = LookingAtCache.get(p);
 					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, cachedId) : cachedId);
 				}
-				
+
 				Predicate<Block> blockPredicate = (block -> {
-					if (block == null) return false;
+					if (block == null)
+						return false;
 					return furnitureProvider.isFurniture(block);
 				});
-				
+
 				Predicate<Entity> entityFilter = (entity -> {
-					if (entity == null) return false;
-					if (entity.equals(p)) return false;
+					if (entity == null)
+						return false;
+					if (entity.equals(p))
+						return false;
 					return Tooltips.FURNITURE_ENTITIES.contains(entity.getType());
 				});
-				
+
 				var rayTrace = Utils.getRayTrace(p, 10, blockPredicate, entityFilter);
 
 				if (rayTrace == null)
 					return null;
-				
+
 				if (rayTrace.getHitBlock() != null) {
 					final Block hitBlock = rayTrace.getHitBlock();
 					final String id = furnitureProvider.getFurnitureId(hitBlock);
@@ -428,7 +439,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 			String variableName = s.substring(cutIndex);
 			variableName = Placeholders.replacePlaceholders(p, variableName);
-			
+
 			Argument returnArgument = null;
 
 			if (global) {
@@ -436,7 +447,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 			} else {
 				returnArgument = Variables.LOCAL.getVar(p, variableName);
 			}
-			
+
 			if (returnArgument == null || returnArgument.getAsString() == null)
 				return "0";
 
@@ -446,7 +457,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 		Placeholders.addLocal("persistentvar", new SimplePlaceholderParser((p, s) -> {
 			if (!s.startsWith("persistentvar_"))
 				return null;
-			
+
 			boolean global = s.startsWith("persistentvar_global_");
 			int cutIndex = (global ? 21 : 14);
 
