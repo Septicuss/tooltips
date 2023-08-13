@@ -70,8 +70,8 @@ import fi.septicuss.tooltips.object.schema.SchemaManager;
 import fi.septicuss.tooltips.object.theme.ThemeManager;
 import fi.septicuss.tooltips.pack.PackGenerator;
 import fi.septicuss.tooltips.pack.impl.IconGenerator;
-import fi.septicuss.tooltips.pack.impl.SchemaGenerator;
-import fi.septicuss.tooltips.pack.impl.SpacesGenerator;
+import fi.septicuss.tooltips.pack.impl.LineGenerator;
+import fi.septicuss.tooltips.pack.impl.SpaceGenerator;
 import fi.septicuss.tooltips.pack.impl.TextureGenerator;
 import fi.septicuss.tooltips.pack.impl.ThemeGenerator;
 import fi.septicuss.tooltips.tooltip.TooltipManager;
@@ -105,7 +105,6 @@ public class Tooltips extends JavaPlugin implements Listener {
 	private PresetManager presetManager;
 	private ConditionManager conditionManager;
 	private TooltipManager tooltipManager;
-	private PackGenerator packGenerator;
 	private TooltipRunnableManager runnableManager;
 
 	private FurnitureProvider furnitureProvider;
@@ -145,28 +144,17 @@ public class Tooltips extends JavaPlugin implements Listener {
 	public void onEnable() {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 
-		// Set up files (export them from the jar)
+		FileSetup.performMigration(this);
 		FileSetup.setupFiles(this);
 
-		// Load persistent variables
 		loadVariables();
-
-		// Load integrations
 		loadIntegrations();
-
-		// Load required listeners
 		loadListeners();
 
-		// Load conditionmanager now, because it has to register conditions once
 		conditionManager = new ConditionManager();
 
-		// Load local placeholders
 		addLocalPlaceholders();
-
-		// Register commands
 		loadCommands();
-
-		// Reload the plugin
 		reload();
 	}
 
@@ -181,7 +169,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 	// ------------------------------------------------------
 
 	private void loadVariables() {
-		final File variablesDirectory = new File(getDataFolder(), "data/variables");
+		final File variablesDirectory = new File(getDataFolder(), ".data/variables");
 		Variables.PERSISTENT.load(variablesDirectory);
 	}
 
@@ -325,21 +313,21 @@ public class Tooltips extends JavaPlugin implements Listener {
 		this.presetManager = new PresetManager();
 		this.tooltipManager = new TooltipManager(this);
 
-		schemaManager.loadFrom(new File(getDataFolder(), "data/schemas"));
+		schemaManager.loadFrom(new File(getDataFolder(), ".data/schemas"));
 		iconManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "icons"));
 		themeManager.loadFrom(FileUtils.getAllConfigsFrom(this, "themes"));
 		presetManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "presets"));
 
 		addSpaceCharWidth(useSpaces);
 
-		this.packGenerator = new PackGenerator(this);
-		this.packGenerator.registerGenerator(new SpacesGenerator(packGenerator, useSpaces));
-		this.packGenerator.registerGenerator(new SchemaGenerator(this, packGenerator));
-		this.packGenerator.registerGenerator(new ThemeGenerator(packGenerator, themeManager, useSpaces));
-		this.packGenerator.registerGenerator(new IconGenerator(packGenerator, iconManager));
-		this.packGenerator.registerGenerator(new TextureGenerator(packGenerator));
-		this.packGenerator.generate();
-
+		PackGenerator packGenerator = new PackGenerator(this);
+		packGenerator.registerGenerator(new SpaceGenerator(useSpaces));
+		packGenerator.registerGenerator(new ThemeGenerator(themeManager));
+		packGenerator.registerGenerator(new LineGenerator(schemaManager));
+		packGenerator.registerGenerator(new IconGenerator(iconManager));
+		packGenerator.registerGenerator(new TextureGenerator());
+		packGenerator.generate();
+		
 		this.runnableManager = new TooltipRunnableManager(this);
 		this.runnableManager.run(this, checkFrequency);
 

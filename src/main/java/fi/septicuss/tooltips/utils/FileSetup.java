@@ -9,6 +9,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.security.CodeSource;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -93,7 +95,7 @@ public class FileSetup {
 
 	}
 
-	private static void copyFromJar(Tooltips plugin, String internalPath, File targetFile) throws IOException {
+	public static void copyFromJar(Tooltips plugin, String internalPath, File targetFile) throws IOException {
 		final InputStream stream = plugin.getResource(internalPath);
 		if (stream == null)
 			return;
@@ -108,6 +110,7 @@ public class FileSetup {
 
 		final File dataFolder = plugin.getDataFolder();
 		final CodeSource codeSource = plugin.getClass().getProtectionDomain().getCodeSource();
+		
 		if (codeSource == null) {
 			Tooltips.warn("Failed to read code source");
 			return;
@@ -124,23 +127,53 @@ public class FileSetup {
 
 			final String name = entry.getName();
 
-			if (!name.startsWith("default/data") && !name.startsWith("default/pack")) {
+			if (!name.startsWith("default/.data") && !name.startsWith("default/pack")) {
 				continue;
 			}
 
 			String path = name.replaceFirst("default/", "");
 			File file = new File(dataFolder, path);
-
+			
 			if (!name.endsWith(".png") && !name.endsWith(".yml") && !name.endsWith(".json")) {
 				continue;
 			}
 
 			file.getParentFile().mkdirs();
+			
+			if (file.exists()) {
+				continue;
+			}
+			
 			file.createNewFile();
 			Files.copy(zipFile, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
 		}
 
+	}
+	
+	public static void performMigration(Tooltips plugin) {
+		
+		File dataFolder = plugin.getDataFolder();
+
+		File oldVariablesFolder = new File(dataFolder, "data/variables");
+		File newVariablesFolder = new File(dataFolder, ".data/variables");
+
+		if (oldVariablesFolder != null && oldVariablesFolder.exists()) {
+			FileUtils.copyFiles(oldVariablesFolder, newVariablesFolder);
+		}
+		
+		Set<File> deletedFiles = new HashSet<>();
+		
+		deletedFiles.add(new File(dataFolder, "generated"));
+		deletedFiles.add(new File(dataFolder, "data"));
+		
+		deletedFiles.forEach(file -> {
+			if (file.isDirectory()) {
+				FileUtils.cleanDirectory(file);
+			}
+			
+			file.delete();
+		});
+		
 	}
 
 }

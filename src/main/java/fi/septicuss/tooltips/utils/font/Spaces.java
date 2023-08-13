@@ -13,7 +13,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class Spaces {
 
-	public static final String OFFSET_FONT_NAME = "tooltips:s";
+	public static final String OFFSET_FONT_NAME = "tooltips:space";
 	private static final int[] PLACEHOLDER_OFFSETS = { 1, 2, 4, 8, 16, 32 };
 	private static final Map<Integer, Character> OFFSET_MAP;
 

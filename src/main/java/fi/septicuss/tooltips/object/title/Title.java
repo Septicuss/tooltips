@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.utils.title;
+package fi.septicuss.tooltips.object.title;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

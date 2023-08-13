@@ -123,7 +123,7 @@ public class Theme implements Validatable {
 	}
 
 	public String getFontName() {
-		return path.getNamespace() + ":" + id + "/m";
+		return path.getNamespace() + ":themes/" + id;
 	}
 
 	@Override

@@ -1,7 +1,13 @@
 providers:
+    space:
+      type: "bitmap"
+      texture: space.png
+      height: 4
+      chars:
+        - "\u0020"
     nonlatin-european:
       type: "bitmap"
-      texture: font/nonlatin_european.png
+      texture: nonlatin_european.png
       height: 4
       chars:
         - "\u00a1\u2030\u00ad\u00b7\u20b4\u2260\u00bf\u00d7\u00d8\u00de\u04bb\u00f0\u00f8\u00fe\u0391\u0392"
@@ -73,7 +79,7 @@ providers:
         - "\u20bc\u20bf\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
     accented:
       type: "bitmap"
-      texture: font/accented.png
+      texture: accented.png
       height: 6
       ascent: 2
       chars:
@@ -154,7 +160,7 @@ providers:
         - "\u1e9a\u2152\u2158\u20a8\u20af\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
     ascii:
       type: "bitmap"
-      texture: font/ascii.png
+      texture: ascii.png
       height: 4
       chars:
         - "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"

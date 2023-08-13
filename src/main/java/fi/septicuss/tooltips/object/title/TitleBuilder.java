@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.utils.title;
+package fi.septicuss.tooltips.object.title;
 
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;

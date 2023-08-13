@@ -1,7 +1,9 @@
 package fi.septicuss.tooltips.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +16,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+
+import com.google.gson.JsonObject;
 
 import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
@@ -37,6 +41,13 @@ public class Utils {
 
 		String processedString = ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
 		return processedString;
+	}
+	
+	public static Set<JsonObject> getJsonSetCopy(Set<JsonObject> set) {
+		Set<JsonObject> copy = new HashSet<>();
+		if (set == null) return copy;
+		set.forEach(object -> copy.add(object.deepCopy()));
+		return copy;
 	}
 
 	public static String quote(String message) {

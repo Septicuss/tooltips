@@ -1,37 +1,34 @@
 package fi.septicuss.tooltips.pack.impl;
 
 import java.io.File;
-
-import com.google.common.io.Files;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import fi.septicuss.tooltips.object.NamespacedPath;
 import fi.septicuss.tooltips.pack.Generator;
-import fi.septicuss.tooltips.pack.PackGenerator;
+import fi.septicuss.tooltips.pack.PackData;
 import fi.septicuss.tooltips.utils.FileUtils;
 
 public class TextureGenerator implements Generator {
 
-	private PackGenerator packGenerator;
-
-	public TextureGenerator(PackGenerator packGenerator) {
-		this.packGenerator = packGenerator;
-	}
-
 	@Override
-	public void generate() {
-		try {
-			File packAssets = packGenerator.getPackAssetsDirectory();
-			File generated = packGenerator.getGeneratedDirectory();
+	public void generate(PackData packData, File assetsDirectory, File targetDirectory) {
 
-			for (NamespacedPath texturePath : packGenerator.getUsedTextures()) {
-				File textureFile = new File(packAssets, texturePath.getFullPath());
-				File destination = new File(generated, texturePath.getFullPath());
-				
-				FileUtils.createFileIfNotExists(destination);
-				Files.copy(textureFile, destination);
+		for (NamespacedPath namespacedPath : packData.getUsedTextures()) {
+			String filePath = namespacedPath.getFullPath();
+
+			Path from = Path.of(assetsDirectory.getPath(), filePath);
+			Path to = Path.of(targetDirectory.getPath(), filePath);
+			
+			try {
+				FileUtils.createIfNotExists(to.toFile());
+				Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException exception) {
+				exception.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 	}
 

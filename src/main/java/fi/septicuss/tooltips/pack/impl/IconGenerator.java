@@ -1,123 +1,95 @@
 package fi.septicuss.tooltips.pack.impl;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.io.Files;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.object.NamespacedPath;
 import fi.septicuss.tooltips.object.icon.Icon;
 import fi.septicuss.tooltips.object.icon.IconManager;
 import fi.septicuss.tooltips.pack.Generator;
-import fi.septicuss.tooltips.pack.PackGenerator;
+import fi.septicuss.tooltips.pack.PackData;
+import fi.septicuss.tooltips.pack.PackData.ProviderType;
 import fi.septicuss.tooltips.utils.FileUtils;
+import fi.septicuss.tooltips.utils.Utils;
 
 public class IconGenerator implements Generator {
 
-	private PackGenerator packGenerator;
+	public static final String ICON_FONT_FORMAT = "i%d";
+	private static final String ICON_PATH = "tooltips/font/icons/" + ICON_FONT_FORMAT + ".json";
+
 	private IconManager iconManager;
-
-	private HashMap<Icon, JsonObject> iconProviderMap = new HashMap<>();
-
-	public IconGenerator(PackGenerator packGenerator, IconManager iconManager) {
-		this.packGenerator = packGenerator;
+	
+	public IconGenerator(IconManager iconManager) {
 		this.iconManager = iconManager;
 	}
-
+	
 	@Override
-	public void generate() {
-		final Set<Icon> icons = iconManager.getAllIcons();
+	public void generate(PackData packData, File assetsDirectory, File targetDirectory) {
+		
+		
+		Set<JsonObject> iconProviders = new HashSet<>();
+		
+		iconManager.getAllIcons().forEach(icon -> {
+			// 1.
+			packData.addUsedTexture(icon.getPath());
+			
+			// 2.
+			iconProviders.add(getProviderFromIcon(icon));
+		});
+		
+		
+		// 3.
+		packData.getUsedAscents().forEach(ascent -> {
+			Set<JsonObject> copy = Utils.getJsonSetCopy(iconProviders);
+			addAscentToProviders(copy, ascent);
+			
+			for (var globalProvider : packData.getProviders(ProviderType.GLOBAL)) {
+				copy.add(globalProvider);
+			}
+			
+			JsonObject root = new JsonObject();
+			JsonArray array = new JsonArray();
+			
+			copy.forEach(array::add);
+			root.add("providers", array);
 
-		addUsedTextures(icons);
-		prepareProviders(icons);
-		generateFonts();
+			File iconFontFile = new File(targetDirectory, String.format(ICON_PATH, ascent));
+			FileUtils.createFileIfNotExists(iconFontFile);
+			FileUtils.writeToFile(iconFontFile, Tooltips.GSON.toJson(root));
+		});
+		
 	}
 
 	@Override
 	public String getName() {
 		return "Icon Generator";
 	}
+	
+	private void addAscentToProviders(Set<JsonObject> providers, int ascent) {
+		for (var provider : providers) {
+			int currentAscent = (provider.has("ascent") ? provider.get("ascent").getAsInt() : 0);
+			int completeAscent = currentAscent + ascent;
 
-	/**
-	 * Part of the generation process. Add every defined icons texture into the used
-	 * texture list.
-	 * 
-	 * @param icons
-	 */
-	private void addUsedTextures(Set<Icon> icons) {
-		for (Icon icon : icons) {
-			final NamespacedPath path = icon.getPath();
-			packGenerator.addUsedTexture(path);
+			provider.addProperty("ascent", completeAscent);
 		}
 	}
-
-	/**
-	 * Preload all necessary icon providers
-	 * 
-	 * @param icons
-	 */
-	private void prepareProviders(Set<Icon> icons) {
-		for (Icon icon : icons) {
-			JsonObject provider = new JsonObject();
-			provider.addProperty("type", "bitmap");
-			provider.addProperty("file", icon.getPath().getNamespacedPath());
-			provider.addProperty("ascent", icon.getAscent());
-			provider.addProperty("height", icon.getHeight());
-
-			JsonArray chars = new JsonArray();
-			chars.add(icon.getUnicode());
-
-			provider.add("chars", chars);
-
-			iconProviderMap.put(icon, provider);
-		}
-	}
-
-	/**
-	 * Generates icon font files for all used ascents. Icons are not added to
-	 * individual text line font files because that would be too costly on memory.
-	 */
-	private void generateFonts() {
-		File fontDirectory = new File(packGenerator.getGeneratedDirectory(), "tooltips/font");
-		Set<Integer> ascents = packGenerator.getUsedAscents();
-
-		for (int ascent : ascents) {
-			final String fileName = String.format(IconManager.ICON_FONT_FORMAT, ascent);
-			final File ascentedIconFile = new File(fontDirectory, fileName + ".json");
-
-			FileUtils.createFileIfNotExists(ascentedIconFile);
-
-			JsonObject root = new JsonObject();
-			JsonArray providers = new JsonArray();
-
-			packGenerator.getGlobalProviders().forEach(provider -> providers.add(provider));
-
-			for (Map.Entry<Icon, JsonObject> entry : iconProviderMap.entrySet()) {
-				final Icon icon = entry.getKey();
-				final JsonObject provider = entry.getValue();
-
-				provider.addProperty("ascent", ascent + icon.getAscent());
-				providers.add(provider);
-			}
-
-			root.add("providers", providers);
-
-			final String json = Tooltips.GSON.toJson(root);
-
-			try {
-				Files.asCharSink(ascentedIconFile, Charset.forName("UTF-8")).write(json);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
+	
+	public JsonObject getProviderFromIcon(Icon icon) {
+		JsonObject provider = new JsonObject();
+		provider.addProperty("type", "bitmap");
+		provider.addProperty("file", icon.getPath().getNamespacedPath());
+		provider.addProperty("ascent", icon.getAscent());
+		provider.addProperty("height", icon.getHeight());
+		
+		JsonArray chars = new JsonArray();
+		chars.add(icon.getUnicode());
+		
+		provider.add("chars", chars);
+		return provider;
 	}
 
 }

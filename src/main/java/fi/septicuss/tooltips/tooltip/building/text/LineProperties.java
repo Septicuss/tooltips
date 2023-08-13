@@ -2,15 +2,17 @@ package fi.septicuss.tooltips.tooltip.building.text;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.object.theme.Theme;
-import fi.septicuss.tooltips.pack.impl.ThemeGenerator;
+import fi.septicuss.tooltips.pack.impl.IconGenerator;
+import fi.septicuss.tooltips.pack.impl.LineGenerator;
 
 public class LineProperties {
 
 	private Theme theme;
-	private int iconAscent;
+	private int lineAscent;
 	private int lineIndex;
 	private String defaultFont;
 	private String offsetFont;
+	private String iconFont;
 
 	public LineProperties(Theme theme, int lineIndex) {
 		if (theme == null) {
@@ -20,36 +22,39 @@ public class LineProperties {
 		
 		this.theme = theme;
 		this.lineIndex = lineIndex;
-		this.iconAscent = theme.getTextStartAscent() - (lineIndex * theme.getTextLineSpacing());
+		this.lineAscent = theme.getTextStartAscent() - (lineIndex * theme.getTextLineSpacing());
 
-		final var readableLineIndex = lineIndex + 1;
-		final var themeName = theme.getId();
-
-		final String defaultFontFormat = "tooltips:%s/" + ThemeGenerator.DEFAULT_LINE_FORMAT;
-		final String offsetFontFormat = "tooltips:%s/" + ThemeGenerator.OFFSET_LINE_FORMAT;
-
-		this.defaultFont = String.format(defaultFontFormat, themeName, readableLineIndex);
-		this.offsetFont = String.format(offsetFontFormat, themeName, readableLineIndex);
+		final String regularFontFormat = "tooltips:lines/" + LineGenerator.REGULAR_LINE_FORMAT;
+		final String offsetFontFormat = "tooltips:lines/" + LineGenerator.OFFSET_LINE_FORMAT;
+		final String iconFontFormat = "tooltips:icons/" + IconGenerator.ICON_FONT_FORMAT;
+		
+		this.defaultFont = String.format(regularFontFormat, lineAscent);
+		this.offsetFont = String.format(offsetFontFormat, lineAscent);
+		this.iconFont = String.format(iconFontFormat, lineAscent);
 	}
 
 	public Theme getTheme() {
 		return theme;
 	}
-
-	public int getIconAscent() {
-		return iconAscent;
+	
+	public int getLineAscent() {
+		return lineAscent;
 	}
 
 	public int getLineIndex() {
 		return lineIndex;
 	}
 
-	public String getDefaultFont() {
+	public String getRegularFont() {
 		return defaultFont;
 	}
 
 	public String getOffsetFont() {
 		return offsetFont;
+	}
+	
+	public String getIconFont() {
+		return iconFont;
 	}
 
 	public int getMaxLines() {

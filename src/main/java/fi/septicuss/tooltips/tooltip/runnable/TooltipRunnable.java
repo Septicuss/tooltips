@@ -17,12 +17,12 @@ import fi.septicuss.tooltips.object.preset.actions.ActionProperties.TooltipActio
 import fi.septicuss.tooltips.object.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.object.preset.condition.StatementHolder;
 import fi.septicuss.tooltips.object.preset.show.ShowProperties;
+import fi.septicuss.tooltips.object.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 import fi.septicuss.tooltips.tooltip.TooltipManager;
 import fi.septicuss.tooltips.tooltip.runnable.TooltipData.CooldownType;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
-import fi.septicuss.tooltips.utils.title.TitleBuilder;
 
 public class TooltipRunnable extends BukkitRunnable {
 

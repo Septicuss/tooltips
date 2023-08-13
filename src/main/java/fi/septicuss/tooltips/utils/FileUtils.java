@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -66,7 +67,7 @@ public class FileUtils {
 		}
 	}
 
-	public static void copyFile(File file, File toDirectory) {
+	public static void copyFileToDirectory(File file, File toDirectory) {
 		try {
 			File targetFile = new File(toDirectory, file.getName());
 
@@ -76,6 +77,25 @@ public class FileUtils {
 			}
 
 			Files.copy(file.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void copyFile(File from, File to) {
+		try {
+			Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void writeToFile(File file, String str) {
+		try {
+			FileUtils.createIfNotExists(file);
+			BufferedWriter writer = Files.newBufferedWriter(file.toPath());
+			writer.write(str);
+			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,11 +132,8 @@ public class FileUtils {
 
 	public static void createFileIfNotExists(File file) {
 		if (!file.exists()) {
-			File parentDir = file.getParentFile();
-			if (parentDir != null) {
-				parentDir.mkdirs();
-			}
 			try {
+				file.getParentFile().mkdirs();
 				file.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();

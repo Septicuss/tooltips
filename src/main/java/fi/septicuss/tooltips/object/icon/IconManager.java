@@ -21,7 +21,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class IconManager {
 
 	public static final String ICON_FONT_PLACEHOLDER = "tooltips:placeholder";
-	public static final String ICON_FONT_FORMAT = "i%d";
 
 	private Map<String, Icon> icons;
 

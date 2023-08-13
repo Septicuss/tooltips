@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class ThemeManager {
 	
-	public static final char OFFSET = '\uF100';
+	public static final char OFFSET = '\uE000';
 	public static final char LEFT = '\uF101';
 	public static final char CENTER = '\uF102';
 	public static final char RIGHT = '\uF103';

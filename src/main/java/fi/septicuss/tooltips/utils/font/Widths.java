@@ -2,17 +2,8 @@ package fi.septicuss.tooltips.utils.font;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import fi.septicuss.tooltips.Tooltips;
 
 // Credit goes to https://github.com/Ehhthan for width size code
 public class Widths {
@@ -21,36 +12,14 @@ public class Widths {
 
 	// -- SCHEMAS --
 
-	public static void loadFromSchemas(File dataFolder, YamlConfiguration fontConfig) {
-		for (String provider : fontConfig.getConfigurationSection("providers").getKeys(false)) {
-			ConfigurationSection fontConfigSection = fontConfig.getConfigurationSection("providers." + provider);
-
-			String relativePath = fontConfigSection.getString("texture");
-			File texture = new File(dataFolder, "data/schemas/textures/" + relativePath);
-
-			try {
-				BufferedImage image = ImageIO.read(texture);
-				loadSizedCharactersFrom(fontConfigSection, image);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-
-	private static void loadSizedCharactersFrom(ConfigurationSection fontConfigSecton, BufferedImage image) {
-		if (fontConfigSecton == null || image == null) {
-			Tooltips.warn("Failed to load Font Width");
+	public static void loadFrom(List<String> chars, int height, BufferedImage image) {
+		if (chars == null) {
 			return;
 		}
-
-		final List<String> chars = fontConfigSecton.getStringList("chars");
-
+		
 		int rows = chars.size();
 		int tileHeight = image.getHeight() / rows;
-
-		int definedHeight = fontConfigSecton.getInt("height", tileHeight);
-
+		
 		for (int row = 0; row < rows; row++) {
 			final int columns = chars.get(row).length();
 			final int tileWidth = (image.getWidth() / columns);
@@ -59,11 +28,10 @@ public class Widths {
 				BufferedImage sub = image.getSubimage(tileWidth * column, tileHeight * row, tileWidth, tileHeight);
 				char character = chars.get(row).toCharArray()[column];
 
-				SizedChar sizedChar = getSizedChar(character, sub, definedHeight);
+				SizedChar sizedChar = getSizedChar(character, sub, height);
 				WIDTH_MAP.put(character, sizedChar);
 			}
 		}
-
 	}
 
 	// -- PUBLIC API --
@@ -106,11 +74,6 @@ public class Widths {
 	}
 
 	// -- INTERNAL
-
-	@Deprecated
-	public static int getLongestLineLength(List<String> rawLines) {
-		return 0;
-	}
 
 	private static SizedChar getSizedChar(char character, BufferedImage image, int definedHeight) {
 		int exactWidth = calculateExactWidth(image);

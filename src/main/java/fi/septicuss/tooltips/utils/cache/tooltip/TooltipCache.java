@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.integrations.papi.PAPI;
-import fi.septicuss.tooltips.utils.title.TitleBuilder;
+import fi.septicuss.tooltips.object.title.TitleBuilder;
 
 public class TooltipCache {
 

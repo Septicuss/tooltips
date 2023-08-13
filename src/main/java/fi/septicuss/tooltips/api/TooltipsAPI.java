@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.object.preset.Preset;
 import fi.septicuss.tooltips.object.theme.Theme;
+import fi.septicuss.tooltips.object.title.Title;
+import fi.septicuss.tooltips.object.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
-import fi.septicuss.tooltips.utils.title.Title;
-import fi.septicuss.tooltips.utils.title.TitleBuilder;
 
 public class TooltipsAPI {
 

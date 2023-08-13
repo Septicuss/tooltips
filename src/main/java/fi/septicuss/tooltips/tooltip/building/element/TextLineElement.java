@@ -37,7 +37,7 @@ public class TextLineElement implements TooltipElement {
 			return parts;
 
 		final ComponentBuilder componentBuilder = new ComponentBuilder();
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 
 		final List<BaseComponent> lineComponents = textLine.getLineComponents().getParts();
 
@@ -73,7 +73,7 @@ public class TextLineElement implements TooltipElement {
 				}
 
 				original.copyFormatting(textComponent, true);
-				componentBuilder.append(original).font("tooltips:i" + lineProperties.getIconAscent());
+				componentBuilder.append(original).font(lineProperties.getIconFont());
 				previousIsIcon = true;
 				continue;
 			}
@@ -81,14 +81,15 @@ public class TextLineElement implements TooltipElement {
 			// SPACE
 			if (isSpace) {
 				int offsetAmount = 0;
-				
+
 				for (char character : component.toPlainText().toCharArray()) {
 					for (var entry : Spaces.getOffsetMapEntries()) {
-						if (character != entry.getValue()) continue;
+						if (character != entry.getValue())
+							continue;
 						offsetAmount += entry.getKey();
 					}
 				}
-				
+
 				componentBuilder.append(component, RETENTION);
 				this.totalWidth += offsetAmount;
 				continue;
@@ -107,26 +108,31 @@ public class TextLineElement implements TooltipElement {
 				if (firstChar) {
 					firstChar = false;
 				} else {
-					if (!previousIsIcon)
+					if (!previousIsIcon) {
 						builder.append(Spaces.NEGATIVE_ONE);
-					else {
+					} else {
 						previousIsIcon = false;
 					}
 				}
-
+				
 				builder.append(character);
-
+				
+				if (character == ' ') {
+					builder.append(character);
+					builder.append(character);
+				}
+				
 				if (sizedChar.getRealWidth() % 1 == 0 && character != ' ') {
 					final String result = builder.toString();
 
 					TextComponent textComponent = new TextComponent(result);
-					textComponent.setFont((offset ? lineProperties.getOffsetFont() : lineProperties.getDefaultFont()));
+					textComponent.setFont((offset ? lineProperties.getOffsetFont() : lineProperties.getRegularFont()));
 					textComponent.setColor(color);
 
 					componentBuilder.append(textComponent);
 
 					offset = !offset;
-					builder = new StringBuilder();
+					builder.setLength(0);
 
 					continue;
 				}
@@ -135,13 +141,13 @@ public class TextLineElement implements TooltipElement {
 
 			if (!builder.toString().isEmpty()) {
 				TextComponent textComponent = new TextComponent(builder.toString());
-				textComponent.setFont((offset ? lineProperties.getOffsetFont() : lineProperties.getDefaultFont()));
+				textComponent.setFont((offset ? lineProperties.getOffsetFont() : lineProperties.getRegularFont()));
 				textComponent.setColor(color);
 
 				componentBuilder.append(textComponent);
 			}
 
-			builder = new StringBuilder();
+			builder.setLength(0);
 		}
 
 		this.parts = componentBuilder.getParts();
