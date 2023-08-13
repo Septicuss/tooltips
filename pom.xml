@@ -10,7 +10,7 @@
 
 	<groupId>fi.septicuss</groupId>
 	<artifactId>tooltips</artifactId>
-	<version>1.5.1</version>
+	<version>1.6</version>
 
 	<build>
 		<resources>
@@ -34,7 +34,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.3.0</version>
 				<configuration>
-					<outputDirectory>X:\Programming\Minecraft Test Servers\Tooltips\Oraxen\Servers\Spigot-1.19.4\plugins</outputDirectory>
+					<outputDirectory>X:\Programming\Minecraft Test Servers\Tooltips\1.19.4 SPIGOT ORAXEN\plugins</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
