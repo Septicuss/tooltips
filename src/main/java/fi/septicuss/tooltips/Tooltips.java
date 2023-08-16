@@ -36,6 +36,7 @@ import fi.septicuss.tooltips.integrations.IntegratedPlugin;
 import fi.septicuss.tooltips.integrations.crucible.CrucibleFurnitureProvider;
 import fi.septicuss.tooltips.integrations.itemsadder.ItemsAdderFurnitureProvider;
 import fi.septicuss.tooltips.integrations.oraxen.OraxenFurnitureProvider;
+import fi.septicuss.tooltips.integrations.papi.TooltipsExpansion;
 import fi.septicuss.tooltips.integrations.worldguard.WorldGuardAreaProvider;
 import fi.septicuss.tooltips.listener.PlayerConnectionListener;
 import fi.septicuss.tooltips.listener.PlayerInteractListener;
@@ -150,6 +151,13 @@ public class Tooltips extends JavaPlugin implements Listener {
 		loadVariables();
 		loadIntegrations();
 		loadListeners();
+
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			TooltipsExpansion expansion = new TooltipsExpansion();
+			if (expansion.isRegistered())
+				expansion.unregister();
+			expansion.register();
+		}
 
 		conditionManager = new ConditionManager();
 
@@ -327,7 +335,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 		packGenerator.registerGenerator(new IconGenerator(iconManager));
 		packGenerator.registerGenerator(new TextureGenerator());
 		packGenerator.generate();
-		
+
 		this.runnableManager = new TooltipRunnableManager(this);
 		this.runnableManager.run(this, checkFrequency);
 

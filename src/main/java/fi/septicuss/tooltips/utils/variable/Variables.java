@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
@@ -84,31 +84,31 @@ public class Variables {
 		}
 
 		@Override
-		public Argument getVar(Player player, String varName) {
+		public Argument getVar(OfflinePlayer player, String varName) {
 			return new Argument(PLAYER_VARIABLE_CONFIG.getString(getPlayerVarPath(player, varName)));
 		}
 
 		@Override
-		public boolean hasVar(Player player, String varName) {
+		public boolean hasVar(OfflinePlayer player, String varName) {
 			return PLAYER_VARIABLE_CONFIG.isSet(getPlayerVarPath(player, varName));
 		}
 
 		@Override
-		public void setVar(Player player, String varName, String value) {
+		public void setVar(OfflinePlayer player, String varName, String value) {
 			PLAYER_VARIABLE_CONFIG.set(getPlayerVarPath(player, varName), value);
 		}
 
 		@Override
-		public void clearVar(Player player, String varName) {
+		public void clearVar(OfflinePlayer player, String varName) {
 			PLAYER_VARIABLE_CONFIG.set(getPlayerVarPath(player, varName), null);
 		}
 
 		@Override
-		public void clearAllVars(Player player) {
+		public void clearAllVars(OfflinePlayer player) {
 			PLAYER_VARIABLE_CONFIG.set(getPlayerVarPath(player, null), null);
 		}
 
-		private String getPlayerVarPath(Player player, String varName) {
+		private String getPlayerVarPath(OfflinePlayer player, String varName) {
 			if (varName == null)
 				return (player.getUniqueId().toString());
 			return (player.getUniqueId().toString() + "." + varName);
@@ -147,7 +147,7 @@ public class Variables {
 		}
 
 		@Override
-		public Argument getVar(Player player, String varName) {
+		public Argument getVar(OfflinePlayer player, String varName) {
 			UUID uuid = player.getUniqueId();
 
 			if (!PLAYER_VARIABLES.containsKey(uuid)) {
@@ -164,7 +164,7 @@ public class Variables {
 		}
 
 		@Override
-		public boolean hasVar(Player player, String varName) {
+		public boolean hasVar(OfflinePlayer player, String varName) {
 			UUID uuid = player.getUniqueId();
 
 			if (!PLAYER_VARIABLES.containsKey(uuid)) {
@@ -176,7 +176,7 @@ public class Variables {
 		}
 
 		@Override
-		public void setVar(Player player, String varName, String value) {
+		public void setVar(OfflinePlayer player, String varName, String value) {
 			UUID uuid = player.getUniqueId();
 			Arguments args = null;
 
@@ -191,7 +191,7 @@ public class Variables {
 		}
 
 		@Override
-		public void clearVar(Player player, String varName) {
+		public void clearVar(OfflinePlayer player, String varName) {
 			UUID uuid = player.getUniqueId();
 
 			if (!PLAYER_VARIABLES.containsKey(uuid)) {
@@ -204,7 +204,7 @@ public class Variables {
 		}
 
 		@Override
-		public void clearAllVars(Player player) {
+		public void clearAllVars(OfflinePlayer player) {
 			UUID uuid = player.getUniqueId();
 			PLAYER_VARIABLES.remove(uuid);
 		}
@@ -223,15 +223,15 @@ public class Variables {
 
 		public void clearAllVars();
 
-		public Argument getVar(Player player, String varName);
+		public Argument getVar(OfflinePlayer player, String varName);
 
-		public boolean hasVar(Player player, String varName);
+		public boolean hasVar(OfflinePlayer player, String varName);
 
-		public void setVar(Player player, String varName, String value);
+		public void setVar(OfflinePlayer player, String varName, String value);
 
-		public void clearVar(Player player, String varName);
+		public void clearVar(OfflinePlayer player, String varName);
 
-		public void clearAllVars(Player player);
+		public void clearAllVars(OfflinePlayer player);
 
 	}
 
