@@ -10,6 +10,7 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
+import fi.septicuss.tooltips.object.preset.condition.type.MultiString;
 import fi.septicuss.tooltips.object.validation.Validity;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.cache.player.LookingAtCache;
@@ -27,21 +28,21 @@ public class LookingAtFurniture implements Condition {
 
 	@Override
 	public boolean check(Player player, Arguments args) {
-		String id = null;
+		MultiString id = null;
 		int distance = 3;
 
 		if (args.has(DISTANCE))
 			distance = args.get(DISTANCE).getAsInt();
 
 		if (args.has(ID))
-			id = args.get(ID).getAsString();
+			id = MultiString.of(args.get(ID).getAsString());
 
-		final String finalizedId = id;
-
+		final MultiString finalizedId = id;
+		
 		Predicate<Block> blockPredicate = (block -> {
 			if (block == null) return false;
 			if (!provider.isFurniture(block)) return false;
-			return (!provider.getFurnitureId(block).equals(finalizedId));
+			return (finalizedId.contains(provider.getFurnitureId(block)));
 		});
 		
 		Predicate<Entity> entityFilter = (entity -> {
@@ -52,8 +53,9 @@ public class LookingAtFurniture implements Condition {
 		
 		var rayTrace = Utils.getRayTrace(player, distance, blockPredicate, entityFilter);
 
-		if (rayTrace == null)
+		if (rayTrace == null) {
 			return false;
+		}
 		
 		// Block
 		if (rayTrace.getHitBlock() != null) {
@@ -62,8 +64,9 @@ public class LookingAtFurniture implements Condition {
 			
 			cache(player, provider.getFurnitureId(block));
 			
-			if (finalizedId != null)
-				return furnitureId.equals(finalizedId);
+			if (finalizedId != null) { 
+				return finalizedId.contains(furnitureId);
+			}
 			return true;
 		}
 		
@@ -76,7 +79,7 @@ public class LookingAtFurniture implements Condition {
 				cache(player, furnitureId);
 				
 				if (id != null) {
-					return furnitureId.equals(id);
+					return finalizedId.contains(furnitureId);
 				}
 				
 				return true;

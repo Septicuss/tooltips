@@ -23,7 +23,7 @@ public class MultiString {
 	public static MultiString of(String line) {
 		List<String> strings = Lists.newArrayList();
 		for (var string : line.split(","))
-			strings.add(string);
+			strings.add(string.strip());
 		return new MultiString(strings);
 	}
 
