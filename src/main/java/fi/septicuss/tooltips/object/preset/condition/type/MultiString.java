@@ -13,6 +13,7 @@ public class MultiString {
 	}
 
 	public boolean contains(String other) {
+		if (other == null) return false;
 		return strings.contains(other);
 	}
 	

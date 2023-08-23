@@ -42,6 +42,7 @@ public class LookingAtFurniture implements Condition {
 		Predicate<Block> blockPredicate = (block -> {
 			if (block == null) return false;
 			if (!provider.isFurniture(block)) return false;
+			if (finalizedId == null) return true;
 			return (finalizedId.contains(provider.getFurnitureId(block)));
 		});
 		
@@ -78,7 +79,7 @@ public class LookingAtFurniture implements Condition {
 
 				cache(player, furnitureId);
 				
-				if (id != null) {
+				if (finalizedId != null) {
 					return finalizedId.contains(furnitureId);
 				}
 				
@@ -99,7 +100,7 @@ public class LookingAtFurniture implements Condition {
 		if (args.has(DISTANCE) && !args.get(DISTANCE).isNumber()) {
 			return Validity.of(false, "Distance must be a number");
 		}
-
+		
 		return Validity.TRUE;
 	}
 	

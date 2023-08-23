@@ -6,6 +6,7 @@ import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.preset.condition.type.MultiString;
 import fi.septicuss.tooltips.object.validation.Validity;
+import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 
 public class Permission implements Condition {
 
@@ -15,7 +16,7 @@ public class Permission implements Condition {
 	public boolean check(Player player, Arguments args) {
 		MultiString permissions = MultiString.of(args.get(PERMISSION).getAsString());
 		for (var permission : permissions.getStrings())
-			if (player.hasPermission(permission))
+			if (player.hasPermission(Placeholders.replacePlaceholders(player, permission)))
 				return true;
 		return false;
 	}

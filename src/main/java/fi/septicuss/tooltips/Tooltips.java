@@ -61,6 +61,7 @@ import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtEntity;
 import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtFurniture;
 import fi.septicuss.tooltips.object.preset.condition.impl.Night;
 import fi.septicuss.tooltips.object.preset.condition.impl.Op;
+import fi.septicuss.tooltips.object.preset.condition.impl.Permission;
 import fi.septicuss.tooltips.object.preset.condition.impl.Region;
 import fi.septicuss.tooltips.object.preset.condition.impl.Sneaking;
 import fi.septicuss.tooltips.object.preset.condition.impl.StandingOn;
@@ -283,6 +284,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 		event.register("equipped", new Equipped());
 		event.register("op", new Op());
 		event.register("lookingatcitizen", new LookingAtCitizen());
+		event.register("permission", new Permission());
 	}
 
 	private void loadCommands() {
@@ -435,7 +437,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 			String variableName = s.substring(cutIndex);
 			variableName = Placeholders.replacePlaceholders(p, variableName);
-
+			
 			Argument returnArgument = null;
 
 			if (global) {
