@@ -127,6 +127,8 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 		if (SUPPORT_DISPLAY_ENTITIES) {
 			FURNITURE_ENTITIES.add(EntityType.ITEM_DISPLAY);
+			FURNITURE_ENTITIES.add(EntityType.BLOCK_DISPLAY);
+			FURNITURE_ENTITIES.add(EntityType.INTERACTION);
 		}
 
 	}
