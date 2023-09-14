@@ -34,7 +34,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.3.0</version>
 				<configuration>
-					<outputDirectory>X:\Programming\Minecraft Test Servers\Tooltips\1.19.4 SPIGOT ORAXEN\plugins</outputDirectory>
+					<outputDirectory>X:\Programming\Minecraft Test Servers\Tooltips\1.19.4 SPIGOT ITEMSADDER\plugins</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -162,7 +162,7 @@
 		<dependency>
 			<groupId>com.github.LoneDev6</groupId>
 			<artifactId>api-itemsadder</artifactId>
-			<version>3.4.1-r4</version>
+			<version>3.5.0c-r5</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

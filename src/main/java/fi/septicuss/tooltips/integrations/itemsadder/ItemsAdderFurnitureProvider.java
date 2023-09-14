@@ -7,7 +7,6 @@ import org.bukkit.entity.Entity;
 
 import com.google.common.collect.Lists;
 
-import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomFurniture;
 import dev.lone.itemsadder.api.CustomStack;
 import fi.septicuss.tooltips.integrations.FurnitureProvider;
@@ -37,7 +36,7 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
 
 	@Override
 	public String getFurnitureId(Block block) {
-		CustomBlock custom = CustomBlock.byAlreadyPlaced(block);
+		CustomFurniture custom = CustomFurniture.byAlreadySpawned(block);
 		if (custom == null)
 			return null;
 		return custom.getNamespacedID();
