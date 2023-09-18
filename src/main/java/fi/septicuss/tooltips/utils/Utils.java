@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 
 import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
+import fi.septicuss.tooltips.utils.cache.furniture.FurnitureWrapper;
 import net.md_5.bungee.api.ChatColor;
 
 public class Utils {
@@ -67,8 +68,9 @@ public class Utils {
 	}
 
 	public static String getFurnitureDisplayName(FurnitureProvider provider, String id) {
-		
-		return ChatColor.stripColor(FurnitureCache.getFurniture(id).displayName());
+		FurnitureWrapper wrapper = FurnitureCache.getFurniture(id);
+		if (wrapper == null) return "";
+		return ChatColor.stripColor(wrapper.displayName());
 	}
 
 	public static boolean sameAmountOfCharsIn(String string, char first, char second) {
