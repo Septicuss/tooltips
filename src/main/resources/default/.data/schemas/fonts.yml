@@ -2,7 +2,7 @@ providers:
     space:
       type: "bitmap"
       texture: space.png
-      height: 4
+      height: 2
       chars:
         - "\u0020"
     nonlatin-european:

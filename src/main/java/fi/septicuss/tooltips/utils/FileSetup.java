@@ -176,7 +176,20 @@ public class FileSetup {
 			
 			file.delete();
 		});
+
+		File fontsFile = new File(dataFolder, ".data/schemas/fonts.yml");
+		FileConfiguration fonts = YamlConfiguration.loadConfiguration(fontsFile);
+		
+		if (fonts.isSet("providers.space.height")) {
+			if (fonts.getInt("providers.space.height") != 2) {
+				fontsFile.delete();
+			}
+		} else {
+			fontsFile.delete();
+		}
+		
 		
 	}
+	
 
 }
