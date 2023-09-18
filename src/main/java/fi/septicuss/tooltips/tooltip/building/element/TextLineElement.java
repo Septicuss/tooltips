@@ -50,6 +50,7 @@ public class TextLineElement implements TooltipElement {
 			final boolean hasFont = (component.getFont() != null);
 			final boolean isIcon = (hasFont && component.getFont().equals(IconManager.ICON_FONT_PLACEHOLDER));
 			final boolean isSpace = (hasFont && component.getFont().equals(Spaces.OFFSET_FONT_NAME));
+			
 			// ICON
 			if (isIcon) {
 				final TextComponent textComponent = (TextComponent) component;
@@ -116,11 +117,6 @@ public class TextLineElement implements TooltipElement {
 				}
 				
 				builder.append(character);
-				
-				if (character == ' ') {
-					builder.append(character);
-					builder.append(character);
-				}
 				
 				if (sizedChar.getRealWidth() % 1 == 0 && character != ' ') {
 					final String result = builder.toString();

@@ -67,6 +67,7 @@ public class Utils {
 	}
 
 	public static String getFurnitureDisplayName(FurnitureProvider provider, String id) {
+		
 		return ChatColor.stripColor(FurnitureCache.getFurniture(id).displayName());
 	}
 

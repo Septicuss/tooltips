@@ -143,7 +143,7 @@ public class FileSetup {
 
 			file.getParentFile().mkdirs();
 			
-			if (file.exists()) {
+			if (file.exists() && !name.endsWith(".png")) {
 				continue;
 			}
 			
