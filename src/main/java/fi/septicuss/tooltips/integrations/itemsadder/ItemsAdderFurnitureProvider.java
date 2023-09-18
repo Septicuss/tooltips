@@ -3,6 +3,7 @@ package fi.septicuss.tooltips.integrations.itemsadder;
 import java.util.List;
 
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 
 import com.google.common.collect.Lists;
@@ -13,6 +14,9 @@ import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureWrapper;
 
 public class ItemsAdderFurnitureProvider implements FurnitureProvider {
+
+	private static final String FURNITURE_BEHAVIOUR_PATH = "items.%s.behaviours.furniture";
+	private static final String TOOLTIPS_NAME_PATH = "items.%s.tooltips-name";
 
 	@Override
 	public boolean isFurniture(Entity entity) {
@@ -48,23 +52,59 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
 		List<FurnitureWrapper> wrappers = Lists.newArrayList();
 
 		for (var namespacedId : CustomFurniture.getNamespacedIdsInRegistry()) {
-			String name = CustomFurniture.getInstance(namespacedId).getDisplayName();
 			CustomStack stack = CustomFurniture.getInstance(namespacedId);
 
-			String furnitureBehaviourPath = ("items." + stack.getId() + ".behaviours.furniture");
-
-			if (stack.getConfig().getConfigurationSection(furnitureBehaviourPath) == null) {
+			if (!isFurnitureStack(stack)) {
 				continue;
 			}
-
-			if (name == null) {
-				name = stack.getId();
-			}
 			
+			String name = getStackName(stack);
 			wrappers.add(new FurnitureWrapper(namespacedId, name));
 		}
 
 		return wrappers;
 	}
-	
+
+	/**
+	 * ItemsAdder may return customstacks that claim to be furniture but may
+	 * actually not be.
+	 * 
+	 * We check that by making sure that the ItemsAdder configuration for this item
+	 * has a "furniture" behaviour.
+	 */
+	private boolean isFurnitureStack(CustomStack stack) {
+		if (stack == null) {
+			return false;
+		}
+
+		final FileConfiguration config = stack.getConfig();
+
+		final var id = stack.getId();
+		final var behaviourPath = String.format(FURNITURE_BEHAVIOUR_PATH, id);
+
+		return config.isConfigurationSection(behaviourPath);
+	}
+
+	/**
+	 * If using the internationalization feature of ItemsAdder, the display name returned
+	 * may be empty / null. That's why if a display name is not set or is empty, we get the
+	 * name from other sources.
+	 */
+	private String getStackName(CustomStack stack) {
+		if (stack == null) {
+			return null;
+		}
+		
+		if (stack.getDisplayName() != null && !stack.getDisplayName().strip().isBlank()) {
+			return stack.getDisplayName();
+		}
+		
+		final FileConfiguration config = stack.getConfig();
+		
+		final var id = stack.getId();
+		final var tooltipsNamePath = String.format(TOOLTIPS_NAME_PATH, id);
+		
+		return config.getString(tooltipsNamePath, id);
+	}
+
 }
