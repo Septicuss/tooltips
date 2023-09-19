@@ -15,7 +15,6 @@ import fi.septicuss.tooltips.tooltip.building.element.TextLineElement;
 import fi.septicuss.tooltips.tooltip.building.text.LineProperties;
 import fi.septicuss.tooltips.tooltip.building.text.TextLine;
 import fi.septicuss.tooltips.utils.font.Spaces;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
@@ -59,7 +58,7 @@ public class TooltipManager {
 		}
 
 		// BACKGROUND
-		var background = new BackgroundElement(tooltipProperties.getTheme(), ChatColor.of(tooltipProperties.getColor()), longestWidth);
+		var background = new BackgroundElement(tooltipProperties.getTheme(), tooltipProperties.getColor(), longestWidth);
 		
 		ComponentBuilder componentBuilder = new ComponentBuilder();
 
