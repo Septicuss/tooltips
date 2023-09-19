@@ -1,6 +1,5 @@
 package fi.septicuss.tooltips.utils.font;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
@@ -93,20 +92,6 @@ public class Widths {
 		return sizedChar;
 	}
 
-	@Deprecated
-	public static int calculateAbsoluteWidth(BufferedImage image, int xFrom, int yFrom, int xTo, int yTo) {
-		int width;
-		for (width = xTo - 1; width > xFrom; width--) {
-			for (int height = yFrom; height < yTo; height++) {
-				if (new Color(image.getRGB(width, height), true).getAlpha() == 255) {
-					return width - xFrom + 1;
-				}
-			}
-		}
-
-		return width - xFrom + 1;
-	}
-
 	public static int calculateAbsoluteWidth(BufferedImage image) {
 		int rightMostPixel = 0;
 		for (int y = 0; y < image.getHeight(); y++) {
@@ -139,10 +124,6 @@ public class Widths {
 			}
 		}
 		return (rightMostPixel - leftMostPixel + 1);
-	}
-
-	public static int calculateWidth(BufferedImage image) {
-		return calculateAbsoluteWidth(image, 0, 0, image.getWidth(), image.getHeight());
 	}
 
 	public static class SizedChar {

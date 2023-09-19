@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 
-import fi.septicuss.tooltips.object.NamespacedPath;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -72,14 +71,4 @@ public class Spaces {
 		return Collections.unmodifiableSet(OFFSET_MAP.entrySet());
 	}
 
-	/**
-	 * @return tooltips/font/space
-	 */
-	public static NamespacedPath getOffsetFontPath() {
-		return new NamespacedPath(OFFSET_FONT_NAME, "font");
-	}
-
-	public static String getOffsetFontName() {
-		return OFFSET_FONT_NAME;
-	}
 }
