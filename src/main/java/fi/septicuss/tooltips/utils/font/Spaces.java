@@ -1,7 +1,6 @@
 package fi.septicuss.tooltips.utils.font;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class Spaces {
 
 	public static final String OFFSET_FONT_NAME = "tooltips:space";
-	private static final int[] PLACEHOLDER_OFFSETS = { 1, 2, 4, 8, 16, 32 };
 	private static final Map<Integer, Character> OFFSET_MAP;
 
 	// Inside each theme line
@@ -72,22 +70,6 @@ public class Spaces {
 
 	public static Set<Map.Entry<Integer, Character>> getOffsetMapEntries() {
 		return Collections.unmodifiableSet(OFFSET_MAP.entrySet());
-	}
-
-	public static Map<String, TextComponent> getSpacePlaceholders() {
-		Map<String, TextComponent> map = new HashMap<>();
-		for (int positive : PLACEHOLDER_OFFSETS) {
-			TextComponent positiveComponent = (TextComponent) getOffset(positive);
-			TextComponent negativeComponent = (TextComponent) getOffset(-positive);
-
-			String positivePlaceholder = "{+" + (positive) + "}";
-			String negativePlaceholder = "{" + (-positive) + "}";
-
-			map.put(positivePlaceholder, positiveComponent);
-			map.put(negativePlaceholder, negativeComponent);
-		}
-
-		return map;
 	}
 
 	/**
