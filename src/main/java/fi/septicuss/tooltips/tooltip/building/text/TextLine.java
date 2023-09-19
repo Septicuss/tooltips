@@ -34,7 +34,6 @@ public class TextLine {
 		if (REPLACEABLES == null || REPLACEABLES.isEmpty()) {
 			REPLACEABLES = new HashMap<>();
 			REPLACEABLES.putAll(iconManager.getIconPlaceholders());
-			REPLACEABLES.putAll(Spaces.getSpacePlaceholders());
 		}
 
 		final String line = Utils.color(Placeholders.replacePlaceholders(player, unprocessedText));
@@ -72,10 +71,31 @@ public class TextLine {
 
 				if (bracketsExist || openingBeforeClosure) {
 					String sub = plain.substring(j, j + nextClosure + 2);
+					String withoutBrackets = sub.substring(1, sub.length() - 1);
+					
+					BaseComponent replacement = null;
+					
+					// Replace dynamic offsets
+					if (withoutBrackets.startsWith("+") || withoutBrackets.startsWith("-")) {
+						String amountStr = withoutBrackets.substring(1);
 
+						if (Utils.isInteger(amountStr)) {
+							int pixels = Integer.parseInt(amountStr);
+							replacement = Spaces.getOffset(pixels);
+						}
+					}
+					
+					// Replace other placeholders like icons
 					if (REPLACEABLES.containsKey(sub)) {
-
-						final String textUntilNow = stringLineBuilder.toString();
+						var replaceable = REPLACEABLES.get(sub);
+						var replaceWith = replaceable.duplicate();
+						replaceWith.copyFormatting(baseComponent, false);
+						replacement = replaceWith;
+					}
+					
+					// If replacement exists
+					if (replacement != null) {
+						String textUntilNow = stringLineBuilder.toString();
 
 						if (!textUntilNow.isEmpty()) {
 							var text = new TextComponent(textUntilNow);
@@ -83,13 +103,9 @@ public class TextLine {
 							lineComponents.append(text, RETENTION);
 						}
 
-						var replaceable = REPLACEABLES.get(sub);
-						var replaceWith = replaceable.duplicate();
-						replaceWith.copyFormatting(baseComponent, false);
-						lineComponents.append(replaceWith, RETENTION);
-
-						stringLineBuilder = new StringBuilder();
-
+						lineComponents.append(replacement, RETENTION);
+						stringLineBuilder.setLength(0);
+						
 						j = j + nextClosure + 1;
 						continue in;
 					}

@@ -80,20 +80,6 @@ public class IconManager {
 		return icons.containsKey(name);
 	}
 
-	public Map<String, TextComponent> getIconPlaceholders() {
-		Map<String, TextComponent> map = new HashMap<>();
-
-		for (Icon icon : getAllIcons()) {
-			final String iconPlaceholder = "{" + icon.getName() + "}";
-
-			final TextComponent iconComponent = new TextComponent(String.valueOf(icon.getUnicode()));
-			iconComponent.setFont(IconManager.ICON_FONT_PLACEHOLDER);
-			map.put(iconPlaceholder, iconComponent);
-		}
-
-		return map;
-	}
-
 	private void loadWidths() {
 		for (Icon icon : getAllIcons()) {
 			try {
