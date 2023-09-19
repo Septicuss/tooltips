@@ -22,6 +22,7 @@ public class TextLine {
 
 	private ComponentBuilder lineComponents;
 	private String processedText;
+	private boolean centered;
 
 	public TextLine(Player player, IconManager iconManager, String unprocessedText) {
 
@@ -29,6 +30,11 @@ public class TextLine {
 			this.lineComponents = new ComponentBuilder();
 			this.processedText = "";
 			return;
+		}
+		
+		if (unprocessedText.startsWith("||") && unprocessedText.endsWith("||")) {
+			this.centered = true;
+			unprocessedText = unprocessedText.substring(2, unprocessedText.length() - 2);
 		}
 
 		if (REPLACEABLES == null || REPLACEABLES.isEmpty()) {
@@ -80,7 +86,7 @@ public class TextLine {
 						String amountStr = withoutBrackets.substring(1);
 
 						if (Utils.isInteger(amountStr)) {
-							int pixels = Integer.parseInt(amountStr);
+							int pixels = Integer.parseInt(withoutBrackets);
 							replacement = Spaces.getOffset(pixels);
 						}
 					}
@@ -140,6 +146,10 @@ public class TextLine {
 
 	public String getProcessedText() {
 		return processedText;
+	}
+	
+	public boolean isCentered() {
+		return centered;
 	}
 
 	public static void clearReplaceables() {

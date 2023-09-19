@@ -154,6 +154,10 @@ public class TextLineElement implements TooltipElement {
 	public int getWidth() {
 		return (int) totalWidth;
 	}
+	
+	public boolean isCentered() {
+		return textLine.isCentered();
+	}
 
 	private double getCharWidth(char character, SizedChar sizedChar, boolean firstChar, boolean previousIsIcon) {
 		double width = (int) (sizedChar.getAbsoluteWidth() * (double) sizedChar.getHeightRatio()) + 1;

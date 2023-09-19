@@ -26,6 +26,9 @@ public class Widths {
 			for (int column = 0; column < columns; column++) {
 				BufferedImage sub = image.getSubimage(tileWidth * column, tileHeight * row, tileWidth, tileHeight);
 				char character = chars.get(row).toCharArray()[column];
+				
+				if (character == ' ')
+					continue;
 
 				SizedChar sizedChar = getSizedChar(character, sub, height);
 				WIDTH_MAP.put(character, sizedChar);

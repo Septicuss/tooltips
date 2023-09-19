@@ -32,13 +32,12 @@ public class TooltipManager {
 		int longestWidth = 0;
 		int lastLineWidth = 0;
 
-		// PRE-LOAD
+		// --- PRE-LOAD ---
 		for (int i = 0; i < unprocessedText.size(); i++) {
 			String text = unprocessedText.get(i);
 
 			var properties = new LineProperties(tooltipProperties.getTheme(), i);
 			var textLine = new TextLine(player, iconManager, text);
-
 			var element = new TextLineElement(properties, textLine);
 
 			// Generate parts
@@ -51,21 +50,23 @@ public class TooltipManager {
 			if (elementWidth > longestWidth)
 				longestWidth = elementWidth;
 
-			if (lastLine)
+			if (lastLine) {
 				lastLineWidth = elementWidth;
+			}
 
 			textLineElements.add(element);
 		}
 
-		// BACKGROUND
-		var background = new BackgroundElement(tooltipProperties.getTheme(), tooltipProperties.getColor(), longestWidth);
-		
+		// --- BACKGROUND ---
+		var background = new BackgroundElement(tooltipProperties.getTheme(), tooltipProperties.getColor(),
+				longestWidth);
+
 		ComponentBuilder componentBuilder = new ComponentBuilder();
 
 		if (tooltipProperties.getHorizontalShift() > 0) {
 			componentBuilder.append(Spaces.getOffset(tooltipProperties.getHorizontalShift()));
 		}
-		
+
 		componentBuilder.append(Spaces.getOffset(-1));
 
 		for (var backgroundPart : background.getParts())
@@ -76,7 +77,7 @@ public class TooltipManager {
 
 		componentBuilder.append(Spaces.getOffset(backgroundOffset + textPadding));
 
-		// TEXT
+		// --- TEXT ---
 		int index = 0;
 
 		for (var element : textLineElements) {
@@ -86,17 +87,45 @@ public class TooltipManager {
 			if (parts.isEmpty())
 				componentBuilder.append(Spaces.getOffset(1));
 
+			boolean centered = false;
+
+			if (element.isCentered()) {
+				if (element.getWidth() != longestWidth) {
+					centered = true;
+					componentBuilder.append(Spaces.getOffset(((longestWidth - element.getWidth()) / 2)));
+				}
+			}
+			
 			for (var part : parts) {
 				componentBuilder.append(part);
 			}
-			
+
+			if (centered) {
+				componentBuilder.append(Spaces.getOffset(-((longestWidth - element.getWidth()) / 2)));
+			}
+
 			if (!lastLine)
 				componentBuilder.append(Spaces.getOffset(-element.getWidth() - 1));
 
 			index++;
 		}
 
-		// Compensate the the last line
+		/**
+		 * Compensating the last line.
+		 * 
+		 * Each line except for the last one is "neutered" (it's width is fully offset,
+		 * think of this like a typewriter making a new line and the cursor being set to
+		 * the start).
+		 * 
+		 * Titles center text by default. We want the tooltip to also be centered. For
+		 * this to happen, the last line has to have the same width as its longest line.
+		 * 
+		 * In summary, we set the tooltips center to that of the longest (pixel-wise)
+		 * line.
+		 * 
+		 * After that, we can easily apply the horizontalShift (user-defined, allows the
+		 * tooltip to be shown off center).
+		 */
 		if (lastLineWidth <= longestWidth) {
 			int lastLineOffset = -lastLineWidth;
 			int missing = (longestWidth - lastLineWidth);
@@ -104,12 +133,14 @@ public class TooltipManager {
 			int totalLineWidth = lastLineWidth + missing;
 			int horizontalShift = tooltipProperties.getHorizontalShift();
 
+			// Move to the right
 			if (horizontalShift > 0) {
 				if (missing != 0)
 					componentBuilder.append(Spaces.getOffset(-missing));
 				componentBuilder.append(Spaces.getOffset(lastLineOffset - 2));
 			}
 
+			// Move to the left
 			if (horizontalShift < 0) {
 				componentBuilder.append(Spaces.getOffset(-horizontalShift));
 				componentBuilder.append(Spaces.getOffset(totalLineWidth));
@@ -118,7 +149,6 @@ public class TooltipManager {
 			if (missing != 0)
 				componentBuilder.append(Spaces.getOffset(missing));
 		}
-		
 
 		return new Tooltip(componentBuilder.create());
 	}
