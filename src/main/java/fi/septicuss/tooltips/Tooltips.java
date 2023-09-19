@@ -371,9 +371,9 @@ public class Tooltips extends JavaPlugin implements Listener {
 			space.setAbsoluteWidth(1);
 			space.setImageHeight(1);
 		} else {
-			space.setHeight(2);
-			space.setAbsoluteWidth(2);
-			space.setImageHeight(2);
+			space.setHeight(1);
+			space.setAbsoluteWidth(1);
+			space.setImageHeight(1);
 		}
 
 		Widths.add(space);
