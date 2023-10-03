@@ -1,11 +1,10 @@
 package fi.septicuss.tooltips.api;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
+import fi.septicuss.tooltips.object.preset.condition.Condition;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
@@ -16,6 +15,20 @@ import fi.septicuss.tooltips.object.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 
 public class TooltipsAPI {
+
+	private static final Map<String, Condition> REGISTERED_CONDITIONS = new HashMap<>();
+
+	public static void registerCondition(String name, Condition condition) {
+		REGISTERED_CONDITIONS.put(name, condition);
+	}
+
+	public static void unregisterCondition(String name) {
+		REGISTERED_CONDITIONS.remove(name);
+	}
+
+	public static Map<String, Condition> getRegisteredConditions(){
+		return Collections.unmodifiableMap(REGISTERED_CONDITIONS);
+	}
 
 	public static void sendTooltip(Player player, Preset preset) {
 		if (player == null) throw new NullPointerException("Player cannot be null");

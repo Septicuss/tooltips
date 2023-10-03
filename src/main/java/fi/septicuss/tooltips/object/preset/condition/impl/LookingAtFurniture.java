@@ -7,7 +7,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.preset.condition.type.MultiString;
@@ -20,14 +19,11 @@ public class LookingAtFurniture implements Condition {
 	private static final String[] DISTANCE = { "d", "distance" };
 	private static final String[] ID = { "id" };
 
-	private FurnitureProvider provider;
-
-	public LookingAtFurniture(FurnitureProvider provider) {
-		this.provider = provider;
-	}
 
 	@Override
 	public boolean check(Player player, Arguments args) {
+		final var provider = Tooltips.get().getFurnitureProvider();
+		
 		MultiString id = null;
 		int distance = 3;
 
@@ -93,6 +89,8 @@ public class LookingAtFurniture implements Condition {
 	@Override
 	public Validity valid(Arguments args) {
 
+		var provider = Tooltips.get().getFurnitureProvider();
+		
 		if (provider == null) {
 			return Validity.of(false, "No furniture plugin present");
 		}

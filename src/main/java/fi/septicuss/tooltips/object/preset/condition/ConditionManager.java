@@ -3,9 +3,7 @@ package fi.septicuss.tooltips.object.preset.condition;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
-
-import fi.septicuss.tooltips.api.event.ConditionRegisterEvent;
+import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.object.preset.condition.parser.ArgumentParser;
 import fi.septicuss.tooltips.object.preset.condition.parser.CompositeConditionParser;
 import fi.septicuss.tooltips.object.preset.condition.parser.ConditionParser;
@@ -21,15 +19,10 @@ public class ConditionManager {
 	private StatementParser statementParser;
 
 	public ConditionManager() {
+		
 		this.registeredConditions = new HashMap<>();
-
-		ConditionRegisterEvent registerEvent = new ConditionRegisterEvent();
-		Bukkit.getPluginManager().callEvent(registerEvent);
-
-		for (var entry : registerEvent.getRegisteredConditions().entrySet()) {
-			register(entry.getKey(), entry.getValue());
-		}
-
+		this.registeredConditions.putAll(TooltipsAPI.getRegisteredConditions());
+		
 		this.argumentParser = new ArgumentParser();
 		this.conditionParser = new ConditionParser(this, argumentParser);
 		this.compositeParser = new CompositeConditionParser(conditionParser);

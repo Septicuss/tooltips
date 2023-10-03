@@ -11,9 +11,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import fi.septicuss.tooltips.api.event.ConditionRegisterEvent;
+import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.commands.TooltipsCommand;
 import fi.septicuss.tooltips.commands.subcommands.EvalCommand;
 import fi.septicuss.tooltips.commands.subcommands.ReloadCommand;
@@ -92,7 +89,7 @@ import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import fi.septicuss.tooltips.utils.placeholder.impl.SimplePlaceholderParser;
 import fi.septicuss.tooltips.utils.variable.Variables;
 
-public class Tooltips extends JavaPlugin implements Listener {
+public class Tooltips extends JavaPlugin {
 
 	public static Gson GSON = new GsonBuilder().create();
 	public static boolean SUPPORT_DISPLAY_ENTITIES;
@@ -145,6 +142,11 @@ public class Tooltips extends JavaPlugin implements Listener {
 	// ------------------------------------------------------
 
 	@Override
+	public void onLoad() {
+		registerDefaultConditions();
+	}
+	
+	@Override
 	public void onEnable() {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 
@@ -179,6 +181,32 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 	// ------------------------------------------------------
 
+	private void registerDefaultConditions() {
+		TooltipsAPI.registerCondition("day", new Day());
+		TooltipsAPI.registerCondition("night", new Night());
+		TooltipsAPI.registerCondition("world", new World());
+		TooltipsAPI.registerCondition("gamemode", new Gamemode());
+		TooltipsAPI.registerCondition("sneaking", new Sneaking());
+		TooltipsAPI.registerCondition("compare", new Compare());
+		TooltipsAPI.registerCondition("lookingatblock", new LookingAtBlock());
+		TooltipsAPI.registerCondition("lookingatfurniture", new LookingAtFurniture());
+		TooltipsAPI.registerCondition("lookingatentity", new LookingAtEntity());
+		TooltipsAPI.registerCondition("region", new Region());
+		TooltipsAPI.registerCondition("incuboid", new InCuboid());
+		TooltipsAPI.registerCondition("location", new Location());
+		TooltipsAPI.registerCondition("standingon", new StandingOn());
+		TooltipsAPI.registerCondition("itemnbtequals", new ItemNbtEquals());
+		TooltipsAPI.registerCondition("entitynbtequals", new EntityNbtEquals());
+		TooltipsAPI.registerCondition("tileentitynbtequals", new TileEntityNbtEquals());
+		TooltipsAPI.registerCondition("blocknbtequals", new BlockNbtEquals());
+		TooltipsAPI.registerCondition("blockstateequals", new BlockStateEquals());
+		TooltipsAPI.registerCondition("time", new Time());
+		TooltipsAPI.registerCondition("equipped", new Equipped());
+		TooltipsAPI.registerCondition("op", new Op());
+		TooltipsAPI.registerCondition("lookingatcitizen", new LookingAtCitizen());
+		TooltipsAPI.registerCondition("permission", new Permission());
+	}
+	
 	private void loadVariables() {
 		final File variablesDirectory = new File(getDataFolder(), ".data/variables");
 		Variables.PERSISTENT.load(variablesDirectory);
@@ -251,7 +279,6 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 	private void loadListeners() {
 		PluginManager pluginManager = Bukkit.getPluginManager();
-		pluginManager.registerEvents(this, this);
 
 		if (this.areaProvider != null) {
 			pluginManager.registerEvents(new PlayerMovementListener(this.areaProvider), this);
@@ -260,33 +287,6 @@ public class Tooltips extends JavaPlugin implements Listener {
 		this.playerInteractListener = new PlayerInteractListener();
 		pluginManager.registerEvents(this.playerInteractListener, this);
 		pluginManager.registerEvents(new PlayerConnectionListener(), this);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void on(ConditionRegisterEvent event) {
-		event.register("day", new Day());
-		event.register("night", new Night());
-		event.register("world", new World());
-		event.register("gamemode", new Gamemode());
-		event.register("sneaking", new Sneaking());
-		event.register("compare", new Compare());
-		event.register("lookingatblock", new LookingAtBlock());
-		event.register("lookingatfurniture", new LookingAtFurniture(this.furnitureProvider));
-		event.register("lookingatentity", new LookingAtEntity());
-		event.register("region", new Region());
-		event.register("incuboid", new InCuboid());
-		event.register("location", new Location());
-		event.register("standingon", new StandingOn());
-		event.register("itemnbtequals", new ItemNbtEquals());
-		event.register("entitynbtequals", new EntityNbtEquals());
-		event.register("tileentitynbtequals", new TileEntityNbtEquals());
-		event.register("blocknbtequals", new BlockNbtEquals());
-		event.register("blockstateequals", new BlockStateEquals());
-		event.register("time", new Time());
-		event.register("equipped", new Equipped());
-		event.register("op", new Op());
-		event.register("lookingatcitizen", new LookingAtCitizen());
-		event.register("permission", new Permission());
 	}
 
 	private void loadCommands() {
@@ -439,7 +439,7 @@ public class Tooltips extends JavaPlugin implements Listener {
 
 			String variableName = s.substring(cutIndex);
 			variableName = Placeholders.replacePlaceholders(p, variableName);
-			
+
 			Argument returnArgument = null;
 
 			if (global) {
