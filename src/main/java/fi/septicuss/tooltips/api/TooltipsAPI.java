@@ -1,14 +1,18 @@
 package fi.septicuss.tooltips.api;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
-import fi.septicuss.tooltips.object.preset.condition.Condition;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.object.preset.Preset;
+import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.theme.Theme;
 import fi.septicuss.tooltips.object.title.Title;
 import fi.septicuss.tooltips.object.title.TitleBuilder;
@@ -16,7 +20,7 @@ import fi.septicuss.tooltips.tooltip.Tooltip;
 
 public class TooltipsAPI {
 
-	private static final Map<String, Condition> REGISTERED_CONDITIONS = new HashMap<>();
+	private static final Map<String, Condition> REGISTERED_CONDITIONS = new ConcurrentHashMap<>();
 
 	public static void registerCondition(String name, Condition condition) {
 		REGISTERED_CONDITIONS.put(name, condition);
