@@ -31,11 +31,7 @@ public class OraxenFurnitureProvider implements FurnitureProvider {
 	@Override
 	public String getFurnitureId(Entity entity) {
 		var mechanic = OraxenFurniture.getFurnitureMechanic(entity);
-		
-		if (mechanic == null) {
-			return null;
-		}
-		
+		if (mechanic == null) return null;
 		return mechanic.getItemID();
 	}
 
