@@ -56,6 +56,7 @@ import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtBlock;
 import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtCitizen;
 import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtEntity;
 import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtFurniture;
+import fi.septicuss.tooltips.object.preset.condition.impl.LookingAtMythicMob;
 import fi.septicuss.tooltips.object.preset.condition.impl.Night;
 import fi.septicuss.tooltips.object.preset.condition.impl.Op;
 import fi.septicuss.tooltips.object.preset.condition.impl.Permission;
@@ -191,6 +192,7 @@ public class Tooltips extends JavaPlugin {
 		TooltipsAPI.registerCondition("lookingatblock", new LookingAtBlock());
 		TooltipsAPI.registerCondition("lookingatfurniture", new LookingAtFurniture());
 		TooltipsAPI.registerCondition("lookingatentity", new LookingAtEntity());
+		TooltipsAPI.registerCondition("lookingatmythicmob", new LookingAtMythicMob());
 		TooltipsAPI.registerCondition("region", new Region());
 		TooltipsAPI.registerCondition("incuboid", new InCuboid());
 		TooltipsAPI.registerCondition("location", new Location());

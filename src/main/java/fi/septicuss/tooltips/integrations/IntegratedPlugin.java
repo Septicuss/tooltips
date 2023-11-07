@@ -9,10 +9,10 @@ public enum IntegratedPlugin {
 	ORAXEN("Oraxen"),
 	CRUCIBLE("MythicCrucible"),
 	NBTAPI("NBTAPI"),
-	CITIZENS("Citizens");
+	CITIZENS("Citizens"),
+	MYTHICMOBS("MythicMobs");
 
-	public static final IntegratedPlugin[] FURNITURE_PLUGINS = { IntegratedPlugin.ORAXEN, IntegratedPlugin.CRUCIBLE,
-			IntegratedPlugin.ITEMSADDER };
+	public static final IntegratedPlugin[] FURNITURE_PLUGINS = { IntegratedPlugin.ORAXEN, IntegratedPlugin.CRUCIBLE, IntegratedPlugin.ITEMSADDER };
 	public static final IntegratedPlugin[] AREA_PLUGINS = { IntegratedPlugin.WORLDGUARD };
 
 	private String name;
