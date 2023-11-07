@@ -10,7 +10,7 @@
 
 	<groupId>fi.septicuss</groupId>
 	<artifactId>tooltips</artifactId>
-	<version>1.6.5</version>
+	<version>1.6.6</version>
 
 	<build>
 		<resources>
@@ -153,7 +153,6 @@
 			<version>5.3.5</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>io.lumine</groupId>
 			<artifactId>MythicCrucible</artifactId>
