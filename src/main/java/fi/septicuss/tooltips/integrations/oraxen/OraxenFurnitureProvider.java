@@ -49,7 +49,14 @@ public class OraxenFurnitureProvider implements FurnitureProvider {
 		MechanicFactory furnitureFactory = MechanicsManager.getMechanicFactory("furniture");
 
 		for (var id : furnitureFactory.getItems()) {
+			if (id == null)
+				continue;
+			
 			ItemBuilder builder = OraxenItems.getItemById(id);
+			
+			if (builder == null)
+				continue;
+			
 			ItemStack built = builder.build();
 
 			if (built == null)

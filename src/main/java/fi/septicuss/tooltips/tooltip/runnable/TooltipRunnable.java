@@ -70,8 +70,7 @@ public class TooltipRunnable extends BukkitRunnable {
 					TooltipData data = getPlayerData(player);
 
 					// Check if the text of the current preset has changed
-					if (data.hasCurrentText() && data.getCurrentPresetId().equals(id)
-							&& preset.getShowProperties().isActive()) {
+					if (data.hasCurrentText() && data.getCurrentPresetId().equals(id) && preset.getShowProperties().isActive()) {
 
 						if (!data.getCurrentText().equals(Placeholders.replacePlaceholders(player, preset.getText()))) {
 							// Text has changed
