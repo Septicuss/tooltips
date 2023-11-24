@@ -20,7 +20,7 @@ import fi.septicuss.tooltips.utils.font.Spaces;
 
 public class SpaceGenerator implements Generator {
 
-	private static final char ZERO_WIDTH = '\u200c';
+//	private static final char ZERO_WIDTH = '\u200c';
 	private static final String SPACE_FILE_NAME = "space.json";
 
 	private static final String SPACE_FILE_LOCATION = "default/pack/assets/tooltips/textures/space.png";
@@ -66,12 +66,6 @@ public class SpaceGenerator implements Generator {
 		Map<String, Integer> offsets = new HashMap<>();
 		offsets.put(String.valueOf(Spaces.POSITIVE_ONE), 1);
 		offsets.put(String.valueOf(Spaces.NEGATIVE_ONE), -1);
-
-		// Following offsets are only supported on 1.19+
-		if (useSpaces) {
-			offsets.put(String.valueOf(" "), 3);
-			offsets.put(String.valueOf(ZERO_WIDTH), 0);
-		}
 
 		return getSpaceProviders(offsets);
 
