@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,22 +50,28 @@ public class FileUtils {
 	}
 
 	public static void copyFiles(File fromDirectory, File toDirectory) {
-		try {
-			Path sourceDir = fromDirectory.toPath();
-			Path destDir = toDirectory.toPath();
+	    try {
+	        Path sourceDir = fromDirectory.toPath();
+	        Path destDir = toDirectory.toPath();
 
-			Files.walk(fromDirectory.toPath()).filter(Files::isRegularFile).forEach(source -> {
-				try {
-					Path dest = destDir.resolve(sourceDir.relativize(source));
-					Files.createDirectories(dest.getParent());
-					Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	        Files.walk(fromDirectory.toPath()).filter(Files::isRegularFile).forEach(source -> {
+	            try {
+	                Path dest = destDir.resolve(sourceDir.relativize(source));
+	                Files.createDirectories(dest.getParent());
+
+	                // Read the content of the source file into a byte array
+	                byte[] data = Files.readAllBytes(source);
+
+	                // Write the byte array to the destination file
+	                Files.write(dest, data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        });
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	public static void copyFileToDirectory(File file, File toDirectory) {
