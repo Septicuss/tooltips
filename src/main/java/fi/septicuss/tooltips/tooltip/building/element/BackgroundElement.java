@@ -11,6 +11,7 @@ import fi.septicuss.tooltips.utils.Colors;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class BackgroundElement implements TooltipElement {
@@ -43,58 +44,73 @@ public class BackgroundElement implements TooltipElement {
 		this.width = theme.getWidth() * totalParts;
 
 		List<ChatColor> colors = Lists.newArrayList();
-		
-		if (gradient) {
+
+		if (gradient)
 			colors = Colors.createGradient(totalParts, Colors.parseGradientColors(totalParts, color));
-		} else {
+		else
 			colors = Collections.singletonList(ChatColor.of(color));
-		}
-		
-		// Construct the component
-		final String font = theme.getFontName();
-		final String backgroundString = buildBackground(middleParts, colors);
-		final TextComponent component = new TextComponent(backgroundString);
 
-		component.setFont(font);
-		
-		if (!gradient) {
-			component.setColor(ChatColor.of(color));
-		}
+		final boolean singleColor = colors.size() == 1;
 
-		parts = new ComponentBuilder().append(component).getParts();
+		ComponentBuilder builder = singleColor ? constructSingleColorBackground(middleParts, colors.get(0))
+				: constructGradientBackground(middleParts, colors);
+		
+		parts = builder.getParts();
 		return parts;
 	}
-	
-	private String buildBackground(int middleParts, List<ChatColor> colors) {
-		
-		final ChatColor firstColor = colors.get(0);
+
+	private ComponentBuilder constructSingleColorBackground(int middleParts, ChatColor color) {
+		final ComponentBuilder builder = new ComponentBuilder();
 		final StringBuilder backgroundBuilder = new StringBuilder();
-		
-		backgroundBuilder.append(String.valueOf(firstColor) + ThemeManager.LEFT);
-		int gradientIndex = 1;
+
+		backgroundBuilder.append(ThemeManager.LEFT);
 
 		for (int i = 0; i < middleParts; i++) {
-			String color = String.valueOf((gradient ? colors.get(gradientIndex) : ""));
-			String coloredPart = color + ThemeManager.CENTER;
-			
 			backgroundBuilder.append(ThemeManager.OFFSET);
-			backgroundBuilder.append(coloredPart);
+			backgroundBuilder.append(ThemeManager.CENTER);
+		}
+			
+		backgroundBuilder.append(ThemeManager.OFFSET);
+		backgroundBuilder.append(ThemeManager.RIGHT);
+		
+		final TextComponent component = new TextComponent(backgroundBuilder.toString());
+		component.setFont(theme.getFontName());
+		component.setColor(color);
+		
+		builder.append(component);
+		return builder;
+	}
+
+	private ComponentBuilder constructGradientBackground(int middleParts, List<ChatColor> colors) {
+		final ComponentBuilder builder = new ComponentBuilder();
+		final ChatColor firstColor = colors.get(0);
+
+		final String leftPart = String.valueOf(ThemeManager.LEFT);
+		final String centerPart = String.valueOf(ThemeManager.OFFSET) + String.valueOf(ThemeManager.CENTER);
+		final String rightPart = String.valueOf(ThemeManager.OFFSET) + String.valueOf(ThemeManager.RIGHT);
+		
+		builder
+			.append(leftPart)
+			.color(firstColor)
+			.font(theme.getFontName());
+		
+		int gradientIndex = 1;
+		
+		for (int i = 0; i < middleParts; i++) {
+			builder
+				.append(centerPart, FormatRetention.FORMATTING)
+				.color(colors.get(gradientIndex));
 			
 			gradientIndex += 1;
 		}
-
-		String color = String.valueOf((gradient ? colors.get(gradientIndex) : ""));
-		String coloredPart = color + ThemeManager.RIGHT;
-
-		backgroundBuilder.append(ThemeManager.OFFSET);
-		backgroundBuilder.append(coloredPart);
-
-		final String backgroundString = backgroundBuilder.toString();
 		
-		return backgroundString;
+		builder
+			.append(rightPart, FormatRetention.FORMATTING)
+			.color(colors.get(gradientIndex));
+		
+		return builder;
 	}
-	
-	
+
 	@Override
 	public int getWidth() {
 		return width;
