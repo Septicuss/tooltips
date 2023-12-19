@@ -97,6 +97,7 @@ public class Tooltips extends JavaPlugin {
 	public static List<EntityType> FURNITURE_ENTITIES;
 	private static Tooltips INSTANCE;
 	private static Logger LOGGER;
+	private static boolean USE_SPACES;
 
 	private ProtocolManager protocolManager;
 	private SchemaManager schemaManager;
@@ -318,7 +319,7 @@ public class Tooltips extends JavaPlugin {
 
 		FileSetup.setupFiles(this);
 
-		final boolean useSpaces = this.getConfig().getBoolean("use-spaces", true);
+		USE_SPACES = this.getConfig().getBoolean("use-spaces", true);
 		final int checkFrequency = this.getConfig().getInt("condition-check-frequency", 3);
 
 		this.schemaManager = new SchemaManager();
@@ -332,10 +333,10 @@ public class Tooltips extends JavaPlugin {
 		themeManager.loadFrom(FileUtils.getAllConfigsFrom(this, "themes"));
 		presetManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "presets"));
 
-		addSpaceCharWidth(useSpaces);
+		addSpaceCharWidth(USE_SPACES);
 
 		PackGenerator packGenerator = new PackGenerator(this);
-		packGenerator.registerGenerator(new SpaceGenerator(useSpaces));
+		packGenerator.registerGenerator(new SpaceGenerator(USE_SPACES));
 		packGenerator.registerGenerator(new ThemeGenerator(themeManager));
 		packGenerator.registerGenerator(new LineGenerator(schemaManager));
 		packGenerator.registerGenerator(new IconGenerator(iconManager));
@@ -518,6 +519,10 @@ public class Tooltips extends JavaPlugin {
 
 	public static Logger logger() {
 		return LOGGER;
+	}
+	
+	public boolean isUseSpaces() {
+		return USE_SPACES;
 	}
 
 	public static void warn(String message) {

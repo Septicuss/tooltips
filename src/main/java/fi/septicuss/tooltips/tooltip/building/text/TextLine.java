@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.object.icon.IconManager;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.font.Spaces;
@@ -42,8 +43,11 @@ public class TextLine {
 			REPLACEABLES.putAll(iconManager.getIconPlaceholders());
 		}
 
-		final String line = Utils.color(Placeholders.replacePlaceholders(player, unprocessedText));
-
+		String line = Utils.color(Placeholders.replacePlaceholders(player, unprocessedText));
+		
+		if (!Tooltips.get().isUseSpaces())
+			line = line.replace(" ", "{+2}");
+		
 		lineComponents = new ComponentBuilder();
 
 		for (BaseComponent baseComponent : TextComponent.fromLegacyText(line, ChatColor.WHITE)) {
