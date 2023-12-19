@@ -42,7 +42,6 @@ public class ActionCommands {
 		COMMANDS.put("setvar", new SetVarCommand(false));
 		COMMANDS.put("clearvar", new ClearVarCommand(false));
 		COMMANDS.put("clearvars", new ClearVarsCommand(false));
-		
 	}
 
 	public static boolean isValidCommand(String fullCommand) {
@@ -59,14 +58,19 @@ public class ActionCommands {
 		return Collections.unmodifiableSet(COMMANDS.entrySet());
 	}
 
-	public static void runCommand(Player player, String presetId, String fullCommand) {
-		String[] split = fullCommand.replace("%player%", player.getName()).split(" ");
+	public static Validity runCommand(Player player, String presetId, String fullCommand) {
+		
+		if (player != null) {
+			fullCommand = fullCommand.replace("%player%", player.getName());
+		}
+		
+		String[] split = fullCommand.split(" ");
 		String first = split[0].toLowerCase();
 
 		ActionCommand command = COMMANDS.get(first);
 
 		if (command == null)
-			return;
+			return Validity.of(false, "Command not found");
 
 		Arguments arguments = new Arguments();
 
@@ -81,10 +85,11 @@ public class ActionCommands {
 					"Failed to run action command " + Utils.quote(first) + " in preset " + Utils.quote(presetId) + ":");
 			if (validity.hasReason())
 				Tooltips.warn("  -> " + validity.getReason());
-			return;
+			return validity;
 		}
 
 		command.run(player, arguments);
+		return Validity.TRUE;
 	}
 
 	private static String getFirstArgument(String fullCommand) {

@@ -119,6 +119,9 @@ public class SetVarCommand extends VarCommand implements ActionCommand {
 	}
 
 	private String replacePlaceholders(Player target, String value) {
+		if (target == null)
+			return value;
+		
 		value = value.replace("%player%", target.getName());
 		value = Placeholders.replacePlaceholders(target, value);
 		return value;
