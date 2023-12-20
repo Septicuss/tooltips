@@ -101,7 +101,7 @@ public class VarsCommand implements TooltipsSubCommand {
 				return;
 			}
 			
-			warn(sender, "Error: " + Colors.PLUGIN_COLOR_INFO + result.getReason());
+			warn(sender, "Error: " + Colors.INFO + result.getReason());
 		});
 	}
 
@@ -154,11 +154,11 @@ public class VarsCommand implements TooltipsSubCommand {
 	}
 	
 	private void info(CommandSender sender, String message) {
-		Messaging.send(sender, Colors.PLUGIN_COLOR + "[!] " + message);
+		Messaging.send(sender, Colors.PLUGIN + "[!] " + message);
 	}
 	
 	private void warn(CommandSender sender, String message) {
-		Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] " + message);
+		Messaging.send(sender, Colors.WARN + "[!] " + message);
 	}
 
 	private void cacheCommands() {

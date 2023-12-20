@@ -32,7 +32,7 @@ public class TooltipsCommand implements CommandExecutor, TabCompleter {
 			return sendHelp(sender, command, label, args);
 		} else {
 			if (!sender.hasPermission(subcommand.getPermission())) {
-				Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] No permission");
+				Messaging.send(sender, Colors.WARN + "[!] No permission");
 				return true;
 			}
 			subcommand.onCommand(sender, command, label, args);
@@ -42,15 +42,17 @@ public class TooltipsCommand implements CommandExecutor, TabCompleter {
 
 	protected boolean sendHelp(CommandSender sender, Command command, String label, String[] args) {
 		if (!sender.hasPermission("tooltips.command.help")) {
-			Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] No permission");
+			Messaging.send(sender, Colors.WARN + "[!] No permission");
 			return true;
 		}
 		
-		Messaging.send(sender, Colors.PLUGIN_COLOR + ChatColor.BOLD + "Tooltips Help");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN_COLOR + "/tt &freload");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN_COLOR + "/tt &feval {condition}");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN_COLOR + "/tt &fsendpreset {player} {preset id} (text)");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN_COLOR + "/tt &fsendtheme {player} {theme id} (text)");
+		Messaging.send(sender, Colors.PLUGIN + ChatColor.BOLD + "Tooltips Help");
+		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &freload");
+		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &feval {condition}");
+		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fsendpreset {player} {preset id} (text)");
+		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fsendtheme {player} {theme id} (text)");
+		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fvars {varcommand} (args)");
+		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &flistvars {scope}");
 		return true;
 	}
 

@@ -23,6 +23,7 @@ import com.google.gson.GsonBuilder;
 import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.commands.TooltipsCommand;
 import fi.septicuss.tooltips.commands.subcommands.EvalCommand;
+import fi.septicuss.tooltips.commands.subcommands.ListVarsCommand;
 import fi.septicuss.tooltips.commands.subcommands.ReloadCommand;
 import fi.septicuss.tooltips.commands.subcommands.SendPresetCommand;
 import fi.septicuss.tooltips.commands.subcommands.SendThemeCommand;
@@ -299,6 +300,7 @@ public class Tooltips extends JavaPlugin {
 		tooltipsCommand.register("reload", new ReloadCommand(this));
 		tooltipsCommand.register("eval", new EvalCommand(this));
 		tooltipsCommand.register("vars", new VarsCommand());
+		tooltipsCommand.register("listvars", new ListVarsCommand());
 
 		PluginCommand tooltipsPluginCommand = getCommand("tooltips");
 		tooltipsPluginCommand.setExecutor(tooltipsCommand);

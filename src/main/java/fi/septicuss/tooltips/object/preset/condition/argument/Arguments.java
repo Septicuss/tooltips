@@ -1,6 +1,7 @@
 package fi.septicuss.tooltips.object.preset.condition.argument;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class Arguments {
 
@@ -56,6 +57,10 @@ public class Arguments {
 	public void remove(String... aliases) {
 		for (var alias : aliases)
 			argumentMap.remove(alias);
+	}
+	
+	public Set<String> keys() {
+		return argumentMap.keySet();
 	}
 
 	public boolean areEmpty() {

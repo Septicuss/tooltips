@@ -2,7 +2,9 @@ package fi.septicuss.tooltips.utils.variable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -82,6 +84,11 @@ public class Variables {
 			for (var key : GLOBAL_VARIABLE_CONFIG.getKeys(false))
 				GLOBAL_VARIABLE_CONFIG.set(key, null);
 		}
+		
+		@Override
+		public List<String> getVarNames() {
+			return new ArrayList<>(GLOBAL_VARIABLE_CONFIG.getKeys(false));
+		}
 
 		@Override
 		public Argument getVar(OfflinePlayer player, String varName) {
@@ -114,6 +121,12 @@ public class Variables {
 			return (player.getUniqueId().toString() + "." + varName);
 		}
 
+		@Override
+		public List<String> getVarNames(OfflinePlayer player) {
+			String path = player.getUniqueId().toString();
+			return new ArrayList<>(PLAYER_VARIABLE_CONFIG.getConfigurationSection(path).getKeys(false));
+		}
+
 	}
 
 	public static class Local implements VariableProvider {
@@ -144,6 +157,11 @@ public class Variables {
 		@Override
 		public void clearAllVars() {
 			GLOBAL_VARIABLES.clear();
+		}
+		
+		@Override
+		public List<String> getVarNames() {
+			return new ArrayList<>(GLOBAL_VARIABLES.keySet());
 		}
 
 		@Override
@@ -208,6 +226,19 @@ public class Variables {
 			UUID uuid = player.getUniqueId();
 			PLAYER_VARIABLES.remove(uuid);
 		}
+		
+		@Override
+		public List<String> getVarNames(OfflinePlayer player) {
+			UUID uuid = player.getUniqueId();
+			List<String> varNames = new ArrayList<>();
+
+			if (!PLAYER_VARIABLES.containsKey(uuid)) {
+				return varNames;
+			}
+			
+			Arguments args = PLAYER_VARIABLES.get(uuid);
+			return new ArrayList<>(args.keys());
+		}
 
 	}
 
@@ -220,8 +251,10 @@ public class Variables {
 		public void setVar(String varName, String value);
 
 		public void clearVar(String varName);
-
+		
 		public void clearAllVars();
+
+		public List<String> getVarNames();
 
 		public Argument getVar(OfflinePlayer player, String varName);
 
@@ -232,6 +265,8 @@ public class Variables {
 		public void clearVar(OfflinePlayer player, String varName);
 
 		public void clearAllVars(OfflinePlayer player);
+
+		public List<String> getVarNames(OfflinePlayer player);
 
 	}
 

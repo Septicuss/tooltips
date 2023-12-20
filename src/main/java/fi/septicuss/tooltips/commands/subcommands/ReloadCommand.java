@@ -20,9 +20,9 @@ public class ReloadCommand implements TooltipsSubCommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Messaging.send(sender, Colors.PLUGIN_COLOR + "Reloading plugin...");
+		Messaging.send(sender, Colors.PLUGIN + "Reloading plugin...");
 		plugin.reload();
-		Messaging.send(sender, Colors.PLUGIN_COLOR + "Reloaded!");
+		Messaging.send(sender, Colors.PLUGIN + "Reloaded!");
 	}
 
 	@Override

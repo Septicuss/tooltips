@@ -25,12 +25,12 @@ public class EvalCommand implements TooltipsSubCommand {
 	public void onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (!(sender instanceof Player)) {
-			Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] Must be a player to use this command.");
+			Messaging.send(sender, Colors.WARN + "[!] Must be a player to use this command.");
 			return;
 		}
 		
 		if (args.length < 2) {
-			Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] Missing condition");
+			Messaging.send(sender, Colors.WARN + "[!] Missing condition");
 			return;
 		}
 
@@ -45,7 +45,7 @@ public class EvalCommand implements TooltipsSubCommand {
 		var statement = parser.parse("eval", conditionStr);
 
 		if (statement == null) {
-			Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] An error occured while trying to parse condition");
+			Messaging.send(sender, Colors.WARN + "[!] An error occured while trying to parse condition");
 			return;
 		}
 
@@ -54,11 +54,11 @@ public class EvalCommand implements TooltipsSubCommand {
 		boolean result = statement.getCondition().check(player);
 
 		Messaging.send(sender,
-				"Condition result: " + (result ? Colors.PLUGIN_COLOR : Colors.PLUGIN_COLOR_WARN) + result);
+				"Condition result: " + (result ? Colors.PLUGIN : Colors.WARN) + result);
 
 		if (statement.hasOutcome())
 			Messaging.send(sender,
-					" Outcome: " + (statement.getOutcome().asBoolean() ? Colors.PLUGIN_COLOR : Colors.PLUGIN_COLOR_WARN)
+					" Outcome: " + (statement.getOutcome().asBoolean() ? Colors.PLUGIN : Colors.WARN)
 							+ statement.getOutcome().toString());
 
 	}

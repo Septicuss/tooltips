@@ -106,7 +106,7 @@ public class SendThemeCommand implements TooltipsSubCommand {
 	}
 
 	private void warn(CommandSender sender, String message) {
-		Messaging.send(sender, Colors.PLUGIN_COLOR_WARN + "[!] " + message);
+		Messaging.send(sender, Colors.WARN + "[!] " + message);
 	}
 
 }

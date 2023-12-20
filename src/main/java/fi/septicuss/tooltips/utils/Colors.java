@@ -21,9 +21,9 @@ public class Colors {
 	 * https://github.com/Phoenix616/MineDown/blob/master/src/main/java/de/themoep/minedown/Util.java
 	 */
 
-	public static final String PLUGIN_COLOR = "#d33682";
-	public static final String PLUGIN_COLOR_INFO = "#ffffff";
-	public static final String PLUGIN_COLOR_WARN = "#852051";
+	public static final String PLUGIN = "#d33682";
+	public static final String INFO = "#ffffff";
+	public static final String WARN = "#852051";
 
 	private static final char COLOR_CHAR = ChatColor.COLOR_CHAR;
 	private static final Pattern PATTERN = Pattern.compile("#" + "([A-Fa-f0-9]{6})");
