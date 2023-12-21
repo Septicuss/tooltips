@@ -1,0 +1,21 @@
+# Optional file, which allows you to specify the pixel widths of unicodes
+# Note that pixels in this file can be of decimal format (1.25, 4.5 etc..)
+# This helps the plugin in width calculation
+
+！: 2
+｀: 2
+ａ: 3
+ｂ: 3
+ｃ: 3
+ｄ: 3
+ｅ: 3
+ｆ: 3
+ｇ: 3
+ｈ: 3
+ｉ: 3
+ｊ: 3
+ｋ: 3
+ｌ: 3
+ｍ: 3
+ｎ: 3
+ｏ: 3

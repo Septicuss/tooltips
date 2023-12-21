@@ -43,7 +43,6 @@ public class TextLineElement implements TooltipElement {
 
 		boolean offset = false;
 		boolean firstChar = true;
-		boolean previousIsIcon = false;
 
 		for (var component : lineComponents) {
 
@@ -75,7 +74,6 @@ public class TextLineElement implements TooltipElement {
 
 				original.copyFormatting(textComponent, true);
 				componentBuilder.append(original).font(lineProperties.getIconFont());
-				previousIsIcon = true;
 				continue;
 			}
 
@@ -102,18 +100,14 @@ public class TextLineElement implements TooltipElement {
 
 			for (char character : plain.toCharArray()) {
 				final SizedChar sizedChar = Widths.getSizedChar(character);
-				final double addedWidth = getCharWidth(character, sizedChar, firstChar, previousIsIcon);
+				final double addedWidth = getCharWidth(character, sizedChar);
 
 				this.totalWidth += addedWidth;
 
 				if (firstChar) {
 					firstChar = false;
 				} else {
-					if (!previousIsIcon) {
-						builder.append(Spaces.NEGATIVE_ONE);
-					} else {
-						previousIsIcon = false;
-					}
+					builder.append(Spaces.NEGATIVE_ONE);
 				}
 				
 				builder.append(character);
@@ -159,17 +153,32 @@ public class TextLineElement implements TooltipElement {
 		return textLine.isCentered();
 	}
 
-	private double getCharWidth(char character, SizedChar sizedChar, boolean firstChar, boolean previousIsIcon) {
-		double width = (int) (sizedChar.getAbsoluteWidth() * (double) sizedChar.getHeightRatio()) + 1;
+    private double getCharWidth(char character, SizedChar sizedChar) {
+    	if (sizedChar.hasOverridingWidth()) {
+    		return sizedChar.getOverridingWidth();
+    	}
 
-		if (previousIsIcon)
-			width += Math.ceil(sizedChar.getHeightRatio());
+    	if (character == ' ') {
+            return 2;
+        }
 
-		if (sizedChar.getRealWidth() % 1 == 0 && character != ' ')
-			width -= sizedChar.getHeightRatio();
+        int negativeSpace = sizedChar.getNegativeSpace();
 
-		return width;
-	}
+        double width = 0;
+
+        width = (negativeSpace + sizedChar.getExactWidth());
+        width *= sizedChar.getHeightRatio();
+
+        /**
+         * Adds space between characters, which normally is 1, but since we're sizing
+         * everything down 2x, that width is 0.5
+         */
+        if (negativeSpace <= 1) {
+            width += 0.5;
+        }
+
+        return width;
+    }
 
 	private double getIconWidth(char chracter, SizedChar sizedChar, boolean firstChar) {
 		final int negativeSpace = sizedChar.getNegativeSpace();

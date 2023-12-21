@@ -1,8 +1,11 @@
 package fi.septicuss.tooltips.utils.font;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+
+import org.bukkit.configuration.file.YamlConfiguration;
 
 // Credit goes to https://github.com/Ehhthan for width size code
 public class Widths {
@@ -34,6 +37,19 @@ public class Widths {
 				WIDTH_MAP.put(character, sizedChar);
 			}
 		}
+	}
+	
+	public static void loadCustomWidths(File customWidthsFile) {
+		YamlConfiguration widths = YamlConfiguration.loadConfiguration(customWidthsFile);
+		
+		for (String key : widths.getKeys(false)) {
+			char character = key.toCharArray()[0];
+			SizedChar sized = getSizedChar(character);
+			sized.setOverridingWidth(widths.getDouble(key));
+			
+			WIDTH_MAP.put(character, sized);
+		}
+		
 	}
 
 	// -- PUBLIC API --
@@ -131,6 +147,11 @@ public class Widths {
 
 	public static class SizedChar {
 		
+		private static final double DEFAULT_WIDTH = -1d;
+		private static final double DEFAULT_HEIGHT_RATIO = 1d;
+		
+		double overridingWidth = DEFAULT_WIDTH;
+		
 		// Character
 		char character;
 
@@ -148,6 +169,18 @@ public class Widths {
 		
 		public SizedChar(char character) {
 			this.character = character;
+		}
+		
+		public boolean hasOverridingWidth() {
+			return overridingWidth != DEFAULT_WIDTH;
+		}
+		
+		public double getOverridingWidth() {
+			return overridingWidth;
+		}
+		
+		public void setOverridingWidth(double width) {
+			this.overridingWidth = width;
 		}
 
 		public char getCharacter() {
@@ -206,6 +239,9 @@ public class Widths {
 		}
 		
 		public double getRealWidth() {
+			if (hasOverridingWidth())
+				return overridingWidth + 0.5;
+			
 			double ratio = getHeightRatio();
 			double mult = (ratio * (double) absoluteWidth);
 			double result = mult + 1;
@@ -213,6 +249,9 @@ public class Widths {
 		}
 
 		public double getHeightRatio() {
+			if (hasOverridingWidth())
+				return DEFAULT_HEIGHT_RATIO;
+			
 			if (imageHeight == 0)
 				return 0;
 			return ((double) height / (double) imageHeight);

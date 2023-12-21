@@ -335,6 +335,8 @@ public class Tooltips extends JavaPlugin {
 		themeManager.loadFrom(FileUtils.getAllConfigsFrom(this, "themes"));
 		presetManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "presets"));
 
+		Widths.loadCustomWidths(new File(getDataFolder(), ".data/widths.yml"));
+		
 		addSpaceCharWidth(USE_SPACES);
 
 		PackGenerator packGenerator = new PackGenerator(this);
