@@ -124,6 +124,10 @@ public class Variables {
 		@Override
 		public List<String> getVarNames(OfflinePlayer player) {
 			String path = player.getUniqueId().toString();
+			if (!PLAYER_VARIABLE_CONFIG.contains(path))
+				return new ArrayList<>();
+			if (!PLAYER_VARIABLE_CONFIG.isConfigurationSection(path))
+				return new ArrayList<>();
 			return new ArrayList<>(PLAYER_VARIABLE_CONFIG.getConfigurationSection(path).getKeys(false));
 		}
 
