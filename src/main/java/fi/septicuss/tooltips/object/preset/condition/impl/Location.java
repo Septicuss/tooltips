@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
-import fi.septicuss.tooltips.object.preset.condition.type.LocationArgument;
+import fi.septicuss.tooltips.object.preset.condition.type.MultiLocation;
 import fi.septicuss.tooltips.object.validation.Validity;
 
 public class Location implements Condition {
@@ -13,12 +13,18 @@ public class Location implements Condition {
 
 	@Override
 	public boolean check(Player player, Arguments args) {
-		LocationArgument locationArg = args.get(LOCATION).getAsLocationArgument(player);
-		org.bukkit.Location location = locationArg.getLocation();
+		MultiLocation locations = MultiLocation.of(player, args.get(LOCATION).getAsString());
 		org.bukkit.Location playerLocation = player.getLocation();
 		
-		return (playerLocation.getBlockX() == location.getBlockX() && playerLocation.getBlockY() == location.getBlockY()
-				&& playerLocation.getBlockZ() == location.getBlockZ());
+		for (org.bukkit.Location location : locations.getLocations()) {
+			if (playerLocation.getBlockX() == location.getBlockX() && 
+				playerLocation.getBlockY() == location.getBlockY() && 
+				playerLocation.getBlockZ() == location.getBlockZ()) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -27,7 +33,7 @@ public class Location implements Condition {
 			return Validity.of(false, "Location argument is required");
 		}
 
-		Validity validity = LocationArgument.validityOf(args.get(LOCATION).getAsString());
+		Validity validity = MultiLocation.validityOf(args.get(LOCATION).getAsString());
 
 		if (!validity.isValid()) {
 			return validity;
