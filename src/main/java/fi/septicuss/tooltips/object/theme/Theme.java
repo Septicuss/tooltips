@@ -25,7 +25,7 @@ public class Theme implements Validatable {
 	private int textLineSpacing;
 
 	// Calculated from texture
-	private int width;
+	private double width;
 
 	// Validatable
 	private boolean valid = false;
@@ -73,9 +73,17 @@ public class Theme implements Validatable {
 				Tooltips.warn(String.format("Theme \"%s\" has invalid texture width (must be a multiple of 3)", id));
 				return;
 			}
+			
+			double definedHeight = height;
+			double imageHeight = image.getHeight();
 
-			final double heightRatio = (double) (height) / (double) (image.getHeight());
-			this.width = (int) Math.max(1, (((double)imageWidth /(double) 3) * (double)heightRatio));
+			double heightRatio = definedHeight / imageHeight;
+			double partWidth = imageWidth / 3;
+
+			double width = partWidth * heightRatio;
+			
+			this.width = Math.max(1D, (width));
+			
 		} catch (IOException e) {
 			Tooltips.warn(String.format("Theme \"%s\" failed to load texture \"%s\". Error: %s", id,
 					path.getNamespacedPath(), e.getMessage()));
@@ -118,7 +126,7 @@ public class Theme implements Validatable {
 		return padding;
 	}
 
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 

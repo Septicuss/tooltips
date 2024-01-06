@@ -38,10 +38,11 @@ public class BackgroundElement implements TooltipElement {
 		if (parts != null)
 			return parts;
 
-		final int middleParts = (requiredWidth / theme.getWidth()) + SIDE_PARTS;
+		final int middleParts = (int) (((double)requiredWidth / (double)theme.getWidth()) + SIDE_PARTS);
 		final int totalParts = middleParts + SIDE_PARTS;
 
-		this.width = theme.getWidth() * totalParts;
+		double width = (double)theme.getWidth() * (double)totalParts;
+		this.width = (int) (width);
 
 		List<ChatColor> colors = Lists.newArrayList();
 
