@@ -8,7 +8,7 @@ import fi.septicuss.tooltips.object.preset.condition.Condition;
 import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
 import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.object.preset.condition.type.EnumOptions;
-import fi.septicuss.tooltips.object.preset.condition.type.LocationArgument;
+import fi.septicuss.tooltips.object.preset.condition.type.MultiLocation;
 import fi.septicuss.tooltips.object.validation.Validity;
 import fi.septicuss.tooltips.utils.Utils;
 
@@ -21,7 +21,7 @@ public class LookingAtBlock implements Condition {
 	@Override
 	public boolean check(Player player, Arguments args) {
 		EnumOptions<Material> materials = null;
-		LocationArgument location = null;
+		MultiLocation locations = null;
 		int distance = 3;
 
 		if (args.isNumber(DISTANCE_ALIASES))
@@ -31,7 +31,7 @@ public class LookingAtBlock implements Condition {
 			materials = args.get(MATERIAL_ALIASES).getAsEnumOptions(Material.class);
 
 		if (args.has(LOCATION_ALIASES))
-			location = args.get(LOCATION_ALIASES).getAsLocationArgument(player);
+			locations = MultiLocation.of(player, args.get(LOCATION_ALIASES).getAsString());
 
 		var rayTrace = Utils.getRayTraceResult(player, distance);
 		
@@ -47,7 +47,7 @@ public class LookingAtBlock implements Condition {
 		}
 
 		boolean validMaterial = (materials == null ? true : materials.contains(target.getType()));
-		boolean validLocation = (location == null ? true : location.getLocation().equals(target.getLocation()));
+		boolean validLocation = (locations == null ? true : locations.contains(target.getLocation()));
 
 		return (validMaterial && validLocation);
 	}
@@ -69,10 +69,10 @@ public class LookingAtBlock implements Condition {
 
 		if (args.has(LOCATION_ALIASES)) {
 			Argument locationArg = args.get(LOCATION_ALIASES);
-			Validity locationValidity = LocationArgument.validityOf(locationArg.getAsString());
+			Validity multiLocationValidity = MultiLocation.validityOf(locationArg.getAsString());
 
-			if (!locationValidity.isValid()) {
-				return locationValidity;
+			if (!multiLocationValidity.isValid()) {
+				return multiLocationValidity;
 			}
 		}
 
