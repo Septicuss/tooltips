@@ -19,6 +19,7 @@ import fi.septicuss.tooltips.object.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Messaging;
+import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 
 public class SendThemeCommand implements TooltipsSubCommand {
 
@@ -66,7 +67,8 @@ public class SendThemeCommand implements TooltipsSubCommand {
 				builder.append(args[i] + " ");
 			}
 
-			extra.addAll(Arrays.asList(builder.toString().trim().split("\\\\n")));
+			String text = Placeholders.replacePlaceholders(target, builder.toString().trim());
+			extra.addAll(Arrays.asList(text.split("\\\\n")));
 		}
 
 		// Sending
