@@ -73,7 +73,7 @@ public class FileSetup {
 		for (String key : internalConfig.getKeys(true)) {
 			if (!existingConfig.contains(key)) {
 				existingConfig.set(key, internalConfig.get(key));
-				existingConfig.setComments(key, internalConfig.getComments(key));
+//				existingConfig.setComments(key, internalConfig.getComments(key));
 			}
 		}
 		
