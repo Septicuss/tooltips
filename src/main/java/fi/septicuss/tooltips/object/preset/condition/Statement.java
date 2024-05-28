@@ -28,6 +28,11 @@ public class Statement {
 		return condition;
 	}
 
+	@Override
+	public String toString() {
+		return "Statement [" + condition.toString() + ", " + outcome.toString() + "]";
+	}
+
 	public enum Outcome {
 
 		REQUIRED(true), CANCEL(false);

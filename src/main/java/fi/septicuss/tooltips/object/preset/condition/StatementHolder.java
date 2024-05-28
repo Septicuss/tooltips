@@ -19,8 +19,6 @@ public class StatementHolder {
 	}
 
 	public void addStatement(Statement statement) {
-		if (statement == null)
-			return;
 		statements.add(statement);
 	}
 	

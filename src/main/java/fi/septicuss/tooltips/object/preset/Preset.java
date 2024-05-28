@@ -57,7 +57,11 @@ public class Preset implements Validatable {
 	 */
 	private boolean valid = false;
 
+	private ConfigurationSection section;
+
 	public Preset(Tooltips plugin, Preset parent, ConfigurationSection section) {
+
+		this.section = section;
 
 		/* PARENT */
 		if (parent != null) {
@@ -222,5 +226,7 @@ public class Preset implements Validatable {
 	public boolean isValid() {
 		return valid;
 	}
+
+	public ConfigurationSection getSection() { return section; }
 
 }

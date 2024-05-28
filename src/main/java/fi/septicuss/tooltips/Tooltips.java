@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import fi.septicuss.tooltips.commands.subcommands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -22,12 +23,6 @@ import com.google.gson.GsonBuilder;
 
 import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.commands.TooltipsCommand;
-import fi.septicuss.tooltips.commands.subcommands.EvalCommand;
-import fi.septicuss.tooltips.commands.subcommands.ListVarsCommand;
-import fi.septicuss.tooltips.commands.subcommands.ReloadCommand;
-import fi.septicuss.tooltips.commands.subcommands.SendPresetCommand;
-import fi.septicuss.tooltips.commands.subcommands.SendThemeCommand;
-import fi.septicuss.tooltips.commands.subcommands.VarsCommand;
 import fi.septicuss.tooltips.integrations.AreaProvider;
 import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.integrations.IntegratedPlugin;
@@ -301,6 +296,7 @@ public class Tooltips extends JavaPlugin {
 		tooltipsCommand.register("eval", new EvalCommand(this));
 		tooltipsCommand.register("vars", new VarsCommand());
 		tooltipsCommand.register("listvars", new ListVarsCommand());
+		tooltipsCommand.register("debug", new DebugCommand(this));
 
 		PluginCommand tooltipsPluginCommand = getCommand("tooltips");
 		tooltipsPluginCommand.setExecutor(tooltipsCommand);
