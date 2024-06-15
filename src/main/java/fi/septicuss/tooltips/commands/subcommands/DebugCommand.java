@@ -72,15 +72,15 @@ public class DebugCommand implements TooltipsSubCommand {
 
     public void debugPreset(CommandSender sender, Player player, Preset preset) {
         ConfigurationSection section = preset.getSection();
-        var conditionsSection = section.getConfigurationSection("conditions");
 
-        if (conditionsSection == null) {
-            Messaging.send(sender, Colors.WARN + "[!] This preset does not have any conditions");
-            return;
-        }
-        var conditionLines = conditionsSection.getStringList("conditions");
+        List<String> conditionLines = null;
 
-        if (conditionLines.isEmpty()) {
+        if (section.contains("conditions.conditions"))
+            conditionLines = section.getStringList("conditions.conditions");
+        if (section.contains("conditions") && !section.isConfigurationSection("conditions"))
+            conditionLines = section.getStringList("conditions");;
+
+        if (conditionLines == null || conditionLines.isEmpty()) {
             Messaging.send(sender, Colors.WARN + "[!] This preset does not have any conditions");
             return;
         }
