@@ -58,8 +58,11 @@ public class TooltipManager {
 		}
 
 		// --- BACKGROUND ---
+		int leftPadding = tooltipProperties.getTheme().getLeftPadding();
+		int rightPadding = tooltipProperties.getTheme().getRightPadding();
+
 		var background = new BackgroundElement(tooltipProperties.getTheme(), tooltipProperties.getColor(),
-				longestWidth);
+				longestWidth + rightPadding);
 
 		ComponentBuilder componentBuilder = new ComponentBuilder();
 
@@ -72,10 +75,9 @@ public class TooltipManager {
 		for (var backgroundPart : background.getParts())
 			componentBuilder.append(backgroundPart);
 
-		int textPadding = tooltipProperties.getTheme().getPadding();
 		int backgroundOffset = -background.getWidth();
 
-		componentBuilder.append(Spaces.getOffset(backgroundOffset + textPadding));
+		componentBuilder.append(Spaces.getOffset(backgroundOffset + leftPadding));
 
 		// --- TEXT ---
 		int index = 0;

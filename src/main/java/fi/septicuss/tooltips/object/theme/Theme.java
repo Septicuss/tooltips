@@ -19,7 +19,8 @@ public class Theme implements Validatable {
 
 	private int lines;
 	private int height;
-	private int padding;
+	private int leftPadding;
+	private int rightPadding;
 	private int themeAscent;
 	private int textStartAscent;
 	private int textLineSpacing;
@@ -50,8 +51,14 @@ public class Theme implements Validatable {
 
 		this.path = new NamespacedPath(themeSection.getString("path"), "textures");
 		this.height = themeSection.getInt("height");
-		this.padding = themeSection.getInt("padding", 1);
 		this.lines = themeSection.getInt("lines");
+
+		if (themeSection.isConfigurationSection("padding")) {
+			this.leftPadding = themeSection.getInt("padding.left", 1);
+			this.rightPadding = themeSection.getInt("padding.right", 0);
+		} else {
+			this.leftPadding = themeSection.getInt("padding", 1);
+		}
 
 		ConfigurationSection ascentSection = themeSection.getConfigurationSection("ascents");
 		this.themeAscent = ascentSection.getInt("theme-ascent");
@@ -122,8 +129,12 @@ public class Theme implements Validatable {
 		return textLineSpacing;
 	}
 	
-	public int getPadding() {
-		return padding;
+	public int getLeftPadding() {
+		return leftPadding;
+	}
+
+	public int getRightPadding() {
+		return rightPadding;
 	}
 
 	public double getWidth() {
