@@ -9,8 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.comphenix.protocol.ProtocolManager;
-
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
@@ -18,6 +16,7 @@ import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.managers.preset.condition.StatementHolder;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
+import fi.septicuss.tooltips.managers.title.TitleManager;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 import fi.septicuss.tooltips.tooltip.TooltipManager;
 import fi.septicuss.tooltips.tooltip.runnable.TooltipData.CooldownType;
@@ -33,17 +32,17 @@ public class TooltipRunnable extends BukkitRunnable {
 	private static final int ACTIVE_PRESET_DURATION = 40;
 
 	private TooltipManager tooltipManager;
-	private ProtocolManager protocolManager;
+	private TitleManager titleManager;
 
 	private Map<UUID, TooltipData> dataMap = new HashMap<>();
 
 	private Map<String, Preset> presets;
 	private Map<String, StatementHolder> holders;
 
-	public TooltipRunnable(TooltipManager tooltipManager, ProtocolManager protocolManager, Map<String, Preset> presets,
+	public TooltipRunnable(TooltipManager tooltipManager, TitleManager titleManager, Map<String, Preset> presets,
 			Map<String, StatementHolder> holders, int checkFrequency) {
 		this.tooltipManager = tooltipManager;
-		this.protocolManager = protocolManager;
+		this.titleManager = titleManager;
 
 		this.presets = presets;
 		this.holders = holders;
@@ -187,7 +186,7 @@ public class TooltipRunnable extends BukkitRunnable {
 			builder = TooltipCache.get(player, rawText).clone();
 		} else {
 			Tooltip tooltip = tooltipManager.getTooltip(player, preset, null);
-			builder = new TitleBuilder(protocolManager);
+			builder = new TitleBuilder(titleManager);
 			builder.setSubtitle(tooltip.getComponents());
 			TooltipCache.cache(player, rawText, builder.clone());
 		}
@@ -270,7 +269,7 @@ public class TooltipRunnable extends BukkitRunnable {
 				builder = TooltipCache.get(player, rawText).clone();
 			} else {
 				Tooltip tooltip = tooltipManager.getTooltip(player, preset, null);
-				builder = new TitleBuilder(protocolManager);
+				builder = new TitleBuilder(titleManager);
 				builder.setSubtitle(tooltip.getComponents());
 			}
 

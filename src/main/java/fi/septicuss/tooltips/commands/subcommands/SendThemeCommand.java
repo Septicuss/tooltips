@@ -13,8 +13,8 @@ import com.google.common.collect.Lists;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
+import fi.septicuss.tooltips.integrations.Title;
 import fi.septicuss.tooltips.managers.theme.Theme;
-import fi.septicuss.tooltips.managers.title.Title;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 import fi.septicuss.tooltips.utils.Colors;
@@ -75,7 +75,7 @@ public class SendThemeCommand implements TooltipsSubCommand {
 
 		Tooltip tooltip = plugin.getTooltipManager().getTooltip(target, theme, extra);
 
-		TitleBuilder titleBuilder = new TitleBuilder(plugin.getProtocolManager());
+		TitleBuilder titleBuilder = new TitleBuilder(plugin.getTitleManager());
 		titleBuilder.setSubtitle(tooltip.getComponents());
 		titleBuilder.setFadeIn(0);
 		titleBuilder.setStay(5 * 20);

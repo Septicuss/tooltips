@@ -5,8 +5,7 @@ api-version: 1.16
 
 author: Septicuss
 
-depend: [ ProtocolLib ]
-softdepend: [ PlaceholderAPI, ItemsAdder, Oraxen, WorldGuard, WorldEdit, MythicCrucible, MythicMobs, Citizens ]
+softdepend: [ PlaceholderAPI, ItemsAdder, Oraxen, WorldGuard, WorldEdit, MythicCrucible, MythicMobs, Citizens, ProtocolLib, packetevents ]
 
 commands:
    tooltips:

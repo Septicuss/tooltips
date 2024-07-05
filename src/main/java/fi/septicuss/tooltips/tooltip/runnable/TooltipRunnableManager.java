@@ -6,19 +6,18 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.comphenix.protocol.ProtocolManager;
-
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
 import fi.septicuss.tooltips.managers.preset.condition.StatementHolder;
+import fi.septicuss.tooltips.managers.title.TitleManager;
 import fi.septicuss.tooltips.tooltip.TooltipManager;
 
 public class TooltipRunnableManager {
 
 	private TooltipManager tooltipManager;
-	private ProtocolManager protocolManager;
+	private TitleManager titleManager;
 
 	private Map<String, Preset> presets = new HashMap<>();
 	private Map<String, StatementHolder> holders = new HashMap<>();
@@ -29,7 +28,7 @@ public class TooltipRunnableManager {
 	
 	public TooltipRunnableManager(Tooltips plugin) {
 		this.tooltipManager = plugin.getTooltipManager();
-		this.protocolManager = plugin.getProtocolManager();
+		this.titleManager = plugin.getTitleManager();
 		loadNecessaryData(plugin.getPresetManager());
 	}
 	
@@ -49,7 +48,7 @@ public class TooltipRunnableManager {
 	}
 	
 	public void run(JavaPlugin plugin, int checkFrequency) {
-		runnable = new TooltipRunnable(tooltipManager, protocolManager, presets, holders, checkFrequency);
+		runnable = new TooltipRunnable(tooltipManager, titleManager, presets, holders, checkFrequency);
 		runnable.runTaskTimer(plugin, 0L, checkFrequency);
 	}
 	

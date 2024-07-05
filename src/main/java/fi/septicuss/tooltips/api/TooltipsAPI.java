@@ -11,10 +11,10 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.integrations.Title;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.condition.Condition;
 import fi.septicuss.tooltips.managers.theme.Theme;
-import fi.septicuss.tooltips.managers.title.Title;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 
@@ -91,7 +91,7 @@ public class TooltipsAPI {
 	private static void sendTooltipTitle(Player player, Preset preset, List<String> extra) {
 		Tooltip tooltip = Tooltips.get().getTooltipManager().getTooltip(player, preset, extra);
 
-		Title title = new TitleBuilder(Tooltips.get().getProtocolManager())
+		Title title = new TitleBuilder(Tooltips.get().getTitleManager())
 				.setSubtitle(tooltip.getComponents())
 				.setFadeIn(preset.getFadeIn())
 				.setStay(preset.getStay())
@@ -104,7 +104,7 @@ public class TooltipsAPI {
 	private static void sendTooltipTitle(Player player, Theme theme, List<String> extra) {
 		Tooltip tooltip = Tooltips.get().getTooltipManager().getTooltip(player, theme, extra);
 		
-		Title title = new TitleBuilder(Tooltips.get().getProtocolManager())
+		Title title = new TitleBuilder(Tooltips.get().getTitleManager())
 				.setSubtitle(tooltip.getComponents())
 				.setFadeIn(0)
 				.setStay(5*20)

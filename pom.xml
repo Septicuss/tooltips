@@ -58,8 +58,7 @@
 		</repository>
 		<repository>
 			<id>placeholderapi</id>
-			<url>
-				https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+			<url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
 		</repository>
 		<repository>
 			<id>jitpack.io</id>
@@ -77,6 +76,10 @@
 			<id>codemc-repo</id>
 			<url>https://repo.codemc.org/repository/maven-public/</url>
 			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>codemc-releases</id>
+			<url>https://repo.codemc.io/repository/maven-releases/</url>
 		</repository>
 		<repository>
 			<id>nexus</id>
@@ -177,6 +180,12 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.retrooper</groupId>
+			<artifactId>packetevents-spigot</artifactId>
+			<version>2.4.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

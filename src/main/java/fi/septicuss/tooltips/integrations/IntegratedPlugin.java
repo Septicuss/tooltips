@@ -2,7 +2,8 @@ package fi.septicuss.tooltips.integrations;
 
 public enum IntegratedPlugin {
 
-	PROTOCOLLIB("ProtocolLib", true),
+	PROTOCOLLIB("ProtocolLib"),
+	PACKETEVENTS("packetevents"),
 	PAPI("PlaceholderAPI"),
 	WORLDGUARD("WorldGuard"),
 	ITEMSADDER("ItemsAdder"),
@@ -14,6 +15,7 @@ public enum IntegratedPlugin {
 
 	public static final IntegratedPlugin[] FURNITURE_PLUGINS = { IntegratedPlugin.ORAXEN, IntegratedPlugin.CRUCIBLE, IntegratedPlugin.ITEMSADDER };
 	public static final IntegratedPlugin[] AREA_PLUGINS = { IntegratedPlugin.WORLDGUARD };
+	public static final IntegratedPlugin[] PACKET_PLUGINS = { IntegratedPlugin.PROTOCOLLIB, IntegratedPlugin.PACKETEVENTS };
 
 	private String name;
 	private boolean required = false;

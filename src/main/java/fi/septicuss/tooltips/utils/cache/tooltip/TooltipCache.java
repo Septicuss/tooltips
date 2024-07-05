@@ -13,12 +13,9 @@ import fi.septicuss.tooltips.managers.title.TitleBuilder;
 
 public class TooltipCache {
 
-	// TODO Clear
 	// Player -> Hash Code -> Tooltip
 	private static final Map<UUID, Map<Integer, TitleBuilder>> PLAYER_TOOLTIP_CACHE = new ConcurrentHashMap<>();
 
-	// TODO: Cache unprocessedText hashes
-	
 	public static void clear() {
 		PLAYER_TOOLTIP_CACHE.clear();
 	}

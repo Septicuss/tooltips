@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.title;
+package fi.septicuss.tooltips.integrations.protocollib;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -13,22 +13,29 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.integrations.PacketProvider;
+import fi.septicuss.tooltips.integrations.Title;
 
-public class Title {
+public class ProtocolLibTitle extends Title {
 
 	private ProtocolManager protocolManager;
 	private List<PacketContainer> packets;
-
-	public Title(ProtocolManager protocolManager, WrappedChatComponent title, WrappedChatComponent subtitle, int fadeIn,
-			int stay, int fadeOut) {
-		this.protocolManager = protocolManager;
+	private boolean setup = false;
+	
+	public ProtocolLibTitle(PacketProvider packetProvider, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+		super(packetProvider, title, subtitle, fadeIn, stay, fadeOut);
+		
+		if (!(packetProvider instanceof ProtocolLibPacketProvider protocolLib))
+			return;
+		
+		this.protocolManager = protocolLib.getProtocolManager();
 		this.packets = new ArrayList<>();
 
 		PacketContainer titlePacket = new PacketContainer(PacketType.Play.Server.SET_TITLE_TEXT);
-		titlePacket.getChatComponents().write(0, title);
+		titlePacket.getChatComponents().write(0, WrappedChatComponent.fromJson(title));
 
 		PacketContainer subtitlePacket = new PacketContainer(PacketType.Play.Server.SET_SUBTITLE_TEXT);
-		subtitlePacket.getChatComponents().write(0, subtitle);
+		subtitlePacket.getChatComponents().write(0, WrappedChatComponent.fromJson(subtitle));
 
 		PacketContainer time = new PacketContainer(PacketType.Play.Server.SET_TITLES_ANIMATION);
 		time.getIntegers().write(0, fadeIn).write(1, stay).write(2, fadeOut);
@@ -36,9 +43,15 @@ public class Title {
 		packets.add(time);
 		packets.add(titlePacket);
 		packets.add(subtitlePacket);
+		
+		this.setup = true;
 	}
 
+	@Override
 	public void send(Player player) {
+		if (!setup)
+			return;
+		
 		Bukkit.getScheduler().runTaskAsynchronously(Tooltips.get(), () -> {
 			try {
 				for (PacketContainer packet : packets) {
@@ -51,5 +64,5 @@ public class Title {
 		});
 
 	}
-
+	
 }
