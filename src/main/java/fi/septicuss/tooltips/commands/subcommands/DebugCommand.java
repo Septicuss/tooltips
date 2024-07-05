@@ -2,9 +2,9 @@ package fi.septicuss.tooltips.commands.subcommands;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.object.preset.Preset;
-import fi.septicuss.tooltips.object.preset.condition.Statement;
-import fi.septicuss.tooltips.object.preset.condition.StatementHolder;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.preset.condition.Statement;
+import fi.septicuss.tooltips.managers.preset.condition.StatementHolder;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Messaging;
 import org.bukkit.Bukkit;

@@ -3,7 +3,7 @@ package fi.septicuss.tooltips.tooltip.building.element;
 import java.util.List;
 import java.util.Map;
 
-import fi.septicuss.tooltips.object.icon.IconManager;
+import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.tooltip.building.text.LineProperties;
 import fi.septicuss.tooltips.tooltip.building.text.TextLine;
 import fi.septicuss.tooltips.utils.font.Spaces;

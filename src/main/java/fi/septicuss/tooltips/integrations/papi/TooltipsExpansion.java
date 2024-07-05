@@ -4,7 +4,7 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.preset.condition.argument.Argument;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 

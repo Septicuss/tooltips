@@ -9,10 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolManager;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.object.preset.Preset;
-import fi.septicuss.tooltips.object.preset.PresetManager;
-import fi.septicuss.tooltips.object.preset.actions.ActionProperties.TooltipAction;
-import fi.septicuss.tooltips.object.preset.condition.StatementHolder;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.preset.PresetManager;
+import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
+import fi.septicuss.tooltips.managers.preset.condition.StatementHolder;
 import fi.septicuss.tooltips.tooltip.TooltipManager;
 
 public class TooltipRunnableManager {

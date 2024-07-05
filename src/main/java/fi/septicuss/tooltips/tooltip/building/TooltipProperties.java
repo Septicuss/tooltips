@@ -1,7 +1,7 @@
 package fi.septicuss.tooltips.tooltip.building;
 
-import fi.septicuss.tooltips.object.preset.Preset;
-import fi.septicuss.tooltips.object.theme.Theme;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.theme.Theme;
 
 public class TooltipProperties {
 

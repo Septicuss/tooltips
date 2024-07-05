@@ -6,7 +6,7 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.object.icon.IconManager;
+import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.font.Spaces;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;

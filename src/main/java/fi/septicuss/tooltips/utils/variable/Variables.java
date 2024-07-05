@@ -13,8 +13,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
-import fi.septicuss.tooltips.object.preset.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.preset.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.preset.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.FileUtils;
 
 public class Variables {

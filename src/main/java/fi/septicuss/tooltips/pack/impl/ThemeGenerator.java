@@ -6,8 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.object.theme.Theme;
-import fi.septicuss.tooltips.object.theme.ThemeManager;
+import fi.septicuss.tooltips.managers.theme.Theme;
+import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.pack.Generator;
 import fi.septicuss.tooltips.pack.PackData;
 import fi.septicuss.tooltips.pack.PackData.ProviderType;

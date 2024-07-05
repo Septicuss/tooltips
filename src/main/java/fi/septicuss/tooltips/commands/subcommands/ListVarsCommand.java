@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.object.preset.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.preset.condition.argument.Argument;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.variable.Variables;

@@ -1,7 +1,7 @@
 package fi.septicuss.tooltips.tooltip.building.text;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.object.theme.Theme;
+import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.pack.impl.IconGenerator;
 import fi.septicuss.tooltips.pack.impl.LineGenerator;
 

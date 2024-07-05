@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import fi.septicuss.tooltips.object.theme.Theme;
-import fi.septicuss.tooltips.object.theme.ThemeManager;
+import fi.septicuss.tooltips.managers.theme.Theme;
+import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.utils.Colors;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;

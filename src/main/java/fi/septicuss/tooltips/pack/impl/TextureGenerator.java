@@ -6,10 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import fi.septicuss.tooltips.object.NamespacedPath;
 import fi.septicuss.tooltips.pack.Generator;
 import fi.septicuss.tooltips.pack.PackData;
 import fi.septicuss.tooltips.utils.FileUtils;
+import fi.septicuss.tooltips.utils.NamespacedPath;
 
 public class TextureGenerator implements Generator {
 

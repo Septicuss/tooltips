@@ -11,13 +11,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.comphenix.protocol.ProtocolManager;
 
-import fi.septicuss.tooltips.object.preset.Preset;
-import fi.septicuss.tooltips.object.preset.actions.ActionProperties;
-import fi.septicuss.tooltips.object.preset.actions.ActionProperties.TooltipAction;
-import fi.septicuss.tooltips.object.preset.actions.command.ActionCommands;
-import fi.septicuss.tooltips.object.preset.condition.StatementHolder;
-import fi.septicuss.tooltips.object.preset.show.ShowProperties;
-import fi.septicuss.tooltips.object.title.TitleBuilder;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
+import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
+import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
+import fi.septicuss.tooltips.managers.preset.condition.StatementHolder;
+import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
+import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 import fi.septicuss.tooltips.tooltip.TooltipManager;
 import fi.septicuss.tooltips.tooltip.runnable.TooltipData.CooldownType;

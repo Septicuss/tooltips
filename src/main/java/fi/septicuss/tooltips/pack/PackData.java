@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.google.gson.JsonObject;
 
-import fi.septicuss.tooltips.object.NamespacedPath;
+import fi.septicuss.tooltips.utils.NamespacedPath;
 import fi.septicuss.tooltips.utils.Utils;
 
 public class PackData {

@@ -13,8 +13,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.object.schema.SchemaManager;
-import fi.septicuss.tooltips.object.schema.SchemaPart;
+import fi.septicuss.tooltips.managers.schema.SchemaManager;
+import fi.septicuss.tooltips.managers.schema.SchemaPart;
 import fi.septicuss.tooltips.pack.Generator;
 import fi.septicuss.tooltips.pack.PackData;
 import fi.septicuss.tooltips.pack.PackData.ProviderType;

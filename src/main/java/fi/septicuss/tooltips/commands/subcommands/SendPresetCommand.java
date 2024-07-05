@@ -13,9 +13,9 @@ import com.google.common.collect.Lists;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.object.preset.Preset;
-import fi.septicuss.tooltips.object.title.Title;
-import fi.septicuss.tooltips.object.title.TitleBuilder;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.title.Title;
+import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Messaging;

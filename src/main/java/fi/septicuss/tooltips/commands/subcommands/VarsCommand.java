@@ -15,12 +15,12 @@ import com.google.common.collect.Lists;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.object.preset.actions.command.ActionCommand;
-import fi.septicuss.tooltips.object.preset.actions.command.ActionCommands;
-import fi.septicuss.tooltips.object.preset.actions.command.impl.vars.VarCommand;
-import fi.septicuss.tooltips.object.validation.Validity;
+import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
+import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
+import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.VarCommand;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Messaging;
+import fi.septicuss.tooltips.utils.validation.Validity;
 
 public class VarsCommand implements TooltipsSubCommand {
 
