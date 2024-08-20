@@ -1,5 +1,5 @@
-default-one-line:
-    path: "tooltips:tooltips/default/default-one-line.png"
+one-line:
+    path: "tooltips:tooltips/default/one-line.png"
     height: 10
     padding: 1
     lines: 1
@@ -7,8 +7,8 @@ default-one-line:
         theme-ascent: 0
         text-start-ascent: -3
         text-line-spacing: 5
-default-two-line:
-    path: "tooltips:tooltips/default/default-two-line.png"
+two-line:
+    path: "tooltips:tooltips/default/two-line.png"
     height: 13
     padding: 1
     lines: 2
@@ -16,8 +16,8 @@ default-two-line:
         theme-ascent: 0
         text-start-ascent: -2
         text-line-spacing: 5
-default-three-line:
-    path: "tooltips:tooltips/default/default-three-line.png"
+three-line:
+    path: "tooltips:tooltips/default/three-line.png"
     height: 18
     padding: 1
     lines: 3
@@ -25,8 +25,8 @@ default-three-line:
         theme-ascent: 0
         text-start-ascent: -2
         text-line-spacing: 5
-default-four-line:
-    path: "tooltips:tooltips/default/default-four-line.png"
+four-line:
+    path: "tooltips:tooltips/default/four-line.png"
     height: 23
     padding: 1
     lines: 4
@@ -34,8 +34,8 @@ default-four-line:
         theme-ascent: 0
         text-start-ascent: -2
         text-line-spacing: 5
-default-five-line:
-    path: "tooltips:tooltips/default/default-five-line.png"
+five-line:
+    path: "tooltips:tooltips/default/five-line.png"
     height: 28
     padding: 1
     lines: 5
@@ -43,4 +43,3 @@ default-five-line:
         theme-ascent: 0
         text-start-ascent: -2
         text-line-spacing: 5
-      

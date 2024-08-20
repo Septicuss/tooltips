@@ -1,16 +1,19 @@
 package fi.septicuss.tooltips.managers.preset;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fi.septicuss.tooltips.utils.FileUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class PresetManager {
 
@@ -22,50 +25,56 @@ public class PresetManager {
 		this.conditionalPresets = new HashMap<>();
 	}
 
-	public void loadFrom(Tooltips plugin, List<FileConfiguration> presetConfigs) {
-
+	public void loadFrom(Tooltips plugin, File presetDirectory) {
 		Tooltips.logger().info(String.format("Loading presets..."));
 
-		int amount = 0;
+		int valid = 0;
 		presets.clear();
 
-		if (!presetConfigs.isEmpty()) {
-			for (FileConfiguration config : presetConfigs) {
-				for (String name : config.getRoot().getKeys(false)) {
-					final ConfigurationSection section = config.getRoot().getConfigurationSection(name);
-					
-					Preset preset = null;
-					
-					if (section.isSet("parent")) {
-						String parentId = section.getString("parent");
-						
-						if (!presets.containsKey(parentId)) {
-							Tooltips.warn("Unable to define preset " + Utils.quote(name) + ", due to unknown parent " + Utils.quote(parentId));
-							continue;
-						}
-						
-						preset = new Preset(plugin, presets.get(parentId), section);
-					} else {
-						preset = new Preset(plugin, section);
-					}
-					
+		final List<File> presetFiles = FileUtils.getAllYamlFilesFromDirectory(presetDirectory);
 
-					if (!preset.isValid()) {
+		for (File file : presetFiles) {
+			final String relativeName = FileUtils.getRelativeFileName(presetDirectory, file);
+			final String fileName = FileUtils.getExtensionlessFileName(file);
+
+			var config = YamlConfiguration.loadConfiguration(file);
+			var root = config.getRoot();
+
+			for (String key : root.getKeys(false)) {
+				final String presetPath = relativeName + "/" + key;
+				var section = root.getConfigurationSection(key);
+
+				Preset preset = null;
+
+				if (section.isSet("parent")) {
+					String parentId = section.getString("parent");
+
+					if (!presets.containsKey(parentId)) {
+						Tooltips.warn("Unable to define preset " + Utils.quote(presetPath) + ", due to unknown parent " + Utils.quote(parentId));
 						continue;
 					}
 
-					presets.put(name, preset);
-
-					if (preset.hasStatementHolder())
-						conditionalPresets.put(name, preset);
-
-					amount++;
+					preset = new Preset(plugin, presetPath, presets.get(parentId), section);
+				} else {
+					preset = new Preset(plugin, presetPath, section);
 				}
+
+				if (!preset.isValid()) {
+					continue;
+				}
+
+				presets.put(presetPath, preset);
+
+				if (preset.hasStatementHolder()) {
+					conditionalPresets.put(presetPath, preset);
+				}
+
+				valid++;
 			}
+
 		}
 
-		Tooltips.log(ChatColor.GREEN + String.format("Loaded %d presets.", amount));
-
+		Tooltips.log(ChatColor.GREEN + String.format("Loaded %d presets.", valid));
 	}
 
 	public Map<String, Preset> getConditionalPresets() {

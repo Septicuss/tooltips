@@ -28,9 +28,9 @@ public class ThemeGenerator implements Generator {
 		FileUtils.createDirectoryIfNotExists(themeDirectory);
 		
 		for (var theme : themeManager.getThemes().values()) {
-			String themeId = theme.getId();
+			String themeId = theme.getPath();
 			
-			packData.addUsedTexture(theme.getPath());
+			packData.addUsedTexture(theme.getTexturePath());
 
 			for (int line = 0; line < theme.getLines(); line++) {
 				int ascent = theme.getTextStartAscent() - (line * theme.getTextLineSpacing());
@@ -57,7 +57,7 @@ public class ThemeGenerator implements Generator {
 		JsonObject root = new JsonObject();
 		JsonArray providers = new JsonArray();
 
-		var path = theme.getPath().getNamespacedPath();
+		var path = theme.getTexturePath().getNamespacedPath();
 		var ascent = theme.getThemeAscent();
 		var height = theme.getHeight();
 		

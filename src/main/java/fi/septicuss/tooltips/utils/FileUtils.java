@@ -17,6 +17,21 @@ import fi.septicuss.tooltips.Tooltips;
 
 public class FileUtils {
 
+	public static String getRelativeFileName(File directory, File file) {
+		final String relativePath = directory.toPath()
+				.relativize(file.toPath())
+				.toString();
+		final int lastDotIndex = relativePath.lastIndexOf('.');
+        return relativePath
+				.replace('\\', '/')
+				.substring(0, lastDotIndex);
+	}
+
+	public static String getExtensionlessFileName(File file) {
+		final int lastDotIndex = file.getName().lastIndexOf('.');
+		return file.getName().substring(0, lastDotIndex);
+	}
+
 	public static List<FileConfiguration> getAllConfigsFrom(Tooltips plugin, String path) {
 		final File directory = new File(plugin.getDataFolder(), path);
 
@@ -34,17 +49,25 @@ public class FileUtils {
 		return result;
 	}
 
-	private static List<File> getAllFilesFromDirectory(File directory) {
+	public static List<File> getAllYamlFilesFromDirectory(File directory) {
+		return getAllFilesFromDirectory(directory).stream().filter(file -> {
+			if (file == null) return false;
+			return file.getName().endsWith(".yml");
+		}).toList();
+	}
+
+	public static List<File> getAllFilesFromDirectory(File directory) {
 		List<File> result = new ArrayList<>();
 
-		for (File file : directory.listFiles()) {
-			if (file.isDirectory()) {
-				result.addAll(getAllFilesFromDirectory(file));
-				continue;
-			}
+		if (directory != null && directory.isDirectory())
+			for (File file : directory.listFiles()) {
+				if (file.isDirectory()) {
+					result.addAll(getAllFilesFromDirectory(file));
+					continue;
+				}
 
-			result.add(file);
-		}
+				result.add(file);
+			}
 
 		return result;
 	}

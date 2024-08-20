@@ -1,5 +1,13 @@
 package fi.septicuss.tooltips.managers.icon;
 
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.utils.FileUtils;
+import fi.septicuss.tooltips.utils.font.Widths;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,112 +17,111 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-
-import org.bukkit.configuration.file.FileConfiguration;
-
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.utils.font.Widths;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
-
 public class IconManager {
 
-	public static final String ICON_FONT_PLACEHOLDER = "tooltips:placeholder";
+    public static final String ICON_FONT_PLACEHOLDER = "tooltips:placeholder";
 
-	private Map<String, Icon> icons;
+    private final Map<String, Icon> icons;
 
-	public IconManager() {
-		this.icons = new HashMap<>();
-	}
+    public IconManager() {
+        this.icons = new HashMap<>();
+    }
 
-	public void loadFrom(Tooltips plugin, List<FileConfiguration> iconConfigs) {
-		Tooltips.log("Loading icons...");
+    public void loadFrom(final File iconDirectory) {
+        Tooltips.log("Loading icons...");
 
-		int total = 0;
-		int valid = 0;
-		icons.clear();
+        int total = 0;
+        int valid = 0;
+        icons.clear();
 
-		if (!iconConfigs.isEmpty()) {
-			for (FileConfiguration config : iconConfigs) {
-				var root = config.getRoot();
+        final List<File> iconFiles = FileUtils.getAllYamlFilesFromDirectory(iconDirectory);
 
-				for (String name : root.getKeys(false)) {
-					var section = root.getConfigurationSection(name);
-					var icon = new Icon(section);
+        if (!iconFiles.isEmpty()) {
+            for (File file : iconFiles) {
+                final String relativeName = FileUtils.getRelativeFileName(iconDirectory, file);
+                final String fileName = FileUtils.getExtensionlessFileName(file);
 
-					total++;
+                var config = YamlConfiguration.loadConfiguration(file);
+                var root = config.getRoot();
 
-					if (!icon.isValid()) continue;
+                for (String key : root.getKeys(false)) {
+                    final String iconPath = relativeName + "/" + key;
 
-					icons.put(name, icon);
-					valid++;
-				}
-			}
-		}
+                    var section = root.getConfigurationSection(key);
+                    var icon = new Icon(iconPath, fileName, section);
 
-		generateUnicodes();
-		loadWidths();
+                    total++;
 
-		final int invalid = total - valid;
-		final String loadedAmount = valid + ((invalid > 0) ? (" (out of " + total + ")") : (""));
-		final String noun = (total == 1) ? "icon" : "icons";
-		final String message = String.format("Loaded " + loadedAmount + " " + noun + ".");
+                    if (!icon.isValid()) continue;
 
-		Tooltips.log(ChatColor.GREEN + message);
-	}
+                    icons.put(iconPath, icon);
+                    valid++;
+                }
+            }
+        }
 
-	public Set<Icon> getAllIcons() {
-		return Collections.unmodifiableSet(Set.copyOf(this.icons.values()));
-	}
+        generateUnicodes();
+        loadWidths();
 
-	public char getUnicodeFor(String name) {
-		return icons.get(name).getUnicode();
-	}
+        final int invalid = total - valid;
+        final String loadedAmount = valid + ((invalid > 0) ? (" (out of " + total + ")") : (""));
+        final String noun = (total == 1) ? "icon" : "icons";
+        final String message = String.format("Loaded " + loadedAmount + " " + noun + ".");
 
-	public Icon getIcon(String name) {
-		return icons.get(name);
-	}
+        Tooltips.log(ChatColor.GREEN + message);
+    }
 
-	public boolean hasIcon(String name) {
-		return icons.containsKey(name);
-	}
+    public Set<Icon> getAllIcons() {
+        return Set.copyOf(this.icons.values());
+    }
 
-	public Map<String, TextComponent> getIconPlaceholders() {
-		Map<String, TextComponent> map = new HashMap<>();
+    public char getUnicodeFor(String name) {
+        return icons.get(name).getUnicode();
+    }
 
-		for (Icon icon : getAllIcons()) {
-			final String iconPlaceholder = "{" + icon.getName() + "}";
+    public Icon getIcon(String name) {
+        return icons.get(name);
+    }
 
-			final TextComponent iconComponent = new TextComponent(String.valueOf(icon.getUnicode()));
-			iconComponent.setFont(IconManager.ICON_FONT_PLACEHOLDER);
-			map.put(iconPlaceholder, iconComponent);
-		}
+    public boolean hasIcon(String name) {
+        return icons.containsKey(name);
+    }
 
-		return map;
-	}
+    public Map<String, TextComponent> getIconPlaceholders() {
+        Map<String, TextComponent> map = new HashMap<>();
 
-	private void loadWidths() {
-		for (Icon icon : getAllIcons()) {
-			try {
-				final File texture = new File(Tooltips.getPackAssetsFolder(), icon.getPath().getFullPath());
-				final BufferedImage image = ImageIO.read(texture);
-				Widths.add(icon.getUnicode(), image, icon.getHeight());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        for (Icon icon : getAllIcons()) {
+            final String iconPlaceholder = "{" + icon.getPath() + "}";
 
-	private void generateUnicodes() {
-		char current = '\uF000';
-		int index = 0;
+            final TextComponent iconComponent = new TextComponent(String.valueOf(icon.getUnicode()));
+            iconComponent.setFont(IconManager.ICON_FONT_PLACEHOLDER);
+            map.put(iconPlaceholder, iconComponent);
+        }
 
-		for (Map.Entry<String, Icon> entry : icons.entrySet()) {
-			char character = (char) (current + index);
-			entry.getValue().setUnicode(character);
-			index++;
-		}
-	}
+        return map;
+    }
+
+    private void loadWidths() {
+        for (Icon icon : getAllIcons()) {
+            try {
+                final File texture = new File(Tooltips.getPackAssetsFolder(), icon.getTexturePath().getFullPath());
+                final BufferedImage image = ImageIO.read(texture);
+                Widths.add(icon.getUnicode(), image, icon.getHeight());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void generateUnicodes() {
+        char current = '\uF000';
+        int index = 0;
+
+        for (Map.Entry<String, Icon> entry : icons.entrySet()) {
+            char character = (char) (current + index);
+            entry.getValue().setUnicode(character);
+            index++;
+        }
+    }
 
 }

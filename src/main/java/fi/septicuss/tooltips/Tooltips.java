@@ -364,9 +364,9 @@ public class Tooltips extends JavaPlugin {
 		this.tooltipManager = new TooltipManager(this);
 
 		schemaManager.loadFrom(new File(getDataFolder(), ".data/schemas"));
-		iconManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "icons"));
-		themeManager.loadFrom(FileUtils.getAllConfigsFrom(this, "themes"));
-		presetManager.loadFrom(this, FileUtils.getAllConfigsFrom(this, "presets"));
+		iconManager.loadFrom(new File(getDataFolder(), "icons"));
+		themeManager.loadFrom(new File(getDataFolder(), "themes"));
+		presetManager.loadFrom(this, new File(getDataFolder(), "presets"));
 
 		Widths.loadCustomWidths(new File(getDataFolder(), ".data/widths.yml"));
 		

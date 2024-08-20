@@ -1,15 +1,18 @@
 package fi.septicuss.tooltips.managers.theme;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fi.septicuss.tooltips.utils.FileUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import fi.septicuss.tooltips.Tooltips;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ThemeManager {
 	
@@ -24,35 +27,42 @@ public class ThemeManager {
 		this.themes = new HashMap<>();
 	}
 
-	public void loadFrom(List<FileConfiguration> themeConfigs) {
-
+	public void loadFrom(final File themeDirectory) {
 		Tooltips.log("Loading themes...");
 
 		int total = 0;
-		int amount = 0;
-
+		int valid = 0;
 		themes.clear();
 
-		if (!themeConfigs.isEmpty()) {
-			for (FileConfiguration config : themeConfigs) {
-				for (String name : config.getRoot().getKeys(false)) {
-					final ConfigurationSection section = config.getRoot().getConfigurationSection(name);
-					final Theme theme = new Theme(section);
+		final List<File> themeFiles = FileUtils.getAllYamlFilesFromDirectory(themeDirectory);
+
+		if (!themeFiles.isEmpty()) {
+			for (File file : themeFiles) {
+				final String relativeName = FileUtils.getRelativeFileName(themeDirectory, file);
+
+				var config = YamlConfiguration.loadConfiguration(file);
+				var root = config.getRoot();
+
+				for (String name : root.getKeys(false)) {
+					final String themePath = relativeName + "/" + name;
+
+					final ConfigurationSection section = root.getConfigurationSection(name);
+					final Theme theme = new Theme(themePath, section);
 
 					total++;
 
-					if (!theme.isValid()) {
-						continue;
-					}
+					if (!theme.isValid()) continue;
 
-					registerTheme(name, theme);
-					amount++;
+					registerTheme(themePath, theme);
+					valid++;
+
 				}
+
 			}
 		}
 
-		final int invalid = total - amount;
-		final String loadedAmount = amount + ((invalid > 0) ? (" (out of " + total + ")") : (""));
+		final int invalid = total - valid;
+		final String loadedAmount = valid + ((invalid > 0) ? (" (out of " + total + ")") : (""));
 		final String message = String.format("Loaded " + loadedAmount + " themes.");
 
 		Tooltips.log(ChatColor.GREEN + message);

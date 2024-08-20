@@ -14,8 +14,8 @@ import fi.septicuss.tooltips.utils.validation.Validatable;
 
 public class Theme implements Validatable {
 
-	private String id;
-	private NamespacedPath path;
+	private String path;
+	private NamespacedPath texturePath;
 
 	private int lines;
 	private int height;
@@ -31,25 +31,25 @@ public class Theme implements Validatable {
 	// Validatable
 	private boolean valid = false;
 
-	public Theme(ConfigurationSection themeSection) {
-		this.id = themeSection.getName();
+	public Theme(String path, ConfigurationSection themeSection) {
+		this.path = path;
 
 		if (!themeSection.contains("path")) {
-			Tooltips.warn(String.format("Theme \"%s\" doesn't define a path to a texture.", id));
+			Tooltips.warn(String.format("Theme \"%s\" doesn't define a path to a texture.", path));
 			return;
 		}
 
 		if (!themeSection.contains("ascents")) {
-			Tooltips.warn(String.format("Theme \"%s\" doesn't define the ascents.", id));
+			Tooltips.warn(String.format("Theme \"%s\" doesn't define the ascents.", path));
 			return;
 		}
 
 		if (!themeSection.contains("lines")) {
-			Tooltips.warn(String.format("Theme \"%s\" doesn't define line amount.", id));
+			Tooltips.warn(String.format("Theme \"%s\" doesn't define line amount.", path));
 			return;
 		}
 
-		this.path = new NamespacedPath(themeSection.getString("path"), "textures");
+		this.texturePath = new NamespacedPath(themeSection.getString("path"), "textures");
 		this.height = themeSection.getInt("height");
 		this.lines = themeSection.getInt("lines");
 
@@ -65,10 +65,10 @@ public class Theme implements Validatable {
 		this.textStartAscent = ascentSection.getInt("text-start-ascent");
 		this.textLineSpacing = ascentSection.getInt("text-line-spacing");
 
-		final File texture = new File(Tooltips.getPackAssetsFolder(), path.getFullPath());
+		final File texture = new File(Tooltips.getPackAssetsFolder(), texturePath.getFullPath());
 
 		if (!texture.exists()) {
-			Tooltips.warn(String.format("Theme \"%s\" has an invalid texture \"%s\"", id, path.getNamespacedPath()));
+			Tooltips.warn(String.format("Theme \"%s\" has an invalid texture \"%s\"", path, texturePath.getNamespacedPath()));
 			return;
 		}
 
@@ -77,7 +77,7 @@ public class Theme implements Validatable {
 			final int imageWidth = image.getWidth();
 
 			if (imageWidth % 3 != 0) {
-				Tooltips.warn(String.format("Theme \"%s\" has invalid texture width (must be a multiple of 3)", id));
+				Tooltips.warn(String.format("Theme \"%s\" has invalid texture width (must be a multiple of 3)", path));
 				return;
 			}
 			
@@ -92,8 +92,8 @@ public class Theme implements Validatable {
 			this.width = Math.max(1D, (width));
 			
 		} catch (IOException e) {
-			Tooltips.warn(String.format("Theme \"%s\" failed to load texture \"%s\". Error: %s", id,
-					path.getNamespacedPath(), e.getMessage()));
+			Tooltips.warn(String.format("Theme \"%s\" failed to load texture \"%s\". Error: %s", path,
+					texturePath.getNamespacedPath(), e.getMessage()));
 			return;
 		}
 
@@ -101,12 +101,12 @@ public class Theme implements Validatable {
 
 	}
 
-	public String getId() {
-		return id;
+	public String getPath() {
+		return path;
 	}
 
-	public NamespacedPath getPath() {
-		return path;
+	public NamespacedPath getTexturePath() {
+		return texturePath;
 	}
 
 	public int getHeight() {
@@ -142,7 +142,7 @@ public class Theme implements Validatable {
 	}
 
 	public String getFontName() {
-		return path.getNamespace() + ":themes/" + id;
+		return texturePath.getNamespace() + ":themes/" + path;
 	}
 
 	@Override

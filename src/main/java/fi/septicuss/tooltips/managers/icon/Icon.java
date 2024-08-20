@@ -11,45 +11,47 @@ import fi.septicuss.tooltips.utils.validation.Validatable;
 
 public class Icon implements Validatable {
 
-	private String name;
-	private NamespacedPath path;
+	private String path;
+	private String file;
+	private NamespacedPath texturePath;
 	private int ascent;
 	private int height;
 
 	private char unicode = ' ';
 	private boolean valid = false;
 
-	public Icon(ConfigurationSection iconSection) {
-		this.name = iconSection.getName();
+	public Icon(String path, String file, ConfigurationSection iconSection) {
+		this.path = path;
+		this.file = file;
 		this.ascent = iconSection.getInt("ascent");
 		this.height = iconSection.getInt("height");
 
 		String pathStr = iconSection.getString("path");
 
 		if (pathStr == null) {
-			Tooltips.warn(String.format("Icon " + Utils.quote(name) + " does not define a path to the texture."));
+			Tooltips.warn(String.format("Icon " + Utils.quote(path) + " does not define a path to the texture."));
 			return;
 		}
 
-		this.path = new NamespacedPath(pathStr, "textures");
+		this.texturePath = new NamespacedPath(pathStr, "textures");
 
-		var textureFile = new File(Tooltips.getPackAssetsFolder(), path.getFullPath());
+		var textureFile = new File(Tooltips.getPackAssetsFolder(), texturePath.getFullPath());
 		var fileExists = (textureFile.exists());
 
 		if (!fileExists) {
-			Tooltips.warn("Icon " + Utils.quote(name) + " uses an invalid texture " + Utils.quote(path.getNamespacedPath()));
+			Tooltips.warn("Icon " + Utils.quote(path) + " uses an invalid texture " + Utils.quote(texturePath.getNamespacedPath()));
 			return;
 		}
 
 		this.valid = true;
 	}
 
-	public String getName() {
-		return name;
+	public String getPath() {
+		return path;
 	}
 
-	public NamespacedPath getPath() {
-		return path;
+	public NamespacedPath getTexturePath() {
+		return texturePath;
 	}
 
 	public int getAscent() {

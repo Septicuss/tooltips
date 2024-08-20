@@ -3,10 +3,12 @@ package fi.septicuss.tooltips.managers.preset;
 import com.google.common.collect.Lists;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
+import fi.septicuss.tooltips.managers.preset.condition.ConditionManager;
 import fi.septicuss.tooltips.managers.preset.condition.Statement;
 import fi.septicuss.tooltips.managers.preset.condition.StatementHolder;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
 import fi.septicuss.tooltips.managers.theme.Theme;
+import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.utils.validation.Validatable;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -56,7 +58,10 @@ public class Preset implements Validatable {
 
     private ConfigurationSection section;
 
-    public Preset(Tooltips plugin, Preset parent, ConfigurationSection section) {
+    public Preset(Tooltips plugin, String path, Preset parent, ConfigurationSection section) {
+
+        final ThemeManager themeManager = plugin.getThemeManager();
+        final ConditionManager conditionManager = plugin.getConditionManager();
 
         this.section = section;
 
@@ -75,7 +80,7 @@ public class Preset implements Validatable {
         }
 
         /* TOOLTIP */
-        id = section.getName();
+        id = path;
 
         /* TEXT */
         final var contentSection = section.getConfigurationSection("content");
@@ -100,8 +105,6 @@ public class Preset implements Validatable {
 
         if (section.contains("theme"))
             themeName = section.getString("theme");
-
-        var themeManager = plugin.getThemeManager();
 
         if (themeName == null && theme == null) {
             Tooltips.warn(String.format("Preset by the name of \"%s\" does not define a theme.", id));
@@ -141,7 +144,7 @@ public class Preset implements Validatable {
             statementHolder = new StatementHolder();
 
             for (var line : conditionLines) {
-                Statement statement = plugin.getConditionManager().getStatementParser().parse(id, line);
+                Statement statement = conditionManager.getStatementParser().parse(id, line);
                 statementHolder.addStatement(statement);
             }
         }
@@ -171,8 +174,8 @@ public class Preset implements Validatable {
         valid = true;
     }
 
-    public Preset(Tooltips plugin, ConfigurationSection section) {
-        this(plugin, null, section);
+    public Preset(Tooltips plugin, String path, ConfigurationSection section) {
+        this(plugin, path, null, section);
     }
 
     public String getId() {

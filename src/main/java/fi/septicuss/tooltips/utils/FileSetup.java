@@ -86,8 +86,8 @@ public class FileSetup {
 		final File dataFolder = plugin.getDataFolder();
 
 		for (String configType : SECONDARY_CONFIG_TYPES) {
-			final String fromPath = String.format("default/config/%1$s/%1$s.yml", configType);
-			final String toPath = String.format("%1$s/%1$s.yml", configType);
+			final String fromPath = String.format("default/config/%1$s/default.yml", configType);
+			final String toPath = String.format("%1$s/default.yml", configType);
 
 			final File file = new File(dataFolder, toPath);
 

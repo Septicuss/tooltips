@@ -35,7 +35,7 @@ public class IconGenerator implements Generator {
 		
 		iconManager.getAllIcons().forEach(icon -> {
 			// 1.
-			packData.addUsedTexture(icon.getPath());
+			packData.addUsedTexture(icon.getTexturePath());
 			
 			// 2.
 			iconProviders.add(getProviderFromIcon(icon));
@@ -81,7 +81,7 @@ public class IconGenerator implements Generator {
 	public JsonObject getProviderFromIcon(Icon icon) {
 		JsonObject provider = new JsonObject();
 		provider.addProperty("type", "bitmap");
-		provider.addProperty("file", icon.getPath().getNamespacedPath());
+		provider.addProperty("file", icon.getTexturePath().getNamespacedPath());
 		provider.addProperty("ascent", icon.getAscent());
 		provider.addProperty("height", icon.getHeight());
 		
