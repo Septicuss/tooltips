@@ -24,6 +24,7 @@ public class Preset implements Validatable {
      * PRESET
      */
     private String id;
+    private int priority = 0;
     private List<String> text;
 
     /**
@@ -81,6 +82,9 @@ public class Preset implements Validatable {
 
         /* TOOLTIP */
         id = path;
+
+        if (section.isSet("priority"))
+            priority = section.getInt("priority");
 
         /* TEXT */
         final var contentSection = section.getConfigurationSection("content");
@@ -237,4 +241,7 @@ public class Preset implements Validatable {
         return section;
     }
 
+    public int getPriority() {
+        return this.priority;
+    }
 }

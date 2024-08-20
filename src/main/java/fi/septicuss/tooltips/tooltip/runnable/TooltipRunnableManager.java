@@ -1,6 +1,7 @@
 package fi.septicuss.tooltips.tooltip.runnable;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
@@ -19,8 +20,8 @@ public class TooltipRunnableManager {
 	private TooltipManager tooltipManager;
 	private TitleManager titleManager;
 
-	private Map<String, Preset> presets = new HashMap<>();
-	private Map<String, StatementHolder> holders = new HashMap<>();
+	private Map<String, Preset> presets = new LinkedHashMap<>();
+	private Map<String, StatementHolder> holders = new LinkedHashMap<>();
 	
 	private TooltipRunnable runnable;
 

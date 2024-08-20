@@ -4,13 +4,16 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import fi.septicuss.tooltips.utils.FileUtils;
+import fi.septicuss.tooltips.utils.PrioritySet;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -22,11 +25,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class PresetManager {
 
 	private final Map<String, Preset> presets;
-	private final Set<String> conditionalPresets;
+	private final PrioritySet<String> conditionalPresets;
 
 	public PresetManager() {
 		this.presets = new HashMap<>();
-		this.conditionalPresets = new HashSet<>();
+		this.conditionalPresets = new PrioritySet<>();
 	}
 
 	public void loadFrom(Tooltips plugin, File presetDirectory) {
@@ -44,7 +47,14 @@ public class PresetManager {
 			var config = YamlConfiguration.loadConfiguration(file);
 			var root = config.getRoot();
 
+			int basePriority = 0;
+
+			if (config.isSet("priority"))
+				basePriority = config.getInt("priority");
+
 			for (String key : root.getKeys(false)) {
+				if (!root.isConfigurationSection(key)) continue;
+
 				final String presetPath = relativeName + "/" + key;
 				var section = root.getConfigurationSection(key);
 
@@ -70,7 +80,7 @@ public class PresetManager {
 				presets.put(presetPath, preset);
 
 				if (preset.hasStatementHolder()) {
-					conditionalPresets.add(presetPath);
+					conditionalPresets.add(presetPath, basePriority + preset.getPriority());
 				}
 
 				valid++;
@@ -81,8 +91,11 @@ public class PresetManager {
 		Tooltips.log(ChatColor.GREEN + String.format("Loaded %d presets.", valid));
 	}
 
-	public Set<Preset> getConditionalPresets() {
-		return conditionalPresets.stream().map(presets::get).filter(Objects::nonNull).collect(Collectors.toSet());
+	public LinkedHashSet<Preset> getConditionalPresets() {
+		final LinkedHashSet<Preset> result = new LinkedHashSet<>();
+		for (var presetId : conditionalPresets.toList())
+			result.add(presets.get(presetId));
+		return result;
 	}
 
 	public Map<String, Preset> getPresets() {

@@ -73,7 +73,7 @@ public class TooltipRunnable extends BukkitRunnable {
 				if (!result) {
 					data.setTextJustUpdated(false);
 					handleFalse(player, id, preset, preset.getShowProperties());
-					continue outer;
+					continue;
 				}
 
 				/**
