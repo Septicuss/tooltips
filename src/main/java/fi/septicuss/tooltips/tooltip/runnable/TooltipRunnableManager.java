@@ -33,10 +33,9 @@ public class TooltipRunnableManager {
 	}
 	
 	private void loadNecessaryData(PresetManager presetManager) {
-		for (var entry : presetManager.getConditionalPresets().entrySet()) {
-			String id = entry.getKey();
-			Preset preset = entry.getValue();
-			
+		for (var preset : presetManager.getConditionalPresets()) {
+			String id = preset.getId();
+
 			presets.put(id, preset);
 			holders.put(id, preset.getStatementHolder());
 		}

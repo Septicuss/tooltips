@@ -3,8 +3,12 @@ package fi.septicuss.tooltips.managers.preset;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import fi.septicuss.tooltips.utils.FileUtils;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,12 +21,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class PresetManager {
 
-	private Map<String, Preset> presets;
-	private Map<String, Preset> conditionalPresets;
+	private final Map<String, Preset> presets;
+	private final Set<String> conditionalPresets;
 
 	public PresetManager() {
 		this.presets = new HashMap<>();
-		this.conditionalPresets = new HashMap<>();
+		this.conditionalPresets = new HashSet<>();
 	}
 
 	public void loadFrom(Tooltips plugin, File presetDirectory) {
@@ -66,7 +70,7 @@ public class PresetManager {
 				presets.put(presetPath, preset);
 
 				if (preset.hasStatementHolder()) {
-					conditionalPresets.put(presetPath, preset);
+					conditionalPresets.add(presetPath);
 				}
 
 				valid++;
@@ -77,8 +81,8 @@ public class PresetManager {
 		Tooltips.log(ChatColor.GREEN + String.format("Loaded %d presets.", valid));
 	}
 
-	public Map<String, Preset> getConditionalPresets() {
-		return Collections.unmodifiableMap(conditionalPresets);
+	public Set<Preset> getConditionalPresets() {
+		return conditionalPresets.stream().map(presets::get).filter(Objects::nonNull).collect(Collectors.toSet());
 	}
 
 	public Map<String, Preset> getPresets() {
