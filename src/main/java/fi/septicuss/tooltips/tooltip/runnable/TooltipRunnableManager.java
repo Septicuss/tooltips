@@ -48,7 +48,7 @@ public class TooltipRunnableManager {
 	}
 	
 	public void run(JavaPlugin plugin, int checkFrequency) {
-		runnable = new TooltipRunnable(tooltipManager, titleManager, presets, holders, checkFrequency);
+		runnable = new TooltipRunnable(tooltipManager, titleManager, presets, holders);
 		runnable.runTaskTimer(plugin, 0L, checkFrequency);
 	}
 	

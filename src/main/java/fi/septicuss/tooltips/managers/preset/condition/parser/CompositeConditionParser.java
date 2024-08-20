@@ -69,7 +69,7 @@ public class CompositeConditionParser implements Parser<CompositeCondition> {
 				continue;
 			}
 
-			if (layer == 0 && character == ')' && firstBrace == true) {
+			if (layer == 0 && character == ')' && firstBrace) {
 				if (outerParenthesesSize > 0)
 					hasRoundBrackets = true;
 				firstBrace = false;
@@ -103,7 +103,7 @@ public class CompositeConditionParser implements Parser<CompositeCondition> {
 		String specialDelimiterString = delimiterBuilder.toString();
 		String[] split = specialDelimiterString.split(String.valueOf(DELIMITER));
 
-		// Relevat round brackets eliminated
+		// Relevant round brackets eliminated
 		if (!hasRoundBrackets) {
 
 			StringBuilder conditionStringBuilder = new StringBuilder();
@@ -114,7 +114,7 @@ public class CompositeConditionParser implements Parser<CompositeCondition> {
 			for (var str : split) {
 
 				if (operator != null) {
-					afterBuilder.append(str + " ");
+					afterBuilder.append(str).append(" ");
 					continue;
 				}
 
@@ -123,7 +123,7 @@ public class CompositeConditionParser implements Parser<CompositeCondition> {
 					continue;
 				}
 
-				conditionStringBuilder.append(str + " ");
+				conditionStringBuilder.append(str).append(" ");
 			}
 
 			String leftConditionLine = conditionStringBuilder.toString().strip();

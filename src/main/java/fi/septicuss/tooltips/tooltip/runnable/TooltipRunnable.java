@@ -40,7 +40,7 @@ public class TooltipRunnable extends BukkitRunnable {
 	private Map<String, StatementHolder> holders;
 
 	public TooltipRunnable(TooltipManager tooltipManager, TitleManager titleManager, Map<String, Preset> presets,
-			Map<String, StatementHolder> holders, int checkFrequency) {
+			Map<String, StatementHolder> holders) {
 		this.tooltipManager = tooltipManager;
 		this.titleManager = titleManager;
 
@@ -65,41 +65,56 @@ public class TooltipRunnable extends BukkitRunnable {
 				boolean result = holder.evaluate(player);
 				Preset preset = presets.get(id);
 
-				if (result) {
-					TooltipData data = getPlayerData(player);
+				TooltipData data = getPlayerData(player);
 
-					// Check if the text of the current preset has changed
-					if (data.hasCurrentText() && data.getCurrentPresetId().equals(id) && preset.getShowProperties().isActive()) {
-
-						if (!data.getCurrentText().equals(Placeholders.replacePlaceholders(player, preset.getText()))) {
-							// Text has changed
-							data.setTextJustUpdated(true);
-							
-							handleFalse(player, id, preset, preset.getShowProperties());
-
-							data.removeCooldown(CooldownType.FADE_IN);
-							data.removeCooldown(CooldownType.FADE_OUT);
-
-							if (preset.getFadeOut() == 0)
-								data.removeCooldown(CooldownType.STAY);
-
-							return;
-						} else {
-							// Text has not changed
-							handleTrue(player, id, preset, preset.getShowProperties());
-							data.setTextJustUpdated(false);
-						}
-					} else {
-						// We're handling a new preset
-						handleTrue(player, id, preset, preset.getShowProperties());
-						data.setTextJustUpdated(false);
-					}
-
-					continue outer;
-				} else {
-					getPlayerData(player).setTextJustUpdated(false);
+				/**
+				 * FALSE
+				 */
+				if (!result) {
+					data.setTextJustUpdated(false);
 					handleFalse(player, id, preset, preset.getShowProperties());
+					continue outer;
 				}
+
+				/**
+				 * TRUE
+				 */
+
+				final boolean hasText = data.hasCurrentText();
+				final boolean hasCurrentPreset = data.hasCurrentPreset();
+				final boolean isSamePreset = hasCurrentPreset && data.getCurrentPresetId().equals(id);
+				final boolean isActivePreset = preset.getShowProperties().isActive();
+
+				final boolean hasPresetChanged = !(hasText && isSamePreset && isActivePreset);
+
+				// We're handling a new preset
+				if (hasPresetChanged) {
+					handleTrue(player, id, preset, preset.getShowProperties());
+					data.setTextJustUpdated(false);
+					continue outer;
+				}
+
+				final List<String> replacedText = Placeholders.replacePlaceholders(player, preset.getText());
+				final boolean hasTextChanged = !(data.getCurrentText().equals(replacedText));
+
+				// Text has changed
+				if (hasTextChanged) {
+					data.setTextJustUpdated(true);
+
+					handleFalse(player, id, preset, preset.getShowProperties());
+
+					data.removeCooldown(CooldownType.FADE_IN);
+					data.removeCooldown(CooldownType.FADE_OUT);
+
+					if (preset.getFadeOut() == 0)
+						data.removeCooldown(CooldownType.STAY);
+
+					return;
+				}
+
+				// Text has not changed
+				handleTrue(player, id, preset, preset.getShowProperties());
+				data.setTextJustUpdated(false);
 
 			}
 
@@ -273,8 +288,6 @@ public class TooltipRunnable extends BukkitRunnable {
 				builder.setSubtitle(tooltip.getComponents());
 			}
 
-			// TODO: Maybe?
-			// TooltipCache.remove(player);
 
 			int remainingTicks = MAGIC_NUMBER;
 			int fadeOut = preset.getFadeOut();
