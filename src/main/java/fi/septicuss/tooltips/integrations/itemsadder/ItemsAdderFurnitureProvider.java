@@ -2,6 +2,7 @@ package fi.septicuss.tooltips.integrations.itemsadder;
 
 import java.util.List;
 
+import fi.septicuss.tooltips.Tooltips;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -32,7 +33,16 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
 
 	@Override
 	public String getFurnitureId(Entity entity) {
-		CustomFurniture custom = CustomFurniture.byAlreadySpawned(entity);
+		if (entity == null) {
+			return null;
+		}
+
+		if (!Tooltips.FURNITURE_ENTITIES.contains(entity.getType())) {
+			return null;
+		}
+
+		final CustomFurniture custom = CustomFurniture.byAlreadySpawned(entity);
+
 		if (custom == null)
 			return null;
 		return custom.getNamespacedID();
@@ -40,6 +50,10 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
 
 	@Override
 	public String getFurnitureId(Block block) {
+		if (block == null) {
+			return null;
+		}
+
 		CustomFurniture custom = CustomFurniture.byAlreadySpawned(block);
 		if (custom == null)
 			return null;
