@@ -41,11 +41,15 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
 			return null;
 		}
 
-		final CustomFurniture custom = CustomFurniture.byAlreadySpawned(entity);
+		try {
+			final CustomFurniture custom = CustomFurniture.byAlreadySpawned(entity);
 
-		if (custom == null)
+			if (custom == null)
+				return null;
+			return custom.getNamespacedID();
+		} catch (RuntimeException exception) {
 			return null;
-		return custom.getNamespacedID();
+		}
 	}
 
 	@Override
@@ -54,10 +58,14 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
 			return null;
 		}
 
-		CustomFurniture custom = CustomFurniture.byAlreadySpawned(block);
-		if (custom == null)
+		try {
+			CustomFurniture custom = CustomFurniture.byAlreadySpawned(block);
+			if (custom == null)
+				return null;
+			return custom.getNamespacedID();
+		} catch (RuntimeException exception) {
 			return null;
-		return custom.getNamespacedID();
+		}
 	}
 
 	@Override
