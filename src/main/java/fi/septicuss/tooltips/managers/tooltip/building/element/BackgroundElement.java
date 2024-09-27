@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.tooltip.building.element;
+package fi.septicuss.tooltips.managers.tooltip.building.element;
 
 import java.util.Collections;
 import java.util.List;

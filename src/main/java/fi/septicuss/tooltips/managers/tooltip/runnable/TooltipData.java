@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.tooltip.runnable;
+package fi.septicuss.tooltips.managers.tooltip.runnable;
 
 import java.util.Collections;
 import java.util.HashMap;

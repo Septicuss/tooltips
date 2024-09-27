@@ -16,7 +16,7 @@ import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
-import fi.septicuss.tooltips.tooltip.Tooltip;
+import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 
 public class TooltipsAPI {
 

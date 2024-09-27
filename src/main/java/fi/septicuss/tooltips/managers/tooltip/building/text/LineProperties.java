@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.tooltip.building.text;
+package fi.septicuss.tooltips.managers.tooltip.building.text;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.theme.Theme;

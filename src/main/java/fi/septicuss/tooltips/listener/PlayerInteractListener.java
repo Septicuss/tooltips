@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
-import fi.septicuss.tooltips.tooltip.runnable.TooltipRunnableManager;
+import fi.septicuss.tooltips.managers.tooltip.runnable.TooltipRunnableManager;
 
 public class PlayerInteractListener implements Listener {
 

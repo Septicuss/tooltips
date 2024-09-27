@@ -3,7 +3,7 @@ package fi.septicuss.tooltips.managers.preset.actions.command.impl;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
-import fi.septicuss.tooltips.managers.preset.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import fi.septicuss.tooltips.utils.validation.Validity;

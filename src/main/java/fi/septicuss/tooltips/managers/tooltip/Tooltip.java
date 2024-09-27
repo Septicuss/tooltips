@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.tooltip;
+package fi.septicuss.tooltips.managers.tooltip;
 
 import java.util.Arrays;
 

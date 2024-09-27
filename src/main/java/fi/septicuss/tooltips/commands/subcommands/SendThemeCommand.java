@@ -16,7 +16,7 @@ import fi.septicuss.tooltips.commands.TooltipsSubCommand;
 import fi.septicuss.tooltips.integrations.Title;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
-import fi.septicuss.tooltips.tooltip.Tooltip;
+import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;

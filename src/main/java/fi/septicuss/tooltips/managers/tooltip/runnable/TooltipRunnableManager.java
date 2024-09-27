@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.tooltip.runnable;
+package fi.septicuss.tooltips.managers.tooltip.runnable;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,7 +13,7 @@ import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
 import fi.septicuss.tooltips.managers.condition.StatementHolder;
 import fi.septicuss.tooltips.managers.title.TitleManager;
-import fi.septicuss.tooltips.tooltip.TooltipManager;
+import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
 
 public class TooltipRunnableManager {
 

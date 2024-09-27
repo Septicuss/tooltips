@@ -2,7 +2,7 @@ package fi.septicuss.tooltips.managers.preset.actions.command;
 
 import org.bukkit.entity.Player;
 
-import fi.septicuss.tooltips.managers.preset.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.validation.Validity;
 
 public interface ActionCommand {

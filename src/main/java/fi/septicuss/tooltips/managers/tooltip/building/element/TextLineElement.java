@@ -1,11 +1,11 @@
-package fi.septicuss.tooltips.tooltip.building.element;
+package fi.septicuss.tooltips.managers.tooltip.building.element;
 
 import java.util.List;
 import java.util.Map;
 
 import fi.septicuss.tooltips.managers.icon.IconManager;
-import fi.septicuss.tooltips.tooltip.building.text.LineProperties;
-import fi.septicuss.tooltips.tooltip.building.text.TextLine;
+import fi.septicuss.tooltips.managers.tooltip.building.text.LineProperties;
+import fi.septicuss.tooltips.managers.tooltip.building.text.TextLine;
 import fi.septicuss.tooltips.utils.font.Spaces;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;

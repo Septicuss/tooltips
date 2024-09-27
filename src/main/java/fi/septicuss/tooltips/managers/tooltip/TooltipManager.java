@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.tooltip;
+package fi.septicuss.tooltips.managers.tooltip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,11 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.theme.Theme;
-import fi.septicuss.tooltips.tooltip.building.TooltipProperties;
-import fi.septicuss.tooltips.tooltip.building.element.BackgroundElement;
-import fi.septicuss.tooltips.tooltip.building.element.TextLineElement;
-import fi.septicuss.tooltips.tooltip.building.text.LineProperties;
-import fi.septicuss.tooltips.tooltip.building.text.TextLine;
+import fi.septicuss.tooltips.managers.tooltip.building.TooltipProperties;
+import fi.septicuss.tooltips.managers.tooltip.building.element.BackgroundElement;
+import fi.septicuss.tooltips.managers.tooltip.building.element.TextLineElement;
+import fi.septicuss.tooltips.managers.tooltip.building.text.LineProperties;
+import fi.septicuss.tooltips.managers.tooltip.building.text.TextLine;
 import fi.septicuss.tooltips.utils.font.Spaces;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;

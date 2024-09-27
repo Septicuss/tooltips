@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
-import fi.septicuss.tooltips.managers.preset.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Expr;
 import fi.septicuss.tooltips.utils.Expr.Builder;
 import fi.septicuss.tooltips.utils.Utils;
