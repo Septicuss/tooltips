@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.integrations.Title;
 import fi.septicuss.tooltips.managers.preset.Preset;
-import fi.septicuss.tooltips.managers.preset.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.tooltip.Tooltip;

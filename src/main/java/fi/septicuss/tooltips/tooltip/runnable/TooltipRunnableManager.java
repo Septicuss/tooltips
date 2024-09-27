@@ -11,7 +11,7 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
-import fi.septicuss.tooltips.managers.preset.condition.StatementHolder;
+import fi.septicuss.tooltips.managers.condition.StatementHolder;
 import fi.septicuss.tooltips.managers.title.TitleManager;
 import fi.septicuss.tooltips.tooltip.TooltipManager;
 

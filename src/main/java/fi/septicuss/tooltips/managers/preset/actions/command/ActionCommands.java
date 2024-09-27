@@ -15,8 +15,8 @@ import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.ClearVarC
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.ClearVarsCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.SavePersistentVarsCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.SetVarCommand;
-import fi.septicuss.tooltips.managers.preset.condition.argument.Argument;
-import fi.septicuss.tooltips.managers.preset.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
 
