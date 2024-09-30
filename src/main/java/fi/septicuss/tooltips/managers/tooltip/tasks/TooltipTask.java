@@ -40,7 +40,8 @@ public class TooltipTask extends BukkitRunnable {
         if (onlinePlayers.isEmpty())
             return;
 
-        outer: for (Player player : onlinePlayers) {
+        outer:
+        for (Player player : onlinePlayers) {
             final PlayerTooltipData data = manager.getPlayerTooltipData(player);
 
             final boolean hasCurrentPreset = data.hasCurrentPreset();
@@ -55,18 +56,30 @@ public class TooltipTask extends BukkitRunnable {
                 final ArrayList<String> text = process(player, preset.getText());
 
                 final boolean textChanged = data.hasDisplayedText() && !(data.getDisplayedText().equals(text));
+                final boolean reshowOnChange = preset.getShowProperties().shouldRefreshOnChange();
 
-                // Text, but not the preset changed, redisplay
+                // Text of the same preset has changed
                 if (textChanged) {
-                    final var copy = new ArrayList<>(data.getDisplayedText());
 
-                    data.setSavedText(copy);
+                    // Only reshow tooltip if configured so
+                    if (reshowOnChange) {
+                        final var copy = new ArrayList<>(data.getDisplayedText());
+
+                        data.setSavedText(copy);
+                        data.setTextChanged(true);
+
+                        hide(player, data.getDisplayedPreset(), preset);
+
+                        data.setDisplayedText(text);
+                        data.setDisplayedPreset(null);
+                        continue;
+                    }
+
+                    // Update text immediately
                     data.setTextChanged(true);
+                    data.removeCooldown(CooldownType.STAY);
 
-                    hide(player, data.getDisplayedPreset(), preset);
-
-                    data.setDisplayedText(text);
-                    data.setDisplayedPreset(null);
+                    display(player, data.getDisplayedPreset(), preset);
                     continue;
                 }
 
@@ -101,7 +114,6 @@ public class TooltipTask extends BukkitRunnable {
 
     }
 
-    // TODO: Actions
     public void runActions(ActionProperties.TooltipAction action, Player player) {
         final PlayerTooltipData data = manager.getPlayerTooltipData(player);
 

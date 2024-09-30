@@ -1,14 +1,10 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks;
 
-import fi.septicuss.tooltips.managers.condition.StatementHolder;
-import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Map;
 
 /**
  * Manages:
@@ -65,7 +61,6 @@ public class ConditionTask extends BukkitRunnable {
 
 
         }
-
     }
 
 
