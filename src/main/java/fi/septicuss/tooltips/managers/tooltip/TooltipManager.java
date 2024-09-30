@@ -1,169 +1,105 @@
 package fi.septicuss.tooltips.managers.tooltip;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.comphenix.protocol.PacketType;
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.condition.StatementHolder;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.preset.PresetManager;
+import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
+import fi.septicuss.tooltips.managers.theme.Theme;
+import fi.septicuss.tooltips.managers.title.TitleManager;
+import fi.septicuss.tooltips.managers.tooltip.building.TooltipBuilder;
+import fi.septicuss.tooltips.managers.tooltip.tasks.ConditionTask;
+import fi.septicuss.tooltips.managers.tooltip.tasks.TooltipTask;
+import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import org.bukkit.entity.Player;
 
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.managers.icon.IconManager;
-import fi.septicuss.tooltips.managers.preset.Preset;
-import fi.septicuss.tooltips.managers.theme.Theme;
-import fi.septicuss.tooltips.managers.tooltip.building.TooltipProperties;
-import fi.septicuss.tooltips.managers.tooltip.building.element.BackgroundElement;
-import fi.septicuss.tooltips.managers.tooltip.building.element.TextLineElement;
-import fi.septicuss.tooltips.managers.tooltip.building.text.LineProperties;
-import fi.septicuss.tooltips.managers.tooltip.building.text.TextLine;
-import fi.septicuss.tooltips.utils.font.Spaces;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TooltipManager {
 
-	private IconManager iconManager;
+	// Managers
+	private Tooltips plugin;
+	private TooltipBuilder tooltipBuilder;
+	private TitleManager titleManager;
+
+	// Tasks
+	private ConditionTask conditionTask;
+	private TooltipTask tooltipTask;
+
+	// Variables
+	private Map<UUID, PlayerTooltipData> playerTooltipData = new ConcurrentHashMap<>();
+	private Map<String, Preset> presets = new LinkedHashMap<>();
+	private Map<String, StatementHolder> holders = new LinkedHashMap<>();
 
 	public TooltipManager(Tooltips plugin) {
-		this.iconManager = plugin.getIconManager();
+		this.tooltipBuilder = new TooltipBuilder(plugin.getIconManager());
+		this.titleManager = plugin.getTitleManager();
+		this.plugin = plugin;
 	}
 
-	public Tooltip getTooltip(Player player, TooltipProperties tooltipProperties, List<String> unprocessedText) {
-		List<TextLineElement> textLineElements = new ArrayList<>();
+	public void runTasks() {
+		this.loadPresets(plugin.getPresetManager());
+		this.conditionTask = new ConditionTask(this);
+		this.conditionTask.runTaskTimer(plugin, 0L, plugin.getCheckFrequency());
 
-		int longestWidth = 0;
-		int lastLineWidth = 0;
+		this.tooltipTask = new TooltipTask(this);
+		this.tooltipTask.runTaskTimerAsynchronously(plugin, 0L, 1L);
+	}
 
-		// --- PRE-LOAD ---
-		for (int i = 0; i < unprocessedText.size(); i++) {
-			String text = unprocessedText.get(i);
+	public void stopTasks() {
+		if (this.conditionTask != null)
+			this.conditionTask.cancel();
+		this.conditionTask = null;
+		if (this.tooltipTask != null)
+			this.tooltipTask.cancel();
+		this.tooltipTask = null;
+	}
 
-			var properties = new LineProperties(tooltipProperties.getTheme(), i);
-			var textLine = new TextLine(player, iconManager, text);
-			var element = new TextLineElement(properties, textLine);
+	private void loadPresets(PresetManager presetManager) {
+		for (var preset : presetManager.getConditionalPresets()) {
+			String id = preset.getId();
 
-			// Generate parts
-			element.getParts();
-
-			// Cache widths
-			boolean lastLine = (i == unprocessedText.size() - 1);
-			int elementWidth = element.getWidth();
-
-			if (elementWidth > longestWidth)
-				longestWidth = elementWidth;
-
-			if (lastLine) {
-				lastLineWidth = elementWidth;
-			}
-
-			textLineElements.add(element);
+			presets.put(id, preset);
+			holders.put(id, preset.getStatementHolder());
 		}
+	}
 
-		// --- BACKGROUND ---
-		int leftPadding = tooltipProperties.getTheme().getLeftPadding();
-		int rightPadding = tooltipProperties.getTheme().getRightPadding();
+	public PlayerTooltipData getPlayerTooltipData(Player player) {
+		return playerTooltipData.computeIfAbsent(player.getUniqueId(), PlayerTooltipData::new);
+	}
 
-		var background = new BackgroundElement(tooltipProperties.getTheme(), tooltipProperties.getColor(),
-				longestWidth + rightPadding);
+	public PlayerTooltipData getPlayerTooltipData(UUID uuid) {
+		return playerTooltipData.computeIfAbsent(uuid, PlayerTooltipData::new);
+	}
 
-		ComponentBuilder componentBuilder = new ComponentBuilder();
+	public void runActions(TooltipAction action, Player player) {
+		if (this.tooltipTask != null)
+			this.tooltipTask.runActions(action, player);
+	}
 
-		if (tooltipProperties.getHorizontalShift() > 0) {
-			componentBuilder.append(Spaces.getOffset(tooltipProperties.getHorizontalShift()));
-		}
+	public Map<String, Preset> getPresets() {
+		return presets;
+	}
 
-		componentBuilder.append(Spaces.getOffset(-1));
+	public Map<String, StatementHolder> getHolders() {
+		return holders;
+	}
 
-		for (var backgroundPart : background.getParts())
-			componentBuilder.append(backgroundPart);
-
-		int backgroundOffset = -background.getWidth();
-
-		componentBuilder.append(Spaces.getOffset(backgroundOffset + leftPadding));
-
-		// --- TEXT ---
-		int index = 0;
-
-		for (var element : textLineElements) {
-			boolean lastLine = (index == textLineElements.size() - 1);
-			List<BaseComponent> parts = element.getParts();
-
-			if (parts.isEmpty())
-				componentBuilder.append(Spaces.getOffset(1));
-
-			boolean centered = false;
-
-			if (element.isCentered()) {
-				if (element.getWidth() != longestWidth) {
-					centered = true;
-					componentBuilder.append(Spaces.getOffset(((longestWidth - element.getWidth()) / 2)));
-				}
-			}
-			
-			for (var part : parts) {
-				componentBuilder.append(part);
-			}
-
-			if (centered) {
-				componentBuilder.append(Spaces.getOffset(-((longestWidth - element.getWidth()) / 2)));
-			}
-
-			if (!lastLine)
-				componentBuilder.append(Spaces.getOffset(-element.getWidth() - 1));
-
-			index++;
-		}
-
-		/**
-		 * Compensating the last line.
-		 * 
-		 * Each line except for the last one is "neutered" (it's width is fully offset,
-		 * think of this like a typewriter making a new line and the cursor being set to
-		 * the start).
-		 * 
-		 * Titles center text by default. We want the tooltip to also be centered. For
-		 * this to happen, the last line has to have the same width as its longest line.
-		 * 
-		 * In summary, we set the tooltips center to that of the longest (pixel-wise)
-		 * line.
-		 * 
-		 * After that, we can easily apply the horizontalShift (user-defined, allows the
-		 * tooltip to be shown off center).
-		 */
-		if (lastLineWidth <= longestWidth) {
-			int lastLineOffset = -lastLineWidth;
-			int missing = (longestWidth - lastLineWidth);
-
-			int totalLineWidth = lastLineWidth + missing;
-			int horizontalShift = tooltipProperties.getHorizontalShift();
-
-			// Move to the right
-			if (horizontalShift > 0) {
-				if (missing != 0)
-					componentBuilder.append(Spaces.getOffset(-missing));
-				componentBuilder.append(Spaces.getOffset(lastLineOffset - 2));
-			}
-
-			// Move to the left
-			if (horizontalShift < 0) {
-				componentBuilder.append(Spaces.getOffset(-horizontalShift));
-				componentBuilder.append(Spaces.getOffset(totalLineWidth));
-			}
-
-			if (missing != 0)
-				componentBuilder.append(Spaces.getOffset(missing));
-		}
-
-		return new Tooltip(componentBuilder.create());
+	public TitleManager getTitleManager() {
+		return titleManager;
 	}
 
 	public Tooltip getTooltip(Player target, Preset preset, List<String> unprocessedText) {
-		if (unprocessedText == null || unprocessedText.isEmpty())
-			unprocessedText = preset.getText();
-
-		return getTooltip(target, TooltipProperties.from(preset), unprocessedText);
+		return this.tooltipBuilder.getTooltip(target, preset, unprocessedText);
 	}
 
 	public Tooltip getTooltip(Player target, Theme theme, List<String> unprocessedText) {
-		return getTooltip(target, TooltipProperties.from(theme), unprocessedText);
+		return this.tooltipBuilder.getTooltip(target, theme, unprocessedText);
 	}
 
 }

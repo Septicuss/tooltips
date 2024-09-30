@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.listener;
 
+import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,34 +16,34 @@ import fi.septicuss.tooltips.managers.tooltip.runnable.TooltipRunnableManager;
 
 public class PlayerInteractListener implements Listener {
 
-	private TooltipRunnableManager runnableManager;
+	private TooltipManager tooltipManager;
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void on(PlayerInteractEvent event) {
-		if (runnableManager == null) return;
+		if (tooltipManager == null) return;
 		if (event.getHand() == EquipmentSlot.OFF_HAND) return;
 		
 		final Action eventAction = event.getAction();
 		final Player player = event.getPlayer();
 		
 		if (eventAction == Action.LEFT_CLICK_AIR) {
-			runnableManager.runActions(TooltipAction.LEFT_CLICK_AIR, player);
-			runnableManager.runActions(TooltipAction.LEFT_CLICK, player);
+			tooltipManager.runActions(TooltipAction.LEFT_CLICK_AIR, player);
+			tooltipManager.runActions(TooltipAction.LEFT_CLICK, player);
 		}
 		
 		if (eventAction == Action.LEFT_CLICK_BLOCK) {
-			runnableManager.runActions(TooltipAction.LEFT_CLICK_BLOCK, player);
-			runnableManager.runActions(TooltipAction.LEFT_CLICK, player);
+			tooltipManager.runActions(TooltipAction.LEFT_CLICK_BLOCK, player);
+			tooltipManager.runActions(TooltipAction.LEFT_CLICK, player);
 		}
 
 		if (eventAction == Action.RIGHT_CLICK_AIR) {
-			runnableManager.runActions(TooltipAction.RIGHT_CLICK_AIR, player);
-			runnableManager.runActions(TooltipAction.RIGHT_CLICK, player);
+			tooltipManager.runActions(TooltipAction.RIGHT_CLICK_AIR, player);
+			tooltipManager.runActions(TooltipAction.RIGHT_CLICK, player);
 		}
 		
 		if (eventAction == Action.RIGHT_CLICK_BLOCK) {
-			runnableManager.runActions(TooltipAction.RIGHT_CLICK_BLOCK, player);
-			runnableManager.runActions(TooltipAction.RIGHT_CLICK, player);
+			tooltipManager.runActions(TooltipAction.RIGHT_CLICK_BLOCK, player);
+			tooltipManager.runActions(TooltipAction.RIGHT_CLICK, player);
 		}
 		
 		
@@ -50,28 +51,28 @@ public class PlayerInteractListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void on(PlayerInteractAtEntityEvent event) {
-		if (runnableManager == null) return;
+		if (tooltipManager == null) return;
 		if (event.getHand() == EquipmentSlot.OFF_HAND) return;
 		
 		final Player player = event.getPlayer();
-		runnableManager.runActions(TooltipAction.RIGHT_CLICK_ENTITY, player);
-		runnableManager.runActions(TooltipAction.RIGHT_CLICK, player);
+		tooltipManager.runActions(TooltipAction.RIGHT_CLICK_ENTITY, player);
+		tooltipManager.runActions(TooltipAction.RIGHT_CLICK, player);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void on(EntityDamageByEntityEvent event) {
-		if (runnableManager == null) return;
+		if (tooltipManager == null) return;
 
 		if (!(event.getDamager() instanceof Player player)) {
 			return;
 		}
 		
-		runnableManager.runActions(TooltipAction.LEFT_CLICK_ENTITY, player);
-		runnableManager.runActions(TooltipAction.LEFT_CLICK, player);
+		tooltipManager.runActions(TooltipAction.LEFT_CLICK_ENTITY, player);
+		tooltipManager.runActions(TooltipAction.LEFT_CLICK, player);
 	}
 	
-	public void setRunnableManager(TooltipRunnableManager runnableManager) {
-		this.runnableManager = runnableManager;
+	public void setTooltipManager(TooltipManager tooltipManager) {
+		this.tooltipManager = tooltipManager;
 	}
 
 }

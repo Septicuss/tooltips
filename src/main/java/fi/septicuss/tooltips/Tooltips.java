@@ -1,23 +1,8 @@
 package fi.septicuss.tooltips;
 
-import java.io.File;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.commands.TooltipsCommand;
 import fi.septicuss.tooltips.commands.subcommands.DebugCommand;
@@ -41,8 +26,6 @@ import fi.septicuss.tooltips.integrations.worldguard.WorldGuardAreaProvider;
 import fi.septicuss.tooltips.listener.PlayerConnectionListener;
 import fi.septicuss.tooltips.listener.PlayerInteractListener;
 import fi.septicuss.tooltips.listener.PlayerMovementListener;
-import fi.septicuss.tooltips.managers.icon.IconManager;
-import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.condition.ConditionManager;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.impl.BlockNbtEquals;
@@ -69,20 +52,20 @@ import fi.septicuss.tooltips.managers.condition.impl.StandingOn;
 import fi.septicuss.tooltips.managers.condition.impl.TileEntityNbtEquals;
 import fi.septicuss.tooltips.managers.condition.impl.Time;
 import fi.septicuss.tooltips.managers.condition.impl.World;
+import fi.septicuss.tooltips.managers.icon.IconManager;
+import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.managers.title.TitleManager;
+import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
+import fi.septicuss.tooltips.managers.tooltip.building.text.TextLine;
 import fi.septicuss.tooltips.pack.PackGenerator;
 import fi.septicuss.tooltips.pack.impl.IconGenerator;
 import fi.septicuss.tooltips.pack.impl.LineGenerator;
 import fi.septicuss.tooltips.pack.impl.SpaceGenerator;
 import fi.septicuss.tooltips.pack.impl.TextureGenerator;
 import fi.septicuss.tooltips.pack.impl.ThemeGenerator;
-import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
-import fi.septicuss.tooltips.managers.tooltip.building.text.TextLine;
-import fi.septicuss.tooltips.managers.tooltip.runnable.TooltipRunnableManager;
 import fi.septicuss.tooltips.utils.FileSetup;
-import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
@@ -93,6 +76,19 @@ import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import fi.septicuss.tooltips.utils.placeholder.impl.SimplePlaceholderParser;
 import fi.septicuss.tooltips.utils.variable.Variables;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 public class Tooltips extends JavaPlugin {
 
@@ -102,6 +98,7 @@ public class Tooltips extends JavaPlugin {
 	private static Tooltips INSTANCE;
 	private static Logger LOGGER;
 	private static boolean USE_SPACES;
+	private static int CHECK_FREQUENCY = 3;
 
 	private TitleManager titleManager;
 	private SchemaManager schemaManager;
@@ -110,7 +107,6 @@ public class Tooltips extends JavaPlugin {
 	private PresetManager presetManager;
 	private ConditionManager conditionManager;
 	private TooltipManager tooltipManager;
-	private TooltipRunnableManager runnableManager;
 
 	private IntegratedPlugin packetPlugin;
 	private PacketProvider packetProvider;
@@ -180,8 +176,11 @@ public class Tooltips extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		if (this.runnableManager != null)
-			this.runnableManager.stop();
+		//if (this.runnableManager != null)
+		//	this.runnableManager.stop();
+
+		if (this.tooltipManager != null)
+			this.tooltipManager.stopTasks();
 
 		Variables.PERSISTENT.save();
 	}
@@ -342,9 +341,9 @@ public class Tooltips extends JavaPlugin {
 
 	public void reload() {
 
-		// Stop possible previous tooltip runnable
-		if (this.runnableManager != null) {
-			this.runnableManager.stop();
+		// Stop already running tasks
+		if (this.tooltipManager != null) {
+			this.tooltipManager.stopTasks();
 		}
 
 		this.reloadConfig();
@@ -355,7 +354,7 @@ public class Tooltips extends JavaPlugin {
 		FileSetup.setupFiles(this);
 
 		USE_SPACES = this.getConfig().getBoolean("use-spaces", true);
-		final int checkFrequency = this.getConfig().getInt("condition-check-frequency", 3);
+		CHECK_FREQUENCY = this.getConfig().getInt("condition-check-frequency", 3);
 
 		this.schemaManager = new SchemaManager();
 		this.iconManager = new IconManager();
@@ -380,11 +379,12 @@ public class Tooltips extends JavaPlugin {
 		packGenerator.registerGenerator(new TextureGenerator());
 		packGenerator.generate();
 
-		this.runnableManager = new TooltipRunnableManager(this);
-		this.runnableManager.run(this, checkFrequency);
+		this.tooltipManager.runTasks();
+
+
 
 		if (this.playerInteractListener != null)
-			playerInteractListener.setRunnableManager(this.runnableManager);
+			playerInteractListener.setTooltipManager(this.tooltipManager);
 
 	}
 
@@ -560,6 +560,10 @@ public class Tooltips extends JavaPlugin {
 
 	public FurnitureProvider getFurnitureProvider() {
 		return furnitureProvider;
+	}
+
+	public int getCheckFrequency() {
+		return CHECK_FREQUENCY;
 	}
 
 	public static Logger logger() {
