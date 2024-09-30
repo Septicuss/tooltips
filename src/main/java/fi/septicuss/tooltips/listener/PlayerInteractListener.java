@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.listener;
 
+import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,9 +11,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-
-import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
-import fi.septicuss.tooltips.managers.tooltip.runnable.TooltipRunnableManager;
 
 public class PlayerInteractListener implements Listener {
 

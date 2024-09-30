@@ -1,6 +1,5 @@
 package fi.septicuss.tooltips.managers.tooltip;
 
-import com.comphenix.protocol.PacketType;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.StatementHolder;
 import fi.septicuss.tooltips.managers.preset.Preset;
@@ -23,23 +22,31 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TooltipManager {
 
 	// Managers
-	private Tooltips plugin;
-	private TooltipBuilder tooltipBuilder;
-	private TitleManager titleManager;
+	private final Tooltips plugin;
+	private final TooltipBuilder tooltipBuilder;
+	private final TitleManager titleManager;
 
 	// Tasks
 	private ConditionTask conditionTask;
 	private TooltipTask tooltipTask;
 
 	// Variables
-	private Map<UUID, PlayerTooltipData> playerTooltipData = new ConcurrentHashMap<>();
-	private Map<String, Preset> presets = new LinkedHashMap<>();
-	private Map<String, StatementHolder> holders = new LinkedHashMap<>();
+	private final Map<UUID, PlayerTooltipData> playerTooltipData = new ConcurrentHashMap<>();
+	private final Map<String, Preset> presets = new LinkedHashMap<>();
+	private final Map<String, StatementHolder> holders = new LinkedHashMap<>();
 
 	public TooltipManager(Tooltips plugin) {
 		this.tooltipBuilder = new TooltipBuilder(plugin.getIconManager());
 		this.titleManager = plugin.getTitleManager();
 		this.plugin = plugin;
+	}
+
+	public Tooltip getTooltip(Player target, Preset preset, List<String> unprocessedText) {
+		return this.tooltipBuilder.getTooltip(target, preset, unprocessedText);
+	}
+
+	public Tooltip getTooltip(Player target, Theme theme, List<String> unprocessedText) {
+		return this.tooltipBuilder.getTooltip(target, theme, unprocessedText);
 	}
 
 	public void runTasks() {
@@ -61,6 +68,9 @@ public class TooltipManager {
 	}
 
 	private void loadPresets(PresetManager presetManager) {
+		presets.clear();
+		holders.clear();
+
 		for (var preset : presetManager.getConditionalPresets()) {
 			String id = preset.getId();
 
@@ -94,12 +104,6 @@ public class TooltipManager {
 		return titleManager;
 	}
 
-	public Tooltip getTooltip(Player target, Preset preset, List<String> unprocessedText) {
-		return this.tooltipBuilder.getTooltip(target, preset, unprocessedText);
-	}
 
-	public Tooltip getTooltip(Player target, Theme theme, List<String> unprocessedText) {
-		return this.tooltipBuilder.getTooltip(target, theme, unprocessedText);
-	}
 
 }
