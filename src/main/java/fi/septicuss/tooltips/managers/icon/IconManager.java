@@ -106,7 +106,7 @@ public class IconManager {
             try {
                 final File texture = new File(Tooltips.getPackAssetsFolder(), icon.getTexturePath().getFullPath());
                 final BufferedImage image = ImageIO.read(texture);
-                Widths.add(icon.getUnicode(), image, icon.getHeight());
+                Widths.addIcon(icon.getUnicode(), image, icon.getHeight());
             } catch (IOException e) {
                 e.printStackTrace();
             }

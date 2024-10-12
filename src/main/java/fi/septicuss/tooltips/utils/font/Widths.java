@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Widths {
 
 	private static final HashMap<Character, SizedChar> WIDTH_MAP = new HashMap<>();
+	private static final HashMap<Character, SizedChar> ICON_WIDTH_MAP = new HashMap<Character, SizedChar>();
 
 	// -- SCHEMAS --
 
@@ -62,11 +63,21 @@ public class Widths {
 		return WIDTH_MAP.getOrDefault(character, new SizedChar(character));
 	}
 
+	public static SizedChar getIconSizedChar(char iconCharacter) {
+		return ICON_WIDTH_MAP.getOrDefault(iconCharacter, new SizedChar(iconCharacter));
+	}
+
 	/**
 	 * Manually add a sized character
 	 */
 	public static void add(SizedChar sizedChar) {
 		WIDTH_MAP.put(sizedChar.getCharacter(), sizedChar);
+	}
+
+	public static void addIcon(char character, BufferedImage image, int definedHeight) {
+		final SizedChar sizedChar = getSizedChar(character, image, definedHeight);
+		sizedChar.setIcon(true);
+		ICON_WIDTH_MAP.put(character, sizedChar);
 	}
 
 	/**
@@ -206,7 +217,7 @@ public class Widths {
 		public int getImageWidth() {
 			return imageWidth;
 		}
-		
+
 		public void setImageWidth(int imageWidth) {
 			this.imageWidth = imageWidth;
 		}

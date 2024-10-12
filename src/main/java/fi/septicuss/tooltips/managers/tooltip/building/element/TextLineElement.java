@@ -56,7 +56,7 @@ public class TextLineElement implements TooltipElement {
 				TextComponent original = new TextComponent(component.toPlainText());
 
 				final char unicode = textComponent.getText().charAt(0);
-				final SizedChar sizedChar = Widths.getSizedChar(unicode);
+				final SizedChar sizedChar = Widths.getIconSizedChar(unicode);
 
 				final int negativeSpace = sizedChar.getNegativeSpace();
 				final double addedWidth = getIconWidth(unicode, sizedChar, firstChar);
