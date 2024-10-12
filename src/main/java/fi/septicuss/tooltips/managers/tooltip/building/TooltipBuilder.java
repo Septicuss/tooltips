@@ -55,6 +55,14 @@ public class TooltipBuilder {
             textLineElements.add(element);
         }
 
+        if (tooltipProperties.hasMinWidth()) {
+            longestWidth = Math.max(longestWidth, tooltipProperties.getMinWidth());
+        }
+
+        if (tooltipProperties.hasMaxWidth()) {
+            longestWidth = Math.min(longestWidth, tooltipProperties.getMaxWidth());
+        }
+
         // --- BACKGROUND ---
         int leftPadding = tooltipProperties.getTheme().getLeftPadding();
         int rightPadding = tooltipProperties.getTheme().getRightPadding();
