@@ -26,12 +26,18 @@ public class WorldGuardAreaProvider implements AreaProvider {
 	@Override
 	public List<String> getApplicableAreas(Location location) {
 		if (location == null) return null;
+		if (location.getWorld() == null) return null;
 		
 		final World world = BukkitAdapter.adapt(location.getWorld());
 		final RegionManager regions = container.get(world);
+
+		if (regions == null) return null;
+
 		final BlockVector3 vector = BukkitAdapter.asBlockVector(location);
 
-		ApplicableRegionSet applicable = regions.getApplicableRegions(vector);
+		if (vector == null) return null;
+
+        ApplicableRegionSet applicable = regions.getApplicableRegions(vector);
 
 		if (applicable.size() == 0) {
 			return null;
