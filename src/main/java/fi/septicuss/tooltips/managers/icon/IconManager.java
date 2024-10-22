@@ -3,23 +3,26 @@ package fi.septicuss.tooltips.managers.icon;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.font.Widths;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class IconManager {
 
-    public static final String ICON_FONT_PLACEHOLDER = "tooltips:placeholder";
+    public static final Key ICON_FONT_PLACEHOLDER_KEY = Key.key("tooltips", "placeholder");
 
     private final Map<String, Icon> icons;
 
@@ -75,6 +78,10 @@ public class IconManager {
         return Set.copyOf(this.icons.values());
     }
 
+    public Set<String> getIconPaths() {
+        return Set.copyOf(this.icons.keySet());
+    }
+
     public char getUnicodeFor(String name) {
         return icons.get(name).getUnicode();
     }
@@ -87,15 +94,15 @@ public class IconManager {
         return icons.containsKey(name);
     }
 
-    public Map<String, TextComponent> getIconPlaceholders() {
-        Map<String, TextComponent> map = new HashMap<>();
+    public Map<String, TagResolver> getIconPlaceholders() {
+        Map<String, TagResolver> map = new HashMap<>();
 
         for (Icon icon : getAllIcons()) {
-            final String iconPlaceholder = "{" + icon.getPath() + "}";
 
-            final TextComponent iconComponent = new TextComponent(String.valueOf(icon.getUnicode()));
-            iconComponent.setFont(IconManager.ICON_FONT_PLACEHOLDER);
-            map.put(iconPlaceholder, iconComponent);
+            final String iconPlaceholder = "icon:"+icon.getPath();
+
+            final Component iconComponent = Component.text(String.valueOf(icon.getUnicode())).font(ICON_FONT_PLACEHOLDER_KEY);
+            map.put(iconPlaceholder, Placeholder.component(iconPlaceholder, iconComponent));
         }
 
         return map;

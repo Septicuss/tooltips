@@ -1,39 +1,27 @@
 package fi.septicuss.tooltips.managers.tooltip;
 
-import java.util.Arrays;
-
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 
 public class Tooltip {
 
-	private BaseComponent[] components;
+	private Component component;
 
-	public Tooltip(BaseComponent[] components) {
-		this.components = components;
+	public Tooltip(Component component) {
+		this.component = component;
 	}
 
-	public BaseComponent[] getComponents() {
-		return components;
+	public Component getComponent() {
+		return component;
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.hashCode(components);
-		return result;
+		return component.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Tooltip)) {
-			return false;
-		}
-		Tooltip other = (Tooltip) obj;
-		return Arrays.equals(components, other.components);
+		return component.equals(obj);
 	}
 
 	

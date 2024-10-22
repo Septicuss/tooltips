@@ -92,7 +92,7 @@ public class TooltipsAPI {
 		Tooltip tooltip = Tooltips.get().getTooltipManager().getTooltip(player, preset, extra);
 
 		Title title = new TitleBuilder(Tooltips.get().getTitleManager())
-				.setSubtitle(tooltip.getComponents())
+				.setSubtitle(tooltip.getComponent())
 				.setFadeIn(preset.getFadeIn())
 				.setStay(preset.getStay())
 				.setFadeOut(preset.getFadeOut())
@@ -105,7 +105,7 @@ public class TooltipsAPI {
 		Tooltip tooltip = Tooltips.get().getTooltipManager().getTooltip(player, theme, extra);
 		
 		Title title = new TitleBuilder(Tooltips.get().getTitleManager())
-				.setSubtitle(tooltip.getComponents())
+				.setSubtitle(tooltip.getComponent())
 				.setFadeIn(0)
 				.setStay(5*20)
 				.setFadeOut(0)

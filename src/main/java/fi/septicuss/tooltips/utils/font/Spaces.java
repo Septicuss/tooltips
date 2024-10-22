@@ -1,17 +1,16 @@
 package fi.septicuss.tooltips.utils.font;
 
+import com.google.common.collect.Maps;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-
 public class Spaces {
 
-	public static final String OFFSET_FONT_NAME = "tooltips:space";
+	public static final Key OFFSET_FONT_KEY = Key.key("tooltips", "space");
 	private static final Map<Integer, Character> OFFSET_MAP;
 
 	// Inside each theme line
@@ -40,11 +39,8 @@ public class Spaces {
 		OFFSET_MAP.put(128, '\uE016');
 	}
 
-	public static BaseComponent getOffset(int pixels) {
-		var component = new TextComponent(getOffsetText(pixels));
-		component.setFont(OFFSET_FONT_NAME);
-
-		return component;
+	public static Component getOffset(int pixels) {
+		return Component.text(getOffsetText(pixels)).font(OFFSET_FONT_KEY);
 	}
 
 	public static String getOffsetText(int pixels) {

@@ -1,8 +1,8 @@
 package fi.septicuss.tooltips.managers.title;
 
 import fi.septicuss.tooltips.integrations.Title;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
+import fi.septicuss.tooltips.utils.AdventureUtils;
+import net.kyori.adventure.text.Component;
 
 public class TitleBuilder {
 
@@ -33,13 +33,13 @@ public class TitleBuilder {
 		return clone;
 	}
 
-	public TitleBuilder setTitle(BaseComponent[] title) {
-		this.titleJson = ComponentSerializer.toString(title);
+	public TitleBuilder setTitle(Component title) {
+		this.titleJson = AdventureUtils.GSONSERIALIZER.serialize(title);
 		return this;
 	}
 
-	public TitleBuilder setSubtitle(BaseComponent[] subtitle) {
-		this.subtitleJson = ComponentSerializer.toString(subtitle);
+	public TitleBuilder setSubtitle(Component subtitle) {
+		this.subtitleJson = AdventureUtils.GSONSERIALIZER.serialize(subtitle);
 		return this;
 	}
 

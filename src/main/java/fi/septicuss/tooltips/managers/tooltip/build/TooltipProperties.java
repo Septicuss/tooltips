@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.tooltip.building;
+package fi.septicuss.tooltips.managers.tooltip.build;
 
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.width.WidthProperties;

@@ -1,15 +1,13 @@
 package fi.septicuss.tooltips.managers.condition.type;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.utils.validation.Validity;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
-
-import fi.septicuss.tooltips.utils.Utils;
-import fi.septicuss.tooltips.utils.validation.Validity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiLocation {
 

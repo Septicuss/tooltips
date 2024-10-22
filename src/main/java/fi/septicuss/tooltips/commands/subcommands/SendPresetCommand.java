@@ -76,7 +76,7 @@ public class SendPresetCommand implements TooltipsSubCommand {
 		Tooltip tooltip = plugin.getTooltipManager().getTooltip(target, preset, extra);
 
 		TitleBuilder titleBuilder = new TitleBuilder(plugin.getTitleManager());
-		titleBuilder.setSubtitle(tooltip.getComponents());
+		titleBuilder.setSubtitle(tooltip.getComponent());
 		titleBuilder.setFadeIn(preset.getFadeIn());
 		titleBuilder.setStay(preset.getStay());
 		titleBuilder.setFadeOut(preset.getFadeOut());

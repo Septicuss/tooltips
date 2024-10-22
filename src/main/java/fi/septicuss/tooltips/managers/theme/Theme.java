@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import net.kyori.adventure.key.Key;
 import org.bukkit.configuration.ConfigurationSection;
 
 import fi.septicuss.tooltips.Tooltips;
@@ -139,6 +140,10 @@ public class Theme implements Validatable {
 
 	public double getWidth() {
 		return width;
+	}
+
+	public Key getFontKey() {
+		return Key.key(texturePath.getNamespace(), "themes/" + path);
 	}
 
 	public String getFontName() {

@@ -35,7 +35,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.3.0</version>
 				<configuration>
-					<outputDirectory>C:\Files\Projects\plugins\servers\paper 1.21.1\plugins</outputDirectory>
+					<outputDirectory>C:\Files\Projects\plugins\servers\spigot 1.21.1\plugins</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -46,6 +46,8 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<adventure.core.version>4.17.0</adventure.core.version>
+		<adventure.platform.version>4.3.3</adventure.platform.version>
 	</properties>
 
 	<repositories>
@@ -94,6 +96,37 @@
 	</repositories>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-api</artifactId>
+			<version>${adventure.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-text-minimessage</artifactId>
+			<version>${adventure.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-text-serializer-plain</artifactId>
+			<version>${adventure.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-text-serializer-gson</artifactId>
+			<version>${adventure.core.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.code.gson</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-platform-bukkit</artifactId>
+			<version>${adventure.platform.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>

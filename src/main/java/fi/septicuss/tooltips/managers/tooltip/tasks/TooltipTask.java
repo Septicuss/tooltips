@@ -285,7 +285,7 @@ public class TooltipTask extends BukkitRunnable {
             builder = TooltipCache.get(player, text);
         } else {
             builder = new TitleBuilder(manager.getTitleManager());
-            builder.setSubtitle(manager.getTooltip(player, preset, text).getComponents());
+            builder.setSubtitle(manager.getTooltip(player, preset, text).getComponent());
             TooltipCache.cache(player, text, builder.clone());
         }
 

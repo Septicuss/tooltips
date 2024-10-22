@@ -76,7 +76,7 @@ public class SendThemeCommand implements TooltipsSubCommand {
 		Tooltip tooltip = plugin.getTooltipManager().getTooltip(target, theme, extra);
 
 		TitleBuilder titleBuilder = new TitleBuilder(plugin.getTitleManager());
-		titleBuilder.setSubtitle(tooltip.getComponents());
+		titleBuilder.setSubtitle(tooltip.getComponent());
 		titleBuilder.setFadeIn(0);
 		titleBuilder.setStay(5 * 20);
 		titleBuilder.setFadeOut(0);

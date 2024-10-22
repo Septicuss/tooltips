@@ -58,7 +58,6 @@ import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.managers.title.TitleManager;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
-import fi.septicuss.tooltips.managers.tooltip.building.text.TextLine;
 import fi.septicuss.tooltips.pack.PackGenerator;
 import fi.septicuss.tooltips.pack.impl.IconGenerator;
 import fi.septicuss.tooltips.pack.impl.LineGenerator;
@@ -397,7 +396,6 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void clearCache() {
-		TextLine.clearReplaceables();
 		TooltipCache.clear();
 		FurnitureCache.clear();
 	}

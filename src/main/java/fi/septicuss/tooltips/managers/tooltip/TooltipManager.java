@@ -7,7 +7,7 @@ import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.title.TitleManager;
-import fi.septicuss.tooltips.managers.tooltip.building.TooltipBuilder;
+import fi.septicuss.tooltips.managers.tooltip.build.TooltipBuilder;
 import fi.septicuss.tooltips.managers.tooltip.tasks.ConditionTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.TooltipTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
@@ -42,11 +42,16 @@ public class TooltipManager {
 	}
 
 	public Tooltip getTooltip(Player target, Preset preset, List<String> unprocessedText) {
-		return this.tooltipBuilder.getTooltip(target, preset, unprocessedText);
+		if (true) {
+			return new fi.septicuss.tooltips.managers.tooltip.build.TooltipBuilder(plugin.getIconManager()).build(target, preset, unprocessedText);
+		}
+
+		return this.tooltipBuilder.build(target, preset, unprocessedText);
 	}
 
+
 	public Tooltip getTooltip(Player target, Theme theme, List<String> unprocessedText) {
-		return this.tooltipBuilder.getTooltip(target, theme, unprocessedText);
+		return this.tooltipBuilder.build(target, theme, unprocessedText);
 	}
 
 	public void runTasks() {
