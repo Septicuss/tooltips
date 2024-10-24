@@ -1,6 +1,5 @@
 package fi.septicuss.tooltips.managers.tooltip.build.element;
 
-import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.tooltip.build.text.TextLine;
 import fi.septicuss.tooltips.utils.AdventureUtils;
@@ -18,6 +17,10 @@ import java.util.List;
 import java.util.OptionalInt;
 
 public class TextLineElement implements TooltipElement{
+
+    private static final double HALF = 0.5;
+    private static final double QUARTER = 0.25;
+    private static final int PIXEL = 1;
 
     private final List<TagResolver> tagResolvers;
     private final TextLine textLine;
@@ -137,7 +140,7 @@ public class TextLineElement implements TooltipElement{
 
                     stringBuilder.append(character);
 
-                    if (sizedChar.getRealWidth() % 1 == 0 && character != ' ') {
+                    if (sizedChar.getRealWidth() % PIXEL == 0 && character != ' ') {
                         final String result = stringBuilder.toString();
 
                         var textFont = (offset ? textLine.getOffsetFont() : textLine.getRegularFont());
@@ -183,7 +186,7 @@ public class TextLineElement implements TooltipElement{
         }
 
         if (character == ' ') {
-            return 2;
+            return PIXEL * 2;
         }
 
         int negativeSpace = sizedChar.getNegativeSpace();
@@ -198,34 +201,37 @@ public class TextLineElement implements TooltipElement{
          * everything down 2x, that width is 0.5
          */
         if (negativeSpace <= 1) {
-            width += 0.5;
+            width += HALF;
         }
 
         return width;
     }
 
-    private double getIconWidth(Widths.SizedChar sizedChar, boolean firstChar) {
+    private double getIconWidth(Widths.SizedChar sizedChar, boolean firstCharacter) {
         final int negativeSpace = sizedChar.getNegativeSpace();
-        double width = (int) (sizedChar.getAbsoluteWidth() * sizedChar.getHeightRatio()) + 1;
+        final double heightRatio = sizedChar.getHeightRatio();
 
-        final double ratio = sizedChar.getHeightRatio();
+        double width = sizedChar.getRealWidth();
+        double subtracted = PIXEL;
 
-        double amount;
-        if (ratio == 0.5)
-            amount = 1;
-        else if (ratio > 0.5)
-            amount = (int) ratio;
-        else if (ratio == 0.25)
-            amount = 0;
-        else
-            amount = 1;
+        // Mostly experimental, magic values.
+        // Subtracting from width, based on the height ratio of the character.
+        if (heightRatio > HALF) {
+            subtracted = (int) heightRatio;
+        } else if (heightRatio == QUARTER) {
+            subtracted = 0;
+        }
 
-        if (negativeSpace >= 1)
-            width -= amount;
+        final boolean hasNegativeSpace = (negativeSpace >= PIXEL);
 
-        if (firstChar)
-            if (negativeSpace < 1)
-                width -= amount;
+        if (hasNegativeSpace) {
+            width -= subtracted;
+        }
+
+        if (firstCharacter)
+            if (negativeSpace < 1) {
+                width -= subtracted;
+            }
 
         return width;
     }
