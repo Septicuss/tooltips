@@ -16,6 +16,7 @@ public class Icon implements Validatable {
 	private NamespacedPath texturePath;
 	private int ascent;
 	private int height;
+	private double overridingWidth;
 
 	private char unicode = ' ';
 	private boolean valid = false;
@@ -25,6 +26,7 @@ public class Icon implements Validatable {
 		this.file = file;
 		this.ascent = iconSection.getInt("ascent");
 		this.height = iconSection.getInt("height");
+		this.overridingWidth = iconSection.getDouble("width", 0);
 
 		String pathStr = iconSection.getString("path");
 
@@ -68,6 +70,10 @@ public class Icon implements Validatable {
 
 	public void setUnicode(char unicode) {
 		this.unicode = unicode;
+	}
+
+	public double getOverridingWidth() {
+		return overridingWidth;
 	}
 
 	public boolean hasUnicode() {
