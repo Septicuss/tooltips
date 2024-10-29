@@ -95,6 +95,10 @@
 			<name>Oraxen Repository</name>
 			<url>https://repo.oraxen.com/releases/</url>
 		</repository>
+		<repository>
+			<id>Artillex-Studios</id>
+			<url>https://repo.artillex-studios.com/releases/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -174,6 +178,12 @@
 			<groupId>com.github.retrooper</groupId>
 			<artifactId>packetevents-spigot</artifactId>
 			<version>2.4.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.artillexstudios</groupId>
+			<artifactId>AxGensAPI</artifactId>
+			<version>13</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

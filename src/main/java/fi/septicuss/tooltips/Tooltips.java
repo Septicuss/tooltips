@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import fi.septicuss.tooltips.integrations.axgens.AxGensIntegration;
+import fi.septicuss.tooltips.integrations.axgens.LookingAtAxGen;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -213,6 +215,7 @@ public class Tooltips extends JavaPlugin {
 		TooltipsAPI.registerCondition("op", new Op());
 		TooltipsAPI.registerCondition("lookingatcitizen", new LookingAtCitizen());
 		TooltipsAPI.registerCondition("permission", new Permission());
+		TooltipsAPI.registerCondition("lookingataxgen", new LookingAtAxGen());
 	}
 	
 	private void loadVariables() {
@@ -309,7 +312,8 @@ public class Tooltips extends JavaPlugin {
 			pluginManager.disablePlugin(this);
 			return;
 		}
-		
+
+		AxGensIntegration.registerIntegration();
 
 	}
 
