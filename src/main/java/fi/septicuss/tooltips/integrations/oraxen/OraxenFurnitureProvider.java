@@ -2,6 +2,7 @@ package fi.septicuss.tooltips.integrations.oraxen;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -49,25 +50,21 @@ public class OraxenFurnitureProvider implements FurnitureProvider {
 		MechanicFactory furnitureFactory = MechanicsManager.getMechanicFactory("furniture");
 
 		for (var id : furnitureFactory.getItems()) {
+
 			if (id == null)
 				continue;
-			
-			ItemBuilder builder = OraxenItems.getItemById(id);
-			
-			if (builder == null)
-				continue;
-			
-			ItemStack built = builder.build();
 
-			if (built == null)
+			ItemBuilder builder = OraxenItems.getItemById(id);
+
+			if (builder == null)
 				continue;
 
 			String name;
 
-			if (built.hasItemMeta() && built.getItemMeta().hasDisplayName())
-				name = built.getItemMeta().getDisplayName();
+			if (builder.hasItemName())
+				name = builder.getItemName();
 			else
-				name = built.getType().toString();
+				name = builder.getType().toString();
 
 			wrappers.add(new FurnitureWrapper(id, name));
 		}

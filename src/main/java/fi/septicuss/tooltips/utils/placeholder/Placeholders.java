@@ -39,10 +39,9 @@ public class Placeholders {
 					String placeholder = str.substring(i + 1, j);
 					String result = null;
 
-					for (var parser : LOCAL_PLACEHOLDERS.values()) {
+					if (LOCAL_PLACEHOLDERS.containsKey(placeholder.toLowerCase())) {
+						var parser = LOCAL_PLACEHOLDERS.get(placeholder.toLowerCase());
 						result = parser.parse(player, placeholder);
-						if (result != null)
-							break;
 					}
 
 					if (result != null) {

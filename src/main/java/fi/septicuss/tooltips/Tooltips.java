@@ -1,5 +1,21 @@
 package fi.septicuss.tooltips;
 
+import java.io.File;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.logging.Logger;
+
+import fi.septicuss.tooltips.integrations.axgens.AxGensIntegration;
+import fi.septicuss.tooltips.integrations.axgens.LookingAtAxGen;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -211,6 +227,7 @@ public class Tooltips extends JavaPlugin {
 		TooltipsAPI.registerCondition("op", new Op());
 		TooltipsAPI.registerCondition("lookingatcitizen", new LookingAtCitizen());
 		TooltipsAPI.registerCondition("permission", new Permission());
+		TooltipsAPI.registerCondition("lookingataxgen", new LookingAtAxGen());
 	}
 	
 	private void loadVariables() {
@@ -307,7 +324,8 @@ public class Tooltips extends JavaPlugin {
 			pluginManager.disablePlugin(this);
 			return;
 		}
-		
+
+		AxGensIntegration.registerIntegration();
 
 	}
 
