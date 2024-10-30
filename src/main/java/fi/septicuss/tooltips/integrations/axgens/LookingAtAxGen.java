@@ -1,10 +1,9 @@
 package fi.septicuss.tooltips.integrations.axgens;
 
-import com.artillexstudios.axgens.AxGens;
 import com.artillexstudios.axgens.generators.Generator;
 import com.artillexstudios.axgens.generators.GeneratorArea;
-import fi.septicuss.tooltips.managers.preset.condition.Condition;
-import fi.septicuss.tooltips.managers.preset.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.cache.integrations.axgens.AxGensCache;
 import fi.septicuss.tooltips.utils.validation.Validity;
