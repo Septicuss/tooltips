@@ -184,7 +184,8 @@ public class TooltipTask extends BukkitRunnable {
             int stay = ACTIVE_PRESET_DURATION_TICKS;
 
             titleBuilder.setStay(stay + EXTRA_DELAY_TICKS);
-            titleBuilder.build().send(player);
+            titleBuilder.build().ifPresent(title -> title.send(player));
+
 
             data.addCooldown(CooldownType.STAY, stay - EXTRA_DELAY_TICKS);
 
@@ -209,7 +210,7 @@ public class TooltipTask extends BukkitRunnable {
         titleBuilder.setFadeIn(fadeIn);
         titleBuilder.setStay(stay);
         titleBuilder.setFadeOut(fadeOut);
-        titleBuilder.build().send(player);
+        titleBuilder.build().ifPresent(title -> title.send(player));
 
         data.addCooldown(CooldownType.FADE_OUT, total);
         data.setFirstTime(false);
@@ -236,7 +237,7 @@ public class TooltipTask extends BukkitRunnable {
             titleBuilder.setFadeIn(0);
             titleBuilder.setStay(stay);
             titleBuilder.setFadeOut(fadeOut);
-            titleBuilder.build().send(player);
+            titleBuilder.build().ifPresent(title -> title.send(player));
 
             if (hasFadeOut) {
                 data.addCooldown(CooldownType.FADE_OUT, fadeOut);

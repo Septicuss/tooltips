@@ -1,5 +1,7 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks.data;
 
+import fi.septicuss.tooltips.managers.condition.Context;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
@@ -22,6 +24,7 @@ public class PlayerTooltipData {
     private final AtomicBoolean textChanged = new AtomicBoolean();
     private final AtomicBoolean firstTime = new AtomicBoolean();
     private final ConcurrentHashMap<CooldownType, Long> cooldowns = new ConcurrentHashMap<>();
+    private Context context = new Context();
 
 
     public UUID getPlayersId() {
@@ -96,8 +99,6 @@ public class PlayerTooltipData {
         this.firstTime.set(firstTime);
     }
 
-
-
     public boolean hasCooldown(CooldownType cooldownType) {
         if (!cooldowns.containsKey(cooldownType))
             return false;
@@ -126,6 +127,14 @@ public class PlayerTooltipData {
             meow += " {" + entry.getKey() + ": " + (entry.getValue()) + "}";
         }
         return meow;
+    }
+
+    public void resetContext() {
+        this.context = new Context();
+    }
+
+    public Context getContext() {
+        return this.context;
     }
 
     private long ticksToMilliseconds(long ticks) {

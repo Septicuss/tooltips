@@ -1,10 +1,10 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import fi.septicuss.tooltips.integrations.IntegratedPlugin;
-import fi.septicuss.tooltips.integrations.nbtapi.NBTTileEntityWrapper;
+import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTTileEntityWrapper;
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
@@ -66,7 +66,7 @@ public class TileEntityNbtEquals implements Condition {
 
 	@Override
 	public Validity valid(Arguments args) {
-		if (!IntegratedPlugin.NBTAPI.isEnabled()) {
+		if (!Bukkit.getPluginManager().isPluginEnabled("NBTAPI")) {
 			return Validity.of(false, "Cannot use entitynbtequals because NBTAPI is not installed");
 		}
 

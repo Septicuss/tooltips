@@ -24,7 +24,7 @@ public class EvalCommand implements TooltipsSubCommand {
 	@Override
 	public void onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof Player player)) {
 			Messaging.send(sender, Colors.WARN + "[!] Must be a player to use this command.");
 			return;
 		}
@@ -49,9 +49,7 @@ public class EvalCommand implements TooltipsSubCommand {
 			return;
 		}
 
-		Player player = (Player) sender;
-
-		boolean result = statement.getCondition().check(player);
+        boolean result = statement.getCondition().check(player);
 
 		Messaging.send(sender,
 				"Condition result: " + (result ? Colors.PLUGIN : Colors.WARN) + result);

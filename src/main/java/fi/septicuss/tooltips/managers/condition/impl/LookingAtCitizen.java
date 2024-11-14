@@ -1,9 +1,9 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import fi.septicuss.tooltips.integrations.IntegratedPlugin;
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.type.MultiString;
@@ -51,7 +51,7 @@ public class LookingAtCitizen implements Condition {
 
 	@Override
 	public Validity valid(Arguments args) {
-		if (!IntegratedPlugin.CITIZENS.isEnabled())
+		if (Bukkit.getPluginManager().isPluginEnabled("Citizens"))
 			return Validity.of(false, "Citizens is required for this condition.");
 
 		if (CitizensAPI.getNPCRegistry() == null)

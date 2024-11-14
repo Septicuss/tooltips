@@ -8,9 +8,15 @@ import fi.septicuss.tooltips.utils.validation.Validity;
 
 public interface Condition {
 
-	public boolean check(Player player, Arguments args);
+	default boolean check(Player player, Arguments args) {
+		return false;
+	}
 
-	public Validity valid(Arguments args);
+	default boolean check(Player player, Arguments args, Context context) {
+		return check(player, args);
+	}
+
+	Validity valid(Arguments args);
 
 	default String quote(String message) {
 		return Utils.quote(message);

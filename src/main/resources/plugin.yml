@@ -8,9 +8,10 @@ author: Septicuss
 softdepend: [ PlaceholderAPI, ItemsAdder, Oraxen, WorldGuard, WorldEdit, MythicCrucible, MythicMobs, Citizens, ProtocolLib, packetevents ]
 
 libraries:
+   - net.kyori:adventure-api:${adventure.core.version}
    - net.kyori:adventure-text-minimessage:${adventure.core.version}
    - net.kyori:adventure-text-serializer-plain:${adventure.core.version}
-   - net.kyori:adventure-platform-bukkit:${adventure.platform.version}
+   - net.kyori:adventure-text-serializer-gson:${adventure.core.version}
 
 commands:
    tooltips:

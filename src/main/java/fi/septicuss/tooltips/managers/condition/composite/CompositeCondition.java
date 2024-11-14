@@ -1,12 +1,12 @@
 package fi.septicuss.tooltips.managers.condition.composite;
 
-import org.bukkit.entity.Player;
-
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.parser.ParsedCondition;
+import org.bukkit.entity.Player;
 
 public class CompositeCondition {
 
-	private static final boolean DEFAULT = true;
+	private static final boolean DEFAULT = false;
 
 	// Leaf
 	private ParsedCondition condition;
@@ -55,29 +55,33 @@ public class CompositeCondition {
 		this.operator = operator;
 	}
 
-	public boolean check(Player player) {
+	public boolean check(Player player, Context context) {
 
 		if (!hasLeft() && !hasRight())
 			if (hasCondition()) {
-				return condition.check(player);
+				return condition.check(player, context);
 			} else
 				return DEFAULT;
 
 		if (hasLeft() && !hasRight())
-			return getLeft().check(player);
+			return getLeft().check(player, context);
 
 		if (!hasLeft() && hasRight())
-			return getRight().check(player);
+			return getRight().check(player, context);
 
 		switch (operator) {
 		case AND:
-			return (left.check(player) && right.check(player));
+			return (left.check(player, context) && right.check(player, context));
 		case OR:
-			return (left.check(player) || right.check(player));
+			return (left.check(player, context) || right.check(player, context));
 		default:
 			return DEFAULT;
 		}
 
+	}
+
+	public boolean check(Player player) {
+		return this.check(player, new Context());
 	}
 
 	@Override

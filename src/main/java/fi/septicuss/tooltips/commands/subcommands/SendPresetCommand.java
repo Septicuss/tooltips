@@ -13,7 +13,6 @@ import com.google.common.collect.Lists;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.integrations.Title;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.managers.tooltip.Tooltip;
@@ -81,8 +80,11 @@ public class SendPresetCommand implements TooltipsSubCommand {
 		titleBuilder.setStay(preset.getStay());
 		titleBuilder.setFadeOut(preset.getFadeOut());
 
-		Title title = titleBuilder.build();
-		title.send(target);
+		var optionalTitle = titleBuilder.build();
+		if (optionalTitle.isPresent()) {
+			optionalTitle.get().send(target);
+		}
+
 
 	}
 

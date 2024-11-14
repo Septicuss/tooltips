@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.google.common.collect.Lists;
 
-import fi.septicuss.tooltips.integrations.papi.PAPI;
+import fi.septicuss.tooltips.managers.integration.impl.papi.PAPI;
 
 public class Placeholders {
 

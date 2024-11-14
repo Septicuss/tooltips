@@ -1,11 +1,11 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import fi.septicuss.tooltips.integrations.IntegratedPlugin;
-import fi.septicuss.tooltips.integrations.nbtapi.NBTItemWrapper;
+import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTItemWrapper;
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
@@ -59,7 +59,7 @@ public class ItemNbtEquals implements Condition {
 	}
 
 	public Validity valid(Arguments args) {
-		if (!IntegratedPlugin.NBTAPI.isEnabled()) {
+		if (!Bukkit.getPluginManager().isPluginEnabled("NBTAPI")) {
 			return Validity.of(false, "Cannot use itemnbtequals because NBTAPI is not installed");
 		}
 

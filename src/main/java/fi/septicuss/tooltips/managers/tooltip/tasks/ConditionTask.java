@@ -29,12 +29,13 @@ public class ConditionTask extends BukkitRunnable {
         for (Player player : onlinePlayers) {
 
             final PlayerTooltipData data = manager.getPlayerTooltipData(player);
+            data.resetContext();
 
             for (var holderEntry : manager.getHolders().entrySet()) {
                 var id = holderEntry.getKey();
                 var holder = holderEntry.getValue();
 
-                final boolean conditionResult = holder.evaluate(player);
+                final boolean conditionResult = holder.evaluate(player, data.getContext());
 
                 final boolean hasCurrentPreset = data.hasCurrentPreset();
                 final boolean isSamePreset = hasCurrentPreset && data.getCurrentPreset().equals(id);

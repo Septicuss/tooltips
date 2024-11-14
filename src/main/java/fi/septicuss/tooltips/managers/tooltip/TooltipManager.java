@@ -42,10 +42,6 @@ public class TooltipManager {
 	}
 
 	public Tooltip getTooltip(Player target, Preset preset, List<String> unprocessedText) {
-		if (true) {
-			return new fi.septicuss.tooltips.managers.tooltip.build.TooltipBuilder(plugin.getIconManager()).build(target, preset, unprocessedText);
-		}
-
 		return this.tooltipBuilder.build(target, preset, unprocessedText);
 	}
 

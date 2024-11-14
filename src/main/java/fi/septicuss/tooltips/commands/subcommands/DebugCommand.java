@@ -105,7 +105,7 @@ public class DebugCommand implements TooltipsSubCommand {
                 continue;
             }
 
-            boolean conditionResult = statement.getCondition().check(player);
+            boolean conditionResult = statement.getCondition().check(player, null);
 
             Messaging.send(sender, Colors.PLUGIN + readableIndex + Colors.INFO + " " + conditionLines.get(index));
             Messaging.send(sender, Colors.INFO + "   -> " + (conditionResult ? ChatColor.GREEN + "true" : ChatColor.RED + "false"));

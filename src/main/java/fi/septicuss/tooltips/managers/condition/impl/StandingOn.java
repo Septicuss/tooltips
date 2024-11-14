@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import fi.septicuss.tooltips.managers.condition.Context;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -16,7 +17,7 @@ public class StandingOn implements Condition {
 	private static final String[] TYPE_ALIASES = { "type", "m", "mat", "material" };
 
 	@Override
-	public boolean check(Player player, Arguments args) {
+	public boolean check(Player player, Arguments args, Context context) {
 		Argument typeArg = args.get(TYPE_ALIASES);
 		String typeStr = typeArg.getAsString();
 

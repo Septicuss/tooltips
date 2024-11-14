@@ -1,13 +1,7 @@
 package fi.septicuss.tooltips.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.gson.JsonObject;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -17,12 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import com.google.gson.JsonObject;
-
-import fi.septicuss.tooltips.integrations.FurnitureProvider;
-import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
-import fi.septicuss.tooltips.utils.cache.furniture.FurnitureWrapper;
-import net.md_5.bungee.api.ChatColor;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -97,12 +92,6 @@ public class Utils {
 			if (ch == character)
 				amount++;
 		return amount;
-	}
-
-	public static String getFurnitureDisplayName(FurnitureProvider provider, String id) {
-		FurnitureWrapper wrapper = FurnitureCache.getFurniture(id);
-		if (wrapper == null) return "";
-		return ChatColor.stripColor(wrapper.displayName());
 	}
 
 	public static boolean sameAmountOfCharsIn(String string, char first, char second) {

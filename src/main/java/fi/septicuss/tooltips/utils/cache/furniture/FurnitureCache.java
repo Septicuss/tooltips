@@ -1,5 +1,7 @@
 package fi.septicuss.tooltips.utils.cache.furniture;
 
+import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

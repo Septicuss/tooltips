@@ -1,12 +1,15 @@
 package fi.septicuss.tooltips.managers.title;
 
-import fi.septicuss.tooltips.integrations.Title;
+import fi.septicuss.tooltips.managers.integration.providers.PacketProvider;
+import fi.septicuss.tooltips.managers.integration.wrappers.Title;
 import fi.septicuss.tooltips.utils.AdventureUtils;
 import net.kyori.adventure.text.Component;
 
+import java.util.Optional;
+
 public class TitleBuilder {
 
-	private TitleManager titleManager;
+	private final TitleManager titleManager;
 
 	private String titleJson = "\"\"";
 	private String subtitleJson = "\"\"";
@@ -19,7 +22,7 @@ public class TitleBuilder {
 		this.titleManager = titleManager;
 	}
 
-	public Title build() {
+	public Optional<Title<? extends PacketProvider>> build() {
 		return titleManager.newTitle(titleJson, subtitleJson, fadeIn, stay, fadeOut);
 	}
 

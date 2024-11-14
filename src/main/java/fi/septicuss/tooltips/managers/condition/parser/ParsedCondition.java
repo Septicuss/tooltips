@@ -1,9 +1,9 @@
 package fi.septicuss.tooltips.managers.condition.parser;
 
-import org.bukkit.entity.Player;
-
 import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import org.bukkit.entity.Player;
 
 public class ParsedCondition {
 
@@ -15,11 +15,11 @@ public class ParsedCondition {
 		this.args = args;
 	}
 
-	public boolean check(Player player) {
+	public boolean check(Player player, Context context) {
 		if (condition == null)
 			return false;
 
-		return condition.check(player, args);
+		return condition.check(player, args, context);
 	}
 
 	public Condition getCondition() {

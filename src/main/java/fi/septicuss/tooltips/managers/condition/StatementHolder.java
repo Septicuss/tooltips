@@ -22,13 +22,13 @@ public class StatementHolder {
 		statements.add(statement);
 	}
 	
-	public boolean evaluate(Player player) {
+	public boolean evaluate(Player player, Context context) {
 
 		for (var statement : statements) {
 			if (statement == null || statement.getCondition() == null)
 				continue;
 
-			boolean conditionResult = statement.getCondition().check(player);
+			boolean conditionResult = statement.getCondition().check(player, context);
 
 			if (statement.hasOutcome()) {
 				boolean outcome = statement.getOutcome().asBoolean();

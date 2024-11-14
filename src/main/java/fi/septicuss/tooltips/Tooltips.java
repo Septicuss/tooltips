@@ -12,19 +12,6 @@ import fi.septicuss.tooltips.commands.subcommands.ReloadCommand;
 import fi.septicuss.tooltips.commands.subcommands.SendPresetCommand;
 import fi.septicuss.tooltips.commands.subcommands.SendThemeCommand;
 import fi.septicuss.tooltips.commands.subcommands.VarsCommand;
-import fi.septicuss.tooltips.integrations.AreaProvider;
-import fi.septicuss.tooltips.integrations.FurnitureProvider;
-import fi.septicuss.tooltips.integrations.IntegratedPlugin;
-import fi.septicuss.tooltips.integrations.PacketProvider;
-import fi.septicuss.tooltips.integrations.axgens.AxGensIntegration;
-import fi.septicuss.tooltips.integrations.axgens.LookingAtAxGen;
-import fi.septicuss.tooltips.integrations.crucible.CrucibleFurnitureProvider;
-import fi.septicuss.tooltips.integrations.itemsadder.ItemsAdderFurnitureProvider;
-import fi.septicuss.tooltips.integrations.oraxen.OraxenFurnitureProvider;
-import fi.septicuss.tooltips.integrations.packetevents.PacketEventsPacketProvider;
-import fi.septicuss.tooltips.integrations.papi.TooltipsExpansion;
-import fi.septicuss.tooltips.integrations.protocollib.ProtocolLibPacketProvider;
-import fi.septicuss.tooltips.integrations.worldguard.WorldGuardAreaProvider;
 import fi.septicuss.tooltips.listener.PlayerConnectionListener;
 import fi.septicuss.tooltips.listener.PlayerInteractListener;
 import fi.septicuss.tooltips.listener.PlayerMovementListener;
@@ -55,6 +42,9 @@ import fi.septicuss.tooltips.managers.condition.impl.TileEntityNbtEquals;
 import fi.septicuss.tooltips.managers.condition.impl.Time;
 import fi.septicuss.tooltips.managers.condition.impl.World;
 import fi.septicuss.tooltips.managers.icon.IconManager;
+import fi.septicuss.tooltips.managers.integration.IntegrationManager;
+import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
+import fi.septicuss.tooltips.managers.integration.impl.papi.TooltipsExpansion;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
@@ -68,9 +58,7 @@ import fi.septicuss.tooltips.pack.impl.TextureGenerator;
 import fi.septicuss.tooltips.pack.impl.ThemeGenerator;
 import fi.septicuss.tooltips.utils.FileSetup;
 import fi.septicuss.tooltips.utils.Messaging;
-import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
-import fi.septicuss.tooltips.utils.cache.player.LookingAtCache;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
@@ -79,16 +67,13 @@ import fi.septicuss.tooltips.utils.placeholder.impl.SimplePlaceholderParser;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 public class Tooltips extends JavaPlugin {
@@ -99,8 +84,8 @@ public class Tooltips extends JavaPlugin {
 	private static Tooltips INSTANCE;
 	private static Logger LOGGER;
 	private static boolean USE_SPACES;
-	private static int CHECK_FREQUENCY = 3;
 
+	private IntegrationManager integrationManager;
 	private TitleManager titleManager;
 	private SchemaManager schemaManager;
 	private IconManager iconManager;
@@ -108,11 +93,6 @@ public class Tooltips extends JavaPlugin {
 	private PresetManager presetManager;
 	private ConditionManager conditionManager;
 	private TooltipManager tooltipManager;
-
-	private IntegratedPlugin packetPlugin;
-	private PacketProvider packetProvider;
-	private FurnitureProvider furnitureProvider;
-	private AreaProvider areaProvider;
 
 	private PlayerInteractListener playerInteractListener;
 
@@ -160,13 +140,6 @@ public class Tooltips extends JavaPlugin {
 		loadIntegrations();
 		loadListeners();
 
-		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-			TooltipsExpansion expansion = new TooltipsExpansion();
-			if (expansion.isRegistered())
-				expansion.unregister();
-			expansion.register();
-		}
-
 		titleManager = new TitleManager(this);
 		conditionManager = new ConditionManager();
 
@@ -177,9 +150,6 @@ public class Tooltips extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		//if (this.runnableManager != null)
-		//	this.runnableManager.stop();
-
 		if (this.tooltipManager != null)
 			this.tooltipManager.stopTasks();
 
@@ -222,104 +192,15 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void loadIntegrations() {
-
-		PluginManager pluginManager = Bukkit.getPluginManager();
-
-		// For each IntegratedPlugin, check if enabled on the server
-		for (IntegratedPlugin integratedPlugin : IntegratedPlugin.values()) {
-
-			final var bukkitPlugin = pluginManager.getPlugin(integratedPlugin.getName());
-			final boolean required = integratedPlugin.isRequired();
-			final boolean enabled = bukkitPlugin != null;
-
-			// Required plugin not present
-			if (!enabled && required) {
-				log(integratedPlugin.getName() + " is required to run Tooltips");
-				pluginManager.disablePlugin(this);
-				return;
-			}
-
-			integratedPlugin.setEnabled(enabled);
-		}
-
-		final String preferredFurniturePlugin = getConfig().getString("furniture-plugin", "automatic").toLowerCase();
-		final boolean chooseAutomatically = (preferredFurniturePlugin.equals("auto")
-				|| preferredFurniturePlugin.equals("automatic"));
-
-		// Load providers for appropriate furniture plugins
-		for (IntegratedPlugin furniturePlugin : IntegratedPlugin.FURNITURE_PLUGINS) {
-
-			if (!furniturePlugin.isEnabled()) {
-				continue;
-			}
-
-			if (chooseAutomatically || preferredFurniturePlugin.equalsIgnoreCase(furniturePlugin.getName())) {
-
-				this.furnitureProvider = switch (furniturePlugin) {
-				case ORAXEN -> new OraxenFurnitureProvider();
-				case ITEMSADDER -> new ItemsAdderFurnitureProvider();
-				case CRUCIBLE -> new CrucibleFurnitureProvider();
-				default -> null;
-				};
-
-				if (this.furnitureProvider != null) {
-					log("Used furniture plugin: " + this.furnitureProvider.getClass().getSimpleName());
-					break;
-				}
-
-			}
-		}
-
-		// Load area provider for appropriate area plugins
-		for (IntegratedPlugin areaPlugin : IntegratedPlugin.AREA_PLUGINS) {
-
-			if (!areaPlugin.isEnabled()) {
-				continue;
-			}
-
-			this.areaProvider = switch (areaPlugin) {
-			case WORLDGUARD -> new WorldGuardAreaProvider();
-			default -> null;
-			};
-
-		}
-		
-		// Load providers for appropriate packet plugins
-		for (IntegratedPlugin packetPlugin : IntegratedPlugin.PACKET_PLUGINS) {
-			
-			if (!packetPlugin.isEnabled()) {
-				continue;
-			}
-
-			
-			this.packetProvider = switch (packetPlugin) {
-			case PACKETEVENTS -> new PacketEventsPacketProvider();
-			case PROTOCOLLIB -> new ProtocolLibPacketProvider();
-			default -> null;
-			};
-			
-			if (this.packetProvider != null) {
-				this.packetPlugin = packetPlugin;
-				break;
-			}
-			
-		}
-		
-		if (this.packetProvider == null) {
-			log("No supported packet plugin found! Tooltips requires either ProtocolLib or PacketEvents.");
-			pluginManager.disablePlugin(this);
-			return;
-		}
-
-		AxGensIntegration.registerIntegration();
-
+		this.integrationManager = new IntegrationManager(this);
+		this.integrationManager.registerDefaultIntegrations();
 	}
 
 	private void loadListeners() {
 		PluginManager pluginManager = Bukkit.getPluginManager();
 
-		if (this.areaProvider != null) {
-			pluginManager.registerEvents(new PlayerMovementListener(this.areaProvider), this);
+		if (!this.integrationManager.getAreaProviders().isEmpty()) {
+			pluginManager.registerEvents(new PlayerMovementListener(this.integrationManager), this);
 		}
 
 		this.playerInteractListener = new PlayerInteractListener();
@@ -352,12 +233,10 @@ public class Tooltips extends JavaPlugin {
 		this.reloadConfig();
 
 		clearCache();
-		fillCache();
 
 		FileSetup.setupFiles(this);
 
 		USE_SPACES = this.getConfig().getBoolean("use-spaces", true);
-		CHECK_FREQUENCY = this.getConfig().getInt("condition-check-frequency", 3);
 
 		this.schemaManager = new SchemaManager();
 		this.iconManager = new IconManager();
@@ -384,19 +263,9 @@ public class Tooltips extends JavaPlugin {
 
 		this.tooltipManager.runTasks();
 
-
-
 		if (this.playerInteractListener != null)
 			playerInteractListener.setTooltipManager(this.tooltipManager);
 
-	}
-
-	private void fillCache() {
-		Bukkit.getScheduler().runTaskLater(this, () -> {
-			if (furnitureProvider != null) {
-				FurnitureCache.cacheAll(furnitureProvider.getAllFurniture());
-			}
-		}, 40L);
 	}
 
 	private void clearCache() {
@@ -423,55 +292,6 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void addLocalPlaceholders() {
-
-		if (furnitureProvider != null) {
-			Placeholders.addLocal("furniture", new SimplePlaceholderParser((p, s) -> {
-				if (!s.equalsIgnoreCase("furniture_id") && !s.equalsIgnoreCase("furniture_name")) {
-					return null;
-				}
-
-				final boolean name = s.equalsIgnoreCase("furniture_name");
-
-				// Already cached by LookingAtFurniture condition
-				if (LookingAtCache.contains(p)) {
-					final String cachedId = LookingAtCache.get(p);
-					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, cachedId) : cachedId);
-				}
-
-				Predicate<Block> blockPredicate = (block -> {
-					if (block == null)
-						return false;
-					return furnitureProvider.isFurniture(block);
-				});
-
-				Predicate<Entity> entityFilter = (entity -> {
-					if (entity == null)
-						return false;
-					if (entity.equals(p))
-						return false;
-					return Tooltips.FURNITURE_ENTITIES.contains(entity.getType());
-				});
-
-				var rayTrace = Utils.getRayTrace(p, 10, blockPredicate, entityFilter);
-
-				if (rayTrace == null)
-					return null;
-
-				if (rayTrace.getHitBlock() != null) {
-					final Block hitBlock = rayTrace.getHitBlock();
-					final String id = furnitureProvider.getFurnitureId(hitBlock);
-					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
-				}
-
-				if (rayTrace.getHitEntity() != null) {
-					final Entity hitEntity = rayTrace.getHitEntity();
-					final String id = furnitureProvider.getFurnitureId(hitEntity);
-					return (name ? Utils.getFurnitureDisplayName(furnitureProvider, id) : id);
-				}
-
-				return null;
-			}));
-		}
 
 		Placeholders.addLocal("var", new SimplePlaceholderParser((p, s) -> {
 			if (!s.startsWith("var_"))
@@ -527,7 +347,11 @@ public class Tooltips extends JavaPlugin {
 	public static Tooltips get() {
 		return INSTANCE;
 	}
-	
+
+	public IntegrationManager getIntegrationManager() {
+		return integrationManager;
+	}
+
 	public TitleManager getTitleManager() {
 		return titleManager;
 	}
@@ -552,20 +376,8 @@ public class Tooltips extends JavaPlugin {
 		return tooltipManager;
 	}
 	
-	public PacketProvider getPacketProvider() {
-		return packetProvider;
-	}
-	
-	public IntegratedPlugin getPacketPlugin() {
-		return packetPlugin;
-	}
-
-	public FurnitureProvider getFurnitureProvider() {
-		return furnitureProvider;
-	}
-
 	public int getCheckFrequency() {
-		return CHECK_FREQUENCY;
+		return this.getConfig().getInt("condition-check-frequency", 3);
 	}
 
 	public static Logger logger() {
