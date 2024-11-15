@@ -360,6 +360,10 @@ public class Tooltips extends JavaPlugin {
 		return presetManager;
 	}
 
+	public SchemaManager getSchemaManager() {
+		return schemaManager;
+	}
+
 	public ConditionManager getConditionManager() {
 		return conditionManager;
 	}
