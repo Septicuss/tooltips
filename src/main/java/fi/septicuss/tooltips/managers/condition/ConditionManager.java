@@ -2,6 +2,7 @@ package fi.septicuss.tooltips.managers.condition;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.managers.condition.parser.ArgumentParser;
@@ -21,8 +22,7 @@ public class ConditionManager {
 	public ConditionManager() {
 		
 		this.registeredConditions = new HashMap<>();
-		this.registeredConditions.putAll(TooltipsAPI.getRegisteredConditions());
-		
+
 		this.argumentParser = new ArgumentParser();
 		this.conditionParser = new ConditionParser(this, argumentParser);
 		this.compositeParser = new CompositeConditionParser(conditionParser);
@@ -32,6 +32,14 @@ public class ConditionManager {
 
 	public void register(String name, Condition condition) {
 		registeredConditions.put(name, condition);
+	}
+
+	public void unregister(String name) {
+		registeredConditions.remove(name);
+	}
+
+	public Set<String> getConditions() {
+		return this.registeredConditions.keySet();
 	}
 
 	public boolean exists(String name) {

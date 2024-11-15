@@ -44,7 +44,6 @@ import fi.septicuss.tooltips.managers.condition.impl.World;
 import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
-import fi.septicuss.tooltips.managers.integration.impl.papi.TooltipsExpansion;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
@@ -127,11 +126,6 @@ public class Tooltips extends JavaPlugin {
 	// ------------------------------------------------------
 
 	@Override
-	public void onLoad() {
-		registerDefaultConditions();
-	}
-	
-	@Override
 	public void onEnable() {
 		FileSetup.performMigration(this);
 		FileSetup.setupFiles(this);
@@ -142,6 +136,8 @@ public class Tooltips extends JavaPlugin {
 
 		titleManager = new TitleManager(this);
 		conditionManager = new ConditionManager();
+
+		registerDefaultConditions();
 
 		addLocalPlaceholders();
 		loadCommands();
@@ -159,31 +155,31 @@ public class Tooltips extends JavaPlugin {
 	// ------------------------------------------------------
 
 	private void registerDefaultConditions() {
-		TooltipsAPI.registerCondition("day", new Day());
-		TooltipsAPI.registerCondition("night", new Night());
-		TooltipsAPI.registerCondition("world", new World());
-		TooltipsAPI.registerCondition("gamemode", new Gamemode());
-		TooltipsAPI.registerCondition("sneaking", new Sneaking());
-		TooltipsAPI.registerCondition("compare", new Compare());
-		TooltipsAPI.registerCondition("lookingatblock", new LookingAtBlock());
-		TooltipsAPI.registerCondition("lookingatfurniture", new LookingAtFurniture());
-		TooltipsAPI.registerCondition("lookingatentity", new LookingAtEntity());
-		TooltipsAPI.registerCondition("lookingatmythicmob", new LookingAtMythicMob());
-		TooltipsAPI.registerCondition("region", new Region());
-		TooltipsAPI.registerCondition("incuboid", new InCuboid());
-		TooltipsAPI.registerCondition("location", new Location());
-		TooltipsAPI.registerCondition("standingon", new StandingOn());
-		TooltipsAPI.registerCondition("itemnbtequals", new ItemNbtEquals());
-		TooltipsAPI.registerCondition("entitynbtequals", new EntityNbtEquals());
-		TooltipsAPI.registerCondition("tileentitynbtequals", new TileEntityNbtEquals());
-		TooltipsAPI.registerCondition("blocknbtequals", new BlockNbtEquals());
-		TooltipsAPI.registerCondition("blockstateequals", new BlockStateEquals());
-		TooltipsAPI.registerCondition("time", new Time());
-		TooltipsAPI.registerCondition("equipped", new Equipped());
-		TooltipsAPI.registerCondition("op", new Op());
-		TooltipsAPI.registerCondition("lookingatcitizen", new LookingAtCitizen());
-		TooltipsAPI.registerCondition("permission", new Permission());
-		TooltipsAPI.registerCondition("lookingataxgen", new LookingAtAxGen());
+		TooltipsAPI.addCondition("day", new Day());
+		TooltipsAPI.addCondition("night", new Night());
+		TooltipsAPI.addCondition("world", new World());
+		TooltipsAPI.addCondition("gamemode", new Gamemode());
+		TooltipsAPI.addCondition("sneaking", new Sneaking());
+		TooltipsAPI.addCondition("compare", new Compare());
+		TooltipsAPI.addCondition("lookingatblock", new LookingAtBlock());
+		TooltipsAPI.addCondition("lookingatfurniture", new LookingAtFurniture());
+		TooltipsAPI.addCondition("lookingatentity", new LookingAtEntity());
+		TooltipsAPI.addCondition("lookingatmythicmob", new LookingAtMythicMob());
+		TooltipsAPI.addCondition("region", new Region());
+		TooltipsAPI.addCondition("incuboid", new InCuboid());
+		TooltipsAPI.addCondition("location", new Location());
+		TooltipsAPI.addCondition("standingon", new StandingOn());
+		TooltipsAPI.addCondition("itemnbtequals", new ItemNbtEquals());
+		TooltipsAPI.addCondition("entitynbtequals", new EntityNbtEquals());
+		TooltipsAPI.addCondition("tileentitynbtequals", new TileEntityNbtEquals());
+		TooltipsAPI.addCondition("blocknbtequals", new BlockNbtEquals());
+		TooltipsAPI.addCondition("blockstateequals", new BlockStateEquals());
+		TooltipsAPI.addCondition("time", new Time());
+		TooltipsAPI.addCondition("equipped", new Equipped());
+		TooltipsAPI.addCondition("op", new Op());
+		TooltipsAPI.addCondition("lookingatcitizen", new LookingAtCitizen());
+		TooltipsAPI.addCondition("permission", new Permission());
+		TooltipsAPI.addCondition("lookingataxgen", new LookingAtAxGen());
 	}
 	
 	private void loadVariables() {

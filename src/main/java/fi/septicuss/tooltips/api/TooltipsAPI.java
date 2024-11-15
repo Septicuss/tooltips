@@ -8,27 +8,24 @@ import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TooltipsAPI {
 
-    private static final Map<String, Condition> REGISTERED_CONDITIONS = new ConcurrentHashMap<>();
-
-    public static void registerCondition(String name, Condition condition) {
-        REGISTERED_CONDITIONS.put(name, condition);
+    public static void addCondition(@Nonnull String name, @Nonnull Condition condition) {
+        Tooltips.get().getConditionManager().register(name, condition);
     }
 
-    public static void unregisterCondition(String name) {
-        REGISTERED_CONDITIONS.remove(name);
+    public static void removeCondition(@Nonnull String name) {
+        Tooltips.get().getConditionManager().unregister(name);
     }
 
-    public static Map<String, Condition> getRegisteredConditions() {
-        return Collections.unmodifiableMap(REGISTERED_CONDITIONS);
+    public static Set<String> getConditions() {
+        return Tooltips.get().getConditionManager().getConditions();
     }
 
     public static void sendTooltip(Player player, Preset preset) {
