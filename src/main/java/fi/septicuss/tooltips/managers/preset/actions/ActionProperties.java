@@ -9,7 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class ActionProperties {
 
-	private Map<TooltipAction, List<String>> actionCommands;
+	private final Map<String, List<String>> actionCommands;
 	
 	private ActionProperties(ConfigurationSection actionsSection) {
 		
@@ -18,29 +18,23 @@ public class ActionProperties {
 		if (actionsSection == null) {
 			return;
 		}
-		
-		for (var action : TooltipAction.values()) {
-			String readableAction = action.toString().toLowerCase().replace("_", "-");
-			
-			if (!actionsSection.contains(readableAction)) {
-				continue;
-			}
-			
 
-			this.actionCommands.put(action, actionsSection.getStringList(readableAction));
+
+		for (String key : actionsSection.getKeys(false)) {
+			this.actionCommands.put(key, actionsSection.getStringList(key));
 		}
-		
+
 	}
 	
 	public boolean hasAnyActions() {
 		return !actionCommands.isEmpty();
 	}
 	
-	public boolean hasAction(TooltipAction action) {
+	public boolean hasAction(String action) {
 		return actionCommands.containsKey(action);
 	}
 	
-	public List<String> getCommandsForAction(TooltipAction action) {
+	public List<String> getCommandsForAction(String action) {
 		return Collections.unmodifiableList(actionCommands.get(action));
 	}
 	
@@ -48,20 +42,4 @@ public class ActionProperties {
 		return new ActionProperties(actionsSection);
 	}
 	
-	public enum TooltipAction {
-		LEFT_CLICK,
-		LEFT_CLICK_BLOCK,
-		LEFT_CLICK_AIR,
-		LEFT_CLICK_ENTITY,
-		RIGHT_CLICK,
-		RIGHT_CLICK_BLOCK,
-		RIGHT_CLICK_AIR,
-		RIGHT_CLICK_ENTITY,
-		ON_SHOW,
-		ON_STOP_SHOWING;
-	}
-
-
-
-
 }

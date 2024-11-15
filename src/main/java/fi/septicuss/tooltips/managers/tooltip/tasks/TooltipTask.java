@@ -2,6 +2,7 @@ package fi.septicuss.tooltips.managers.tooltip.tasks;
 
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
+import fi.septicuss.tooltips.managers.preset.actions.DefaultTooltipAction;
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
@@ -114,7 +115,7 @@ public class TooltipTask extends BukkitRunnable {
 
     }
 
-    public void runActions(ActionProperties.TooltipAction action, Player player) {
+    public void runActions(String action, Player player) {
         final PlayerTooltipData data = manager.getPlayerTooltipData(player);
 
         if (!data.hasDisplayedPreset()) {
@@ -190,7 +191,7 @@ public class TooltipTask extends BukkitRunnable {
             data.addCooldown(CooldownType.STAY, stay - EXTRA_DELAY_TICKS);
 
             if (firstTime && !data.hasTextChanged()) {
-                runActions(ActionProperties.TooltipAction.ON_SHOW, player);
+                runActions(DefaultTooltipAction.ON_SHOW, player);
             }
 
             return;
@@ -216,7 +217,7 @@ public class TooltipTask extends BukkitRunnable {
         data.setFirstTime(false);
 
         if (!data.hasTextChanged()) {
-            runActions(ActionProperties.TooltipAction.ON_SHOW, player);
+            runActions(DefaultTooltipAction.ON_SHOW, player);
         }
 
     }
@@ -249,7 +250,7 @@ public class TooltipTask extends BukkitRunnable {
             }
 
             if (!data.hasTextChanged()) {
-                runActions(ActionProperties.TooltipAction.ON_STOP_SHOWING, player);
+                runActions(DefaultTooltipAction.ON_STOP_SHOWING, player);
             }
 
             data.removeCooldown(CooldownType.STAY);
@@ -264,7 +265,7 @@ public class TooltipTask extends BukkitRunnable {
         }
 
         if (!data.hasTextChanged()) {
-            runActions(ActionProperties.TooltipAction.ON_STOP_SHOWING, player);
+            runActions(DefaultTooltipAction.ON_STOP_SHOWING, player);
         }
 
         data.removeCooldown(CooldownType.STAY);

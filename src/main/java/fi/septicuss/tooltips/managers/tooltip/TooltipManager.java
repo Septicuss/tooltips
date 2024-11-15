@@ -4,7 +4,6 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.StatementHolder;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
-import fi.septicuss.tooltips.managers.preset.actions.ActionProperties.TooltipAction;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.title.TitleManager;
 import fi.septicuss.tooltips.managers.tooltip.build.TooltipBuilder;
@@ -88,7 +87,7 @@ public class TooltipManager {
 		return playerTooltipData.computeIfAbsent(uuid, PlayerTooltipData::new);
 	}
 
-	public void runActions(TooltipAction action, Player player) {
+	public void runActions(String action, Player player) {
 		if (this.tooltipTask != null)
 			this.tooltipTask.runActions(action, player);
 	}
