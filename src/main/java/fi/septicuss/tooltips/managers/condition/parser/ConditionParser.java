@@ -27,24 +27,8 @@ public class ConditionParser implements Parser<ParsedCondition> {
 
 		// Brackets missing / misplaced
 		if (!endsWithBracket || !hasOpeningBracket) {
-			final String name = from;
-			if (!conditionManager.exists(name)) {
-				warn("Failed to parse unknown condition " + quote(name) + " in preset " + quote(presetName) + " (1)");
-				return null;
-			}
-
-			Condition condition = conditionManager.get(name);
-			Arguments args = new Arguments();
-			Validity validity = condition.valid(args);
-
-			if (validity == null || !validity.isValid()) {
-				warn("Failed to parse condition " + quote(from) + " in preset " + quote(presetName) + "");
-				if (validity.hasReason())
-					warn("  -> " + validity.getReason());
-				return null;
-			}
-
-			return new ParsedCondition(condition, args);
+			final Arguments args = new Arguments();
+			return new ParsedCondition(this.conditionManager, presetName, from, args);
 		}
 
 		String name = from.substring(0, firstBracket).strip();
@@ -55,19 +39,8 @@ public class ConditionParser implements Parser<ParsedCondition> {
 			return null;
 		}
 
-		Condition condition = conditionManager.get(name);
-		Arguments args = argumentParser.parse(presetName, argLine);
-
-		Validity validity = condition.valid(args);
-
-		if (!validity.isValid()) {
-			warn("Failed to parse condition " + quote(from) + " in preset " + quote(presetName) + "");
-			if (validity.hasReason())
-				warn("  -> " + validity.getReason());
-			return null;
-		}
-
-		return new ParsedCondition(condition, args);
+		final Arguments args = argumentParser.parse(presetName, argLine);
+		return new ParsedCondition(this.conditionManager, presetName, name, args);
 	}
 
 }

@@ -1,29 +1,51 @@
 package fi.septicuss.tooltips.managers.condition.parser;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.ConditionManager;
 import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.utils.validation.Validity;
 import org.bukkit.entity.Player;
 
 public class ParsedCondition {
 
-	private Condition condition;
-	private Arguments args;
+	private final ConditionManager conditionManager;
+	private final String presetName;
+	private final String conditionName;
+	private final Arguments args;
 
-	public ParsedCondition(Condition condition, Arguments args) {
-		this.condition = condition;
+	public ParsedCondition(ConditionManager conditionManager, String presetName, String conditionName, Arguments args) {
+		this.conditionManager = conditionManager;
+		this.conditionName = conditionName;
+		this.presetName = presetName;
 		this.args = args;
 	}
 
 	public boolean check(Player player, Context context) {
-		if (condition == null)
+		final Condition condition = this.getCondition();
+
+		if (condition == null) {
+			Tooltips.warn("Tried to run an unknown condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName));
 			return false;
+		}
+
+		final Validity validity = condition.valid(args);
+
+		if (!validity.isValid()) {
+			Tooltips.warn("Failed to parse condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName) + "");
+			if (validity.hasReason()) {
+				Tooltips.warn("  -> " + validity.getReason());
+			}
+			return false;
+		}
 
 		return condition.check(player, args, context);
 	}
 
 	public Condition getCondition() {
-		return condition;
+		return this.conditionManager.get(this.conditionName);
 	}
 
 	public Arguments getArgs() {
@@ -32,7 +54,7 @@ public class ParsedCondition {
 
 	@Override
 	public String toString() {
-		return "ParsedCondition [condition=" + condition + ", args=" + args + "]";
+		return "ParsedCondition [condition=" + conditionName + ", args=" + args + "]";
 	}
 
 }

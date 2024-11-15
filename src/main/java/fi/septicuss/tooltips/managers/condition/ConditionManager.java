@@ -11,12 +11,12 @@ import fi.septicuss.tooltips.managers.condition.parser.StatementParser;
 
 public class ConditionManager {
 
-	private Map<String, Condition> registeredConditions;
+	private final Map<String, Condition> registeredConditions;
 
-	private ArgumentParser argumentParser;
-	private ConditionParser conditionParser;
-	private CompositeConditionParser compositeParser;
-	private StatementParser statementParser;
+	private final ArgumentParser argumentParser;
+	private final ConditionParser conditionParser;
+	private final CompositeConditionParser compositeParser;
+	private final StatementParser statementParser;
 
 	public ConditionManager() {
 		
