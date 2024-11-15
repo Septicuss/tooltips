@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.integration.wrappers;
+package fi.septicuss.tooltips.managers.title;
 
 import fi.septicuss.tooltips.managers.integration.providers.PacketProvider;
 import org.bukkit.entity.Player;

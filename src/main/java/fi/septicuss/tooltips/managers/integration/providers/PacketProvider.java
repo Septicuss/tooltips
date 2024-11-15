@@ -1,6 +1,6 @@
 package fi.septicuss.tooltips.managers.integration.providers;
 
-import fi.septicuss.tooltips.managers.integration.wrappers.Title;
+import fi.septicuss.tooltips.managers.title.Title;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;

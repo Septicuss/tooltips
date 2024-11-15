@@ -2,11 +2,9 @@ package fi.septicuss.tooltips.managers.title;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.integration.providers.PacketProvider;
-import fi.septicuss.tooltips.managers.integration.wrappers.Title;
 import fi.septicuss.tooltips.utils.AdventureUtils;
 import net.kyori.adventure.text.Component;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class TitleManager {

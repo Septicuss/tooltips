@@ -5,7 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.managers.integration.wrappers.Title;
+import fi.septicuss.tooltips.managers.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

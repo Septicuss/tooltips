@@ -5,7 +5,7 @@ import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetTitleSubtitle;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetTitleText;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetTitleTimes;
-import fi.septicuss.tooltips.managers.integration.wrappers.Title;
+import fi.septicuss.tooltips.managers.title.Title;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
