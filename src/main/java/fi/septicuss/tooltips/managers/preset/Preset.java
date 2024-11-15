@@ -7,7 +7,6 @@ import fi.septicuss.tooltips.managers.condition.Statement;
 import fi.septicuss.tooltips.managers.condition.StatementHolder;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
-import fi.septicuss.tooltips.managers.preset.width.WidthProperties;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.utils.validation.Validatable;
@@ -50,7 +49,6 @@ public class Preset implements Validatable {
      * PROPERTIES
      */
     private ShowProperties showProperties;
-    private WidthProperties widthProperties;
     private ActionProperties actionProperties;
 
     /**
@@ -78,7 +76,6 @@ public class Preset implements Validatable {
             this.fadeOut = parent.getFadeOut();
             this.statementHolder = parent.getStatementHolder();
             this.showProperties = parent.getShowProperties();
-            this.widthProperties = parent.getWidthProperties();
             this.actionProperties = parent.getActionProperties();
         }
 
@@ -177,12 +174,6 @@ public class Preset implements Validatable {
         if (actionsSection != null || actionProperties == null)
             actionProperties = ActionProperties.of(actionsSection);
 
-        // Widths
-        ConfigurationSection widthSection = section.getConfigurationSection("width");
-
-        if (widthSection != null || widthProperties == null)
-            widthProperties = WidthProperties.of(widthSection);
-
         valid = true;
     }
 
@@ -238,10 +229,6 @@ public class Preset implements Validatable {
 
     public ActionProperties getActionProperties() {
         return actionProperties;
-    }
-
-    public WidthProperties getWidthProperties() {
-        return widthProperties;
     }
 
     @Override
