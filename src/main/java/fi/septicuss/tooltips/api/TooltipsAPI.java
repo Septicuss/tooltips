@@ -28,6 +28,10 @@ public class TooltipsAPI {
         return Tooltips.get().getConditionManager().getConditions();
     }
 
+    public static void runAction(@Nonnull String action, @Nonnull Player player) {
+        Tooltips.get().getTooltipManager().runActions(action, player);
+    }
+
     public static void sendTooltip(Player player, Preset preset) {
         if (player == null) throw new NullPointerException("Player cannot be null");
         if (preset == null) throw new NullPointerException("Preset cannot be null");
