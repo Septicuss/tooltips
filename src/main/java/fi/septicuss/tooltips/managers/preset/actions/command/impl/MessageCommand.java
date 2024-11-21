@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.preset.actions.command.impl;
 
+import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
@@ -14,7 +15,7 @@ public class MessageCommand implements ActionCommand {
 	public void run(Player player, Arguments arguments) {
 		
 		String message = appendFrom(convertArgumentsToArray(arguments), 0);
-		message = Utils.color(Placeholders.replacePlaceholders(player, message));
+		message = Utils.color(Text.processText(player, message));
 		
 		player.sendMessage(message);
 		

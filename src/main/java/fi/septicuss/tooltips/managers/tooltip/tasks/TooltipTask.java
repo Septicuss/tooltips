@@ -4,11 +4,13 @@ import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
 import fi.septicuss.tooltips.managers.preset.actions.DefaultTooltipAction;
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
+import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.CooldownType;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
+import fi.septicuss.tooltips.utils.Text;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import org.bukkit.Bukkit;
@@ -135,7 +137,7 @@ public class TooltipTask extends BukkitRunnable {
             return;
         }
 
-        final List<String> commands = Placeholders.replacePlaceholders(player, actions.getCommandsForAction(action));
+        final List<String> commands = Text.processText(player, actions.getCommandsForAction(action));
         commands.forEach(command -> {
             final String consoleCommand = command.replace("%player%", player.getName());
 
@@ -295,7 +297,7 @@ public class TooltipTask extends BukkitRunnable {
     }
 
     private ArrayList<String> process(Player player, List<String> text) {
-        return (ArrayList<String>) Placeholders.replacePlaceholders(player, text);
+        return new ArrayList<>(Text.processText(player, text));
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import fi.septicuss.tooltips.utils.Text;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import org.bukkit.entity.Player;
 
@@ -56,7 +57,7 @@ public class TooltipCache {
 	}
 
 	private static int getHashCode(Player player, List<String> unprocessedText) {
-		List<String> processed = Placeholders.replacePlaceholders(player, unprocessedText);
+		List<String> processed = Text.processText(player, unprocessedText);
 		return processed.hashCode();
 	}
 

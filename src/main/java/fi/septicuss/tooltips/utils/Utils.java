@@ -23,6 +23,55 @@ public class Utils {
 
 	private static final char COLOR_CHAR = ChatColor.COLOR_CHAR;
 	private static final Pattern PATTERN = Pattern.compile("#" + "([A-Fa-f0-9]{6})");
+	private static final char DELIMITER = '\uF0A2';
+
+	public static boolean isSurroundedByQuotes(String value) {
+		if (value.startsWith("\"") && value.endsWith("\"")) {
+			return true;
+		}
+		return value.startsWith("'") && value.endsWith("'");
+	}
+
+
+	public static String[] splitStringQuotations(final String string, final char separator) {
+		return placeDelimiters(string).split(String.valueOf(DELIMITER));
+	}
+
+	private static String placeDelimiters(final String string) {
+		final StringBuilder modifiedStringBuilder = new StringBuilder(string);
+
+		char previousCharacter = DELIMITER;
+		char startingQuote = ' ';
+
+		for (int i = 0; i < string.length(); i++) {
+			final char character = string.charAt(i);
+
+			boolean isStartingQuoteUnset = (startingQuote == ' ');
+			boolean isQuoteCharacter = (character == '\"' || character == '\'');
+
+			if (isStartingQuoteUnset && isQuoteCharacter) {
+				startingQuote = character;
+				previousCharacter = character;
+				continue;
+			}
+
+			boolean charIsColon = (character == ',');
+			boolean lastCharWasQuote = previousCharacter == startingQuote;
+
+			if (isStartingQuoteUnset && charIsColon) {
+				modifiedStringBuilder.setCharAt(i, DELIMITER);
+			}
+
+			if (!isStartingQuoteUnset && lastCharWasQuote && charIsColon) {
+				modifiedStringBuilder.setCharAt(i, DELIMITER);
+				startingQuote = ' ';
+			}
+
+			previousCharacter = character;
+		}
+
+		return modifiedStringBuilder.toString();
+	}
 
 	public static String color(String message) {
 		Matcher matcher = PATTERN.matcher(message);

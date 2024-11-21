@@ -45,6 +45,8 @@ import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
+import fi.septicuss.tooltips.managers.preset.functions.Function;
+import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.managers.title.TitleManager;
@@ -288,6 +290,19 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void addLocalPlaceholders() {
+
+		Functions.add("test", (player, context, args) -> {
+
+
+
+			return "xxxx";
+		});
+
+		Functions.add("uppercase", (player, context, args) -> {
+			if (args.isEmpty())
+				return null;
+			return args.get(0).process(player).getAsString().toUpperCase();
+		});
 
 		Placeholders.addLocal("var", new SimplePlaceholderParser((p, s) -> {
 			if (!s.startsWith("var_"))

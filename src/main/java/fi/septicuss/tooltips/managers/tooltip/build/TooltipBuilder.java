@@ -4,13 +4,12 @@ import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.tooltip.Tooltip;
+import fi.septicuss.tooltips.managers.tooltip.build.element.BackgroundElement;
 import fi.septicuss.tooltips.managers.tooltip.build.element.TextLineElement;
 import fi.septicuss.tooltips.managers.tooltip.build.text.TextLine;
-import fi.septicuss.tooltips.managers.tooltip.build.element.BackgroundElement;
 import fi.septicuss.tooltips.utils.font.Spaces;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class TooltipBuilder {
         this.iconManager = iconManager;
     }
 
-    public Tooltip build(Player player, TooltipProperties tooltipProperties, List<String> unprocessedText) {
+    public Tooltip build(TooltipProperties tooltipProperties, List<String> unprocessedText) {
         final List<TextLineElement> textLineElements = new ArrayList<>();
         final List<TextLine> textLines = new ArrayList<>();
 
@@ -153,18 +152,12 @@ public class TooltipBuilder {
         return new Tooltip(builder.build());
     }
 
-    public Tooltip build(Player target, Preset preset, List<String> unprocessedText) {
-        if (unprocessedText == null || unprocessedText.isEmpty())
-            unprocessedText = preset.getText();
-
-        return build(target, TooltipProperties.from(preset), unprocessedText);
+    public Tooltip build(Preset preset, List<String> text) {
+        return build(TooltipProperties.from(preset), text);
     }
 
-    public Tooltip build(Player target, Theme theme, List<String> unprocessedText) {
-        return build(target, TooltipProperties.from(theme), unprocessedText);
+    public Tooltip build(Theme theme, List<String> text) {
+        return build(TooltipProperties.from(theme), text);
     }
 
-
-
-
-    }
+}

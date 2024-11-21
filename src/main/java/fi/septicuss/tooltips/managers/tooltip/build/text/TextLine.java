@@ -23,7 +23,7 @@ public class TextLine {
     private Key offsetFont;
     private Key iconFont;
     private boolean centered = false;
-    private String unprocessedText = "";
+    private String text = "";
 
     private IconManager iconManager;
 
@@ -37,11 +37,11 @@ public class TextLine {
         this.iconManager = iconManager;
         this.lineIndex = lineIndex;
         this.lineAscent = theme.getTextStartAscent() - (lineIndex * theme.getTextLineSpacing());
-        this.unprocessedText = unprocessedText;
+        this.text = unprocessedText;
 
-        if (this.unprocessedText.startsWith("||") && this.unprocessedText.endsWith("||")) {
+        if (this.text.startsWith("||") && this.text.endsWith("||")) {
             this.centered = true;
-            this.unprocessedText = unprocessedText.substring(2, unprocessedText.length() - 2);
+            this.text = unprocessedText.substring(2, unprocessedText.length() - 2);
         }
 
         final String regularFontFormat = "lines/" + LineGenerator.REGULAR_LINE_FORMAT;
@@ -56,14 +56,14 @@ public class TextLine {
     }
 
     public void processText() {
-        if (this.unprocessedText.contains("{") && this.unprocessedText.contains("}")) {
+        if (this.text.contains("{") && this.text.contains("}")) {
             final Set<String> iconPaths = this.iconManager.getIconPaths();
 
             // Replace icon placeholders {icon} with <icon:icon>
-            this.unprocessedText = replaceIconPlaceholders(this.unprocessedText, iconPaths);
+            this.text = replaceIconPlaceholders(this.text, iconPaths);
 
             // Replace offset placeholders {+x} or {-x} with <offset:x> or <offset:-x>
-            this.unprocessedText = replaceOffsets(this.unprocessedText);
+            this.text = replaceOffsets(this.text);
         }
     }
 
@@ -125,7 +125,7 @@ public class TextLine {
         return centered;
     }
 
-    public String getUnprocessedText() {
-        return unprocessedText;
+    public String getText() {
+        return text;
     }
 }

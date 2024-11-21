@@ -10,6 +10,7 @@ import fi.septicuss.tooltips.managers.tooltip.build.TooltipBuilder;
 import fi.septicuss.tooltips.managers.tooltip.tasks.ConditionTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.TooltipTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
+import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedHashMap;
@@ -41,12 +42,14 @@ public class TooltipManager {
 	}
 
 	public Tooltip getTooltip(Player target, Preset preset, List<String> unprocessedText) {
-		return this.tooltipBuilder.build(target, preset, unprocessedText);
+		if (unprocessedText == null || unprocessedText.isEmpty())
+			unprocessedText = preset.getText();
+
+		return this.tooltipBuilder.build(preset, Text.processText(target, unprocessedText));
 	}
 
-
 	public Tooltip getTooltip(Player target, Theme theme, List<String> unprocessedText) {
-		return this.tooltipBuilder.build(target, theme, unprocessedText);
+		return this.tooltipBuilder.build(theme, Text.processText(target, unprocessedText));
 	}
 
 	public void runTasks() {

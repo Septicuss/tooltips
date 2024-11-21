@@ -56,6 +56,8 @@ public class CompositeCondition {
 	}
 
 	public boolean check(Player player, Context context) {
+		if (context == null)
+			context = new Context();
 
 		if (!hasLeft() && !hasRight())
 			if (hasCondition()) {

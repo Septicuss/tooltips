@@ -12,7 +12,7 @@ import fi.septicuss.tooltips.managers.integration.impl.papi.PAPI;
 
 public class Placeholders {
 
-	private static Map<String, PlaceholderParser> LOCAL_PLACEHOLDERS = new HashMap<>();
+	private static final Map<String, PlaceholderParser> LOCAL_PLACEHOLDERS = new HashMap<>();
 
 	public static String replacePlaceholders(Player player, String str) {
 
@@ -39,9 +39,10 @@ public class Placeholders {
 					String placeholder = str.substring(i + 1, j);
 					String result = null;
 
-					if (LOCAL_PLACEHOLDERS.containsKey(placeholder.toLowerCase())) {
-						var parser = LOCAL_PLACEHOLDERS.get(placeholder.toLowerCase());
+					for (var parser : LOCAL_PLACEHOLDERS.values()) {
 						result = parser.parse(player, placeholder);
+						if (result != null)
+							break;
 					}
 
 					if (result != null) {
@@ -70,8 +71,10 @@ public class Placeholders {
 	}
 
 	public static List<String> replacePlaceholders(Player player, List<String> str) {
-		List<String> result = Lists.newArrayList();
-		str.forEach(line -> result.add(replacePlaceholders(player, line)));
+		final List<String> result = Lists.newArrayList();
+		for (String line : str) {
+			result.add(replacePlaceholders(player, line));
+		}
 		return result;
 	}
 

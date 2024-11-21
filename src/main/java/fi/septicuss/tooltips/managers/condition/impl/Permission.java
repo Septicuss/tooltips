@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
@@ -16,7 +17,7 @@ public class Permission implements Condition {
 	public boolean check(Player player, Arguments args) {
 		MultiString permissions = MultiString.of(args.get(PERMISSION).getAsString());
 		for (var permission : permissions.getStrings())
-			if (player.hasPermission(Placeholders.replacePlaceholders(player, permission)))
+			if (player.hasPermission(Text.processText(player, permission)))
 				return true;
 		return false;
 	}

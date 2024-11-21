@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -66,7 +67,7 @@ public class SendPresetCommand implements TooltipsSubCommand {
 				builder.append(args[i] + " ");
 			}
 			
-			String text = Placeholders.replacePlaceholders(target, builder.toString().trim());
+			String text = Text.processText(target, builder.toString().strip());
 			extra.addAll(Arrays.asList(text.split("\\\\n")));
 		}
 

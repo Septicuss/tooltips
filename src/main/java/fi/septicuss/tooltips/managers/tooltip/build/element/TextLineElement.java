@@ -51,14 +51,14 @@ public class TextLineElement implements TooltipElement{
             return this.component;
         }
 
-        if (this.textLine.getUnprocessedText().isEmpty()) {
+        if (this.textLine.getText().isEmpty()) {
             return null;
         }
 
         final TagResolver[] iconTagResolverArray = this.tagResolvers.toArray(new TagResolver[0]);
 
         final Component component = AdventureUtils.MINIMESSAGE
-                .deserialize(textLine.getUnprocessedText(), iconTagResolverArray);
+                .deserialize(textLine.getText(), iconTagResolverArray);
 
         final Iterator<Component> iterator = component.iterator(ComponentIteratorType.DEPTH_FIRST);
 

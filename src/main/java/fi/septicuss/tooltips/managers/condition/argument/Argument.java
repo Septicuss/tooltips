@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.condition.argument;
 
+import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
@@ -12,6 +13,10 @@ public class Argument {
 
 	public Argument(String value) {
 		this.value = value;
+	}
+
+	public Argument process(Player player) {
+		return new Argument(Text.processText(player, value));
 	}
 
 	public Argument replacePlaceholders(Player player) {

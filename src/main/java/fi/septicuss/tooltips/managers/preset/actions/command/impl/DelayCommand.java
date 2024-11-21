@@ -3,6 +3,7 @@ package fi.septicuss.tooltips.managers.preset.actions.command.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,7 @@ public class DelayCommand implements ActionCommand {
 		List<String> commandList = new ArrayList<>();
 
 		for (var command : commandString.split(";")) {
-			commandList.add(Placeholders.replacePlaceholders(player, command.strip()));
+			commandList.add(Text.processText(player, command.strip()));
 		}
 		
 		Bukkit.getScheduler().runTaskLater(Tooltips.get(), () -> {
