@@ -54,6 +54,7 @@ public class PresetManager {
 
 			for (String key : root.getKeys(false)) {
 				if (!root.isConfigurationSection(key)) continue;
+				if (key.equalsIgnoreCase("data")) continue; // Used by the $data function
 
 				final String presetPath = relativeName + "/" + key;
 				var section = root.getConfigurationSection(key);

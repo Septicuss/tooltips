@@ -16,6 +16,7 @@ public class Argument {
 	}
 
 	public Argument process(Player player) {
+		if (player == null) return this;
 		return new Argument(Text.processText(player, value));
 	}
 

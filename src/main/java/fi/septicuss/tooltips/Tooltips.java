@@ -3,7 +3,6 @@ package fi.septicuss.tooltips;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.commands.TooltipsCommand;
 import fi.septicuss.tooltips.commands.subcommands.DebugCommand;
 import fi.septicuss.tooltips.commands.subcommands.EvalCommand;
@@ -45,8 +44,9 @@ import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
-import fi.septicuss.tooltips.managers.preset.functions.Function;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
+import fi.septicuss.tooltips.managers.preset.functions.impl.DataFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.HasDataFunction;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.managers.title.TitleManager;
@@ -132,18 +132,15 @@ public class Tooltips extends JavaPlugin {
 		FileSetup.performMigration(this);
 		FileSetup.setupFiles(this);
 
-		loadVariables();
-		loadIntegrations();
-		loadListeners();
-
 		titleManager = new TitleManager(this);
 		conditionManager = new ConditionManager();
 
-		registerDefaultConditions();
-
-		addLocalPlaceholders();
-		loadCommands();
-		reload();
+		this.loadIntegrations();
+		this.reload();
+		this.loadVariables();
+		this.registerDefaultContent();
+		this.loadListeners();
+		this.loadCommands();
 	}
 
 	@Override
@@ -156,32 +153,97 @@ public class Tooltips extends JavaPlugin {
 
 	// ------------------------------------------------------
 
-	private void registerDefaultConditions() {
-		TooltipsAPI.addCondition("day", new Day());
-		TooltipsAPI.addCondition("night", new Night());
-		TooltipsAPI.addCondition("world", new World());
-		TooltipsAPI.addCondition("gamemode", new Gamemode());
-		TooltipsAPI.addCondition("sneaking", new Sneaking());
-		TooltipsAPI.addCondition("compare", new Compare());
-		TooltipsAPI.addCondition("lookingatblock", new LookingAtBlock());
-		TooltipsAPI.addCondition("lookingatfurniture", new LookingAtFurniture());
-		TooltipsAPI.addCondition("lookingatentity", new LookingAtEntity());
-		TooltipsAPI.addCondition("lookingatmythicmob", new LookingAtMythicMob());
-		TooltipsAPI.addCondition("region", new Region());
-		TooltipsAPI.addCondition("incuboid", new InCuboid());
-		TooltipsAPI.addCondition("location", new Location());
-		TooltipsAPI.addCondition("standingon", new StandingOn());
-		TooltipsAPI.addCondition("itemnbtequals", new ItemNbtEquals());
-		TooltipsAPI.addCondition("entitynbtequals", new EntityNbtEquals());
-		TooltipsAPI.addCondition("tileentitynbtequals", new TileEntityNbtEquals());
-		TooltipsAPI.addCondition("blocknbtequals", new BlockNbtEquals());
-		TooltipsAPI.addCondition("blockstateequals", new BlockStateEquals());
-		TooltipsAPI.addCondition("time", new Time());
-		TooltipsAPI.addCondition("equipped", new Equipped());
-		TooltipsAPI.addCondition("op", new Op());
-		TooltipsAPI.addCondition("lookingatcitizen", new LookingAtCitizen());
-		TooltipsAPI.addCondition("permission", new Permission());
-		TooltipsAPI.addCondition("lookingataxgen", new LookingAtAxGen());
+	private void registerDefaultContent() {
+		this.registerConditions();
+		this.registerLocalPlaceholders();
+		this.registerFunctions();
+	}
+
+	private void registerConditions() {
+		this.conditionManager.register("day", new Day());
+		this.conditionManager.register("night", new Night());
+		this.conditionManager.register("world", new World());
+		this.conditionManager.register("gamemode", new Gamemode());
+		this.conditionManager.register("sneaking", new Sneaking());
+		this.conditionManager.register("compare", new Compare());
+		this.conditionManager.register("lookingatblock", new LookingAtBlock());
+		this.conditionManager.register("lookingatfurniture", new LookingAtFurniture());
+		this.conditionManager.register("lookingatentity", new LookingAtEntity());
+		this.conditionManager.register("lookingatmythicmob", new LookingAtMythicMob());
+		this.conditionManager.register("region", new Region());
+		this.conditionManager.register("incuboid", new InCuboid());
+		this.conditionManager.register("location", new Location());
+		this.conditionManager.register("standingon", new StandingOn());
+		this.conditionManager.register("itemnbtequals", new ItemNbtEquals());
+		this.conditionManager.register("entitynbtequals", new EntityNbtEquals());
+		this.conditionManager.register("tileentitynbtequals", new TileEntityNbtEquals());
+		this.conditionManager.register("blocknbtequals", new BlockNbtEquals());
+		this.conditionManager.register("blockstateequals", new BlockStateEquals());
+		this.conditionManager.register("time", new Time());
+		this.conditionManager.register("equipped", new Equipped());
+		this.conditionManager.register("op", new Op());
+		this.conditionManager.register("lookingatcitizen", new LookingAtCitizen());
+		this.conditionManager.register("permission", new Permission());
+		this.conditionManager.register("lookingataxgen", new LookingAtAxGen());
+	}
+
+	private void registerFunctions() {
+		Functions.add("data", new DataFunction(this.presetManager));
+		Functions.add("hasdata", new HasDataFunction(this.presetManager));
+
+		System.out.println(Functions.parse(null, "default/preset", "HAS=$hasdata(test[2]) | DATA= $data(test[2])"));
+
+	}
+
+	private void registerLocalPlaceholders() {
+
+		Placeholders.addLocal("var", new SimplePlaceholderParser((p, s) -> {
+			if (!s.startsWith("var_"))
+				return null;
+			boolean global = s.startsWith("var_global_");
+			int cutIndex = (global ? 11 : 4);
+
+			String variableName = s.substring(cutIndex);
+			variableName = Placeholders.replacePlaceholders(p, variableName);
+
+			Argument returnArgument = null;
+
+			if (global) {
+				returnArgument = Variables.LOCAL.getVar(variableName);
+			} else {
+				returnArgument = Variables.LOCAL.getVar(p, variableName);
+			}
+
+			if (returnArgument == null || returnArgument.getAsString() == null)
+				return "0";
+
+			return returnArgument.getAsString();
+		}));
+
+		Placeholders.addLocal("persistentvar", new SimplePlaceholderParser((p, s) -> {
+			if (!s.startsWith("persistentvar_"))
+				return null;
+
+			boolean global = s.startsWith("persistentvar_global_");
+			int cutIndex = (global ? 21 : 14);
+
+			String variableName = s.substring(cutIndex);
+			variableName = Placeholders.replacePlaceholders(p, variableName);
+
+			Argument returnArgument = null;
+
+			if (global) {
+				returnArgument = Variables.PERSISTENT.getVar(variableName);
+			} else {
+				returnArgument = Variables.PERSISTENT.getVar(p, variableName);
+			}
+
+			if (returnArgument == null || returnArgument.getAsString() == null)
+				return "0";
+
+			return returnArgument.getAsString();
+		}));
+
 	}
 	
 	private void loadVariables() {
@@ -286,57 +348,6 @@ public class Tooltips extends JavaPlugin {
 		}
 
 		Widths.add(space);
-
-	}
-
-	private void addLocalPlaceholders() {
-
-		Placeholders.addLocal("var", new SimplePlaceholderParser((p, s) -> {
-			if (!s.startsWith("var_"))
-				return null;
-			boolean global = s.startsWith("var_global_");
-			int cutIndex = (global ? 11 : 4);
-
-			String variableName = s.substring(cutIndex);
-			variableName = Placeholders.replacePlaceholders(p, variableName);
-
-			Argument returnArgument = null;
-
-			if (global) {
-				returnArgument = Variables.LOCAL.getVar(variableName);
-			} else {
-				returnArgument = Variables.LOCAL.getVar(p, variableName);
-			}
-
-			if (returnArgument == null || returnArgument.getAsString() == null)
-				return "0";
-
-			return returnArgument.getAsString();
-		}));
-
-		Placeholders.addLocal("persistentvar", new SimplePlaceholderParser((p, s) -> {
-			if (!s.startsWith("persistentvar_"))
-				return null;
-
-			boolean global = s.startsWith("persistentvar_global_");
-			int cutIndex = (global ? 21 : 14);
-
-			String variableName = s.substring(cutIndex);
-			variableName = Placeholders.replacePlaceholders(p, variableName);
-
-			Argument returnArgument = null;
-
-			if (global) {
-				returnArgument = Variables.PERSISTENT.getVar(variableName);
-			} else {
-				returnArgument = Variables.PERSISTENT.getVar(p, variableName);
-			}
-
-			if (returnArgument == null || returnArgument.getAsString() == null)
-				return "0";
-
-			return returnArgument.getAsString();
-		}));
 
 	}
 
