@@ -64,7 +64,9 @@ import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
+import fi.septicuss.tooltips.utils.placeholder.impl.PersistentVariablePlaceholder;
 import fi.septicuss.tooltips.utils.placeholder.impl.SimplePlaceholderParser;
+import fi.septicuss.tooltips.utils.placeholder.impl.VariablePlaceholder;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -193,54 +195,8 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void registerLocalPlaceholders() {
-
-		Placeholders.addLocal("var", new SimplePlaceholderParser((p, s) -> {
-			if (!s.startsWith("var_"))
-				return null;
-			boolean global = s.startsWith("var_global_");
-			int cutIndex = (global ? 11 : 4);
-
-			String variableName = s.substring(cutIndex);
-			variableName = Placeholders.replacePlaceholders(p, variableName);
-
-			Argument returnArgument = null;
-
-			if (global) {
-				returnArgument = Variables.LOCAL.getVar(variableName);
-			} else {
-				returnArgument = Variables.LOCAL.getVar(p, variableName);
-			}
-
-			if (returnArgument == null || returnArgument.getAsString() == null)
-				return "0";
-
-			return returnArgument.getAsString();
-		}));
-
-		Placeholders.addLocal("persistentvar", new SimplePlaceholderParser((p, s) -> {
-			if (!s.startsWith("persistentvar_"))
-				return null;
-
-			boolean global = s.startsWith("persistentvar_global_");
-			int cutIndex = (global ? 21 : 14);
-
-			String variableName = s.substring(cutIndex);
-			variableName = Placeholders.replacePlaceholders(p, variableName);
-
-			Argument returnArgument = null;
-
-			if (global) {
-				returnArgument = Variables.PERSISTENT.getVar(variableName);
-			} else {
-				returnArgument = Variables.PERSISTENT.getVar(p, variableName);
-			}
-
-			if (returnArgument == null || returnArgument.getAsString() == null)
-				return "0";
-
-			return returnArgument.getAsString();
-		}));
-
+		Placeholders.addLocal("var", new VariablePlaceholder());
+		Placeholders.addLocal("persistentvar", new PersistentVariablePlaceholder());
 	}
 	
 	private void loadVariables() {
