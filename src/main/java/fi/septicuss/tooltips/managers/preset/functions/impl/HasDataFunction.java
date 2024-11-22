@@ -1,8 +1,8 @@
 package fi.septicuss.tooltips.managers.preset.functions.impl;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.preset.Preset;
-import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.functions.Function;
 import fi.septicuss.tooltips.managers.preset.functions.FunctionContext;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,10 +17,10 @@ public class HasDataFunction implements Function {
 
     private static final String FALSE = "false";
     private static final String TRUE = "true";
-    private final PresetManager presetManager;
+    private final Tooltips plugin;
 
-    public HasDataFunction(final PresetManager presetManager) {
-        this.presetManager = presetManager;
+    public HasDataFunction(final Tooltips plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class HasDataFunction implements Function {
     }
 
     private ConfigurationSection getPresetDataSection(final String presetPath) {
-        final Preset preset = presetManager.getPreset(presetPath);
+        final Preset preset = plugin.getPresetManager().getPreset(presetPath);
         if (preset == null || !preset.isValid()) return null;
 
         final ConfigurationSection section = preset.getSection().getParent();

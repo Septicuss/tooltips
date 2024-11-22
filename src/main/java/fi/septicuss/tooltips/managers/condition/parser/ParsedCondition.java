@@ -41,7 +41,13 @@ public class ParsedCondition {
 			return false;
 		}
 
-		return condition.check(player, args, context);
+		final boolean result = condition.check(player, args);
+
+		if (result) {
+			condition.writeContext(player, args, context);
+		}
+
+		return result;
 	}
 
 	public Condition getCondition() {

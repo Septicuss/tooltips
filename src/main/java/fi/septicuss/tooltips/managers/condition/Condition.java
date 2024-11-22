@@ -12,9 +12,7 @@ public interface Condition {
 		return false;
 	}
 
-	default boolean check(Player player, Arguments args, Context context) {
-		return check(player, args);
-	}
+	default void writeContext(Player player, Arguments args, Context context) { }
 
 	Validity valid(Arguments args);
 

@@ -16,6 +16,10 @@ public class Context {
         return this.context.get(key);
     }
 
+    public boolean has(String key) {
+        return this.context.containsKey(key);
+    }
+
     public void put(String key, Object context) {
         this.context.put(key, context);
     }

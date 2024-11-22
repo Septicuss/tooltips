@@ -15,7 +15,6 @@ import fi.septicuss.tooltips.listener.PlayerConnectionListener;
 import fi.septicuss.tooltips.listener.PlayerInteractListener;
 import fi.septicuss.tooltips.listener.PlayerMovementListener;
 import fi.septicuss.tooltips.managers.condition.ConditionManager;
-import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.impl.BlockNbtEquals;
 import fi.septicuss.tooltips.managers.condition.impl.BlockStateEquals;
 import fi.septicuss.tooltips.managers.condition.impl.Compare;
@@ -45,8 +44,14 @@ import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
+import fi.septicuss.tooltips.managers.preset.functions.impl.CapitalizeFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.ContextFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.DataFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.HasContextFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.HasDataFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.IfFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.LowercaseFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.UppercaseFunction;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.managers.title.TitleManager;
@@ -65,7 +70,6 @@ import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import fi.septicuss.tooltips.utils.placeholder.impl.PersistentVariablePlaceholder;
-import fi.septicuss.tooltips.utils.placeholder.impl.SimplePlaceholderParser;
 import fi.septicuss.tooltips.utils.placeholder.impl.VariablePlaceholder;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import org.bukkit.Bukkit;
@@ -138,9 +142,9 @@ public class Tooltips extends JavaPlugin {
 		conditionManager = new ConditionManager();
 
 		this.loadIntegrations();
+		this.registerDefaultContent();
 		this.reload();
 		this.loadVariables();
-		this.registerDefaultContent();
 		this.loadListeners();
 		this.loadCommands();
 	}
@@ -169,7 +173,7 @@ public class Tooltips extends JavaPlugin {
 		this.conditionManager.register("sneaking", new Sneaking());
 		this.conditionManager.register("compare", new Compare());
 		this.conditionManager.register("lookingatblock", new LookingAtBlock());
-		this.conditionManager.register("lookingatfurniture", new LookingAtFurniture());
+		this.conditionManager.register("lookingatfurniture", new LookingAtFurniture(this.integrationManager));
 		this.conditionManager.register("lookingatentity", new LookingAtEntity());
 		this.conditionManager.register("lookingatmythicmob", new LookingAtMythicMob());
 		this.conditionManager.register("region", new Region());
@@ -190,8 +194,14 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void registerFunctions() {
-		Functions.add("data", new DataFunction(this.presetManager));
-		Functions.add("hasdata", new HasDataFunction(this.presetManager));
+		Functions.add("data", new DataFunction(this));
+		Functions.add("hasdata", new HasDataFunction(this));
+		Functions.add("context", new ContextFunction(this));
+		Functions.add("hascontext", new HasContextFunction(this));
+		Functions.add("capitalize", new CapitalizeFunction());
+		Functions.add("lowercase", new LowercaseFunction());
+		Functions.add("uppercase", new UppercaseFunction());
+		Functions.add("if", new IfFunction());
 	}
 
 	private void registerLocalPlaceholders() {

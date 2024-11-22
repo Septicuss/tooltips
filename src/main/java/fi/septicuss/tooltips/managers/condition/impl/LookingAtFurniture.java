@@ -21,10 +21,30 @@ public class LookingAtFurniture implements Condition {
     private static final String[] DISTANCE = {"d", "distance"};
     private static final String[] ID = {"id"};
 
+    private final IntegrationManager integrationManager;
+
+    public LookingAtFurniture(IntegrationManager integrationManager) {
+        this.integrationManager = integrationManager;
+    }
+
 
     @Override
-    public boolean check(Player player, Arguments args, Context context) {
-        final IntegrationManager manager = Tooltips.get().getIntegrationManager();
+    public boolean check(Player player, Arguments args) {
+        return (getLookedAtFurniture(player, args) != null);
+    }
+
+    @Override
+    public void writeContext(Player player, Arguments args, Context context) {
+        final FurnitureWrapper furniture = getLookedAtFurniture(player, args);
+
+        if (furniture != null) {
+            context.put("furniture.id", furniture.id());
+            context.put("furniture.name", furniture.displayName());
+            context.put("furniture.plugin", furniture.plugin());
+        }
+    }
+
+    private FurnitureWrapper getLookedAtFurniture(Player player, Arguments args) {
 
         MultiString id = null;
         int distance = 3;
@@ -39,7 +59,7 @@ public class LookingAtFurniture implements Condition {
 
         Predicate<Block> blockPredicate = (block -> {
             if (block == null) return false;
-            final Optional<FurnitureWrapper> optionalFurniture = manager.getFurniture(block);
+            final Optional<FurnitureWrapper> optionalFurniture = integrationManager.getFurniture(block);
             if (optionalFurniture.isEmpty()) return false;
             if (finalizedId == null) return true;
             return (finalizedId.contains(optionalFurniture.get().id()));
@@ -54,53 +74,41 @@ public class LookingAtFurniture implements Condition {
         var rayTrace = Utils.getRayTrace(player, distance, blockPredicate, entityFilter);
 
         if (rayTrace == null) {
-            return false;
+            return null;
         }
 
         // Block
         if (rayTrace.getHitBlock() != null) {
             final Block block = rayTrace.getHitBlock();
-            final Optional<FurnitureWrapper> optionalFurniture = manager.getFurniture(block);
+            final Optional<FurnitureWrapper> optionalFurniture = integrationManager.getFurniture(block);
 
             if (optionalFurniture.isEmpty()) {
-                return true;
+                return null;
             }
 
             final FurnitureWrapper furniture = optionalFurniture.get();
             final String furnitureId = furniture.id();
 
             final boolean outcome = (finalizedId == null || finalizedId.contains(furnitureId));
-
-            if (outcome) {
-                context.put("furniture.id", furniture.id());
-                context.put("furniture.name", furniture.displayName());
-            }
-
-            return outcome;
+            return outcome ? furniture : null;
         }
 
         // Entity
         if (rayTrace.getHitEntity() != null) {
             final Entity entity = rayTrace.getHitEntity();
-            final Optional<FurnitureWrapper> optionalFurniture = manager.getFurniture(entity);
+            final Optional<FurnitureWrapper> optionalFurniture = integrationManager.getFurniture(entity);
 
             if (optionalFurniture.isEmpty()) {
-                return false;
+                return null;
             }
 
             final FurnitureWrapper furniture = optionalFurniture.get();
 
             final boolean outcome = (finalizedId == null || finalizedId.contains(furniture.id()));
-
-            if (outcome) {
-                context.put("furniture.id", furniture.id());
-                context.put("furniture.name", furniture.displayName());
-            }
-
-            return outcome;
+            return outcome ? furniture : null;
         }
 
-        return false;
+        return null;
     }
 
     @Override

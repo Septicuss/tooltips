@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import fi.septicuss.tooltips.managers.condition.Context;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -17,6 +18,11 @@ public class Gamemode implements Condition {
 	public boolean check(Player player, Arguments args) {
 		EnumOptions<GameMode> options = args.get(GAMEMODE_ALIASES).getAsEnumOptions(GameMode.class);
 		return options.contains(player.getGameMode());
+	}
+
+	@Override
+	public void writeContext(Player player, Arguments args, Context context) {
+		context.put("gamemode", player.getGameMode().toString());
 	}
 
 	@Override
