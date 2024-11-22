@@ -3,6 +3,8 @@ package fi.septicuss.tooltips.api;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.preset.functions.Function;
+import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.managers.tooltip.Tooltip;
@@ -26,6 +28,14 @@ public class TooltipsAPI {
 
     public static Set<String> getConditions() {
         return Tooltips.get().getConditionManager().getConditions();
+    }
+
+    public static void addFunction(String name, Function function) {
+        Functions.add(name, function);
+    }
+
+    public static void removeFunction(String name, Function function) {
+        Functions.remove(name);
     }
 
     public static void runAction(@Nonnull String action, @Nonnull Player player) {
