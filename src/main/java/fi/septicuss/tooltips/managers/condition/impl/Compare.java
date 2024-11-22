@@ -20,13 +20,13 @@ public class Compare implements Condition {
 		Argument firstArg = args.get(FIRST_VALUE_ALIASES);
 		Argument secondArg = args.get(SECOND_VALUE_ALIASES);
 
-		firstArg = firstArg.replacePlaceholders(player);
+		firstArg = firstArg.process(player);
 
 		if (secondArg == null) {
 			return firstArg.getAsBool();
 		}
 
-		secondArg = secondArg.replacePlaceholders(player);
+		secondArg = secondArg.process(player);
 
 		if (firstArg.isNumber() && secondArg.isNumber()) {
 			Operation operation = Operation.EQUAL;

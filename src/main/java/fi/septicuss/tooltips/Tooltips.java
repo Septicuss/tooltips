@@ -190,9 +190,6 @@ public class Tooltips extends JavaPlugin {
 	private void registerFunctions() {
 		Functions.add("data", new DataFunction(this.presetManager));
 		Functions.add("hasdata", new HasDataFunction(this.presetManager));
-
-		System.out.println(Functions.parse(null, "default/preset", "HAS=$hasdata(test[2]) | DATA= $data(test[2])"));
-
 	}
 
 	private void registerLocalPlaceholders() {

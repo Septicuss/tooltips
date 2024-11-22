@@ -20,10 +20,6 @@ public class Argument {
 		return new Argument(Text.processText(player, value));
 	}
 
-	public Argument replacePlaceholders(Player player) {
-		return new Argument(Placeholders.replacePlaceholders(player, value));
-	}
-
 	public String getAsString() {
 		return value;
 	}
