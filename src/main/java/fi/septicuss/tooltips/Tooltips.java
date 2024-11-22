@@ -291,19 +291,6 @@ public class Tooltips extends JavaPlugin {
 
 	private void addLocalPlaceholders() {
 
-		Functions.add("test", (player, context, args) -> {
-
-
-
-			return "xxxx";
-		});
-
-		Functions.add("uppercase", (player, context, args) -> {
-			if (args.isEmpty())
-				return null;
-			return args.get(0).process(player).getAsString().toUpperCase();
-		});
-
 		Placeholders.addLocal("var", new SimplePlaceholderParser((p, s) -> {
 			if (!s.startsWith("var_"))
 				return null;
