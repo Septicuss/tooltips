@@ -102,6 +102,11 @@
 			<id>Artillex-Studios</id>
 			<url>https://repo.artillex-studios.com/releases/</url>
 		</repository>
+		<repository>
+			<id>nexomc</id>
+			<name>Nexo Custom Repository</name>
+			<url>https://repo.nexomc.com/snapshots/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -153,6 +158,19 @@
 			<groupId>io.th0rgal</groupId>
 			<artifactId>oraxen</artifactId>
 			<version>1.182.0</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.nexomc</groupId>
+			<artifactId>nexo</artifactId>
+			<version>0.1.0-dev.0</version>
+			<classifier>dev</classifier>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>

@@ -4,6 +4,7 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.AxGensIntegration;
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
+import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.oraxen.OraxenFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.packetevents.PacketEventsPacketProvider;
 import fi.septicuss.tooltips.managers.integration.impl.papi.TooltipsExpansion;
@@ -37,6 +38,10 @@ public class IntegrationManager {
             this.setPacketProvider(new PacketEventsPacketProvider());
         } else if (isPresent("ProtocolLib")) {
             this.setPacketProvider(new ProtocolLibPacketProvider());
+        }
+
+        if (isPresent("Nexo")) {
+            this.addFurnitureProvider(new NexoFurnitureProvider());
         }
 
         if (isPresent("Oraxen")) {
