@@ -49,7 +49,7 @@ public class EvalCommand implements TooltipsSubCommand {
 			return;
 		}
 
-        boolean result = statement.getCondition().check(player);
+        boolean result = statement.getCompositeCondition().check(player);
 
 		Messaging.send(sender,
 				"Condition result: " + (result ? Colors.PLUGIN : Colors.WARN) + result);

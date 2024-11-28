@@ -19,7 +19,7 @@ public class CompositeCondition {
 		this.condition = condition;
 	}
 
-	public ParsedCondition getCondition() {
+	public ParsedCondition getParsedCondition() {
 		return condition;
 	}
 

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.libs.org.snakeyaml.engine.v2.api.lowlevel.Parse;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.condition.composite.CompositeCondition;
+import fi.septicuss.tooltips.managers.condition.parser.ParsedCondition;
 import org.bukkit.entity.Player;
 
 public class StatementHolder {
@@ -25,15 +29,22 @@ public class StatementHolder {
 	public boolean evaluate(Player player, Context context) {
 
 		for (var statement : statements) {
-			if (statement == null || statement.getCondition() == null)
+			if (statement == null || statement.getCompositeCondition() == null)
 				continue;
 
-			boolean conditionResult = statement.getCondition().check(player, context);
+			boolean conditionResult = statement.getCompositeCondition().check(player, context);
 
 			if (statement.hasOutcome()) {
-				boolean outcome = statement.getOutcome().asBoolean();
+				final var outcome = statement.getOutcome();
+
+				if (outcome == Statement.Outcome.SKIP) {
+					writeSkippedContext(player, context, statement);
+					continue;
+				}
+
+				final boolean booleanOutcome = statement.getOutcome().asBoolean();
 				
-				if (outcome) {
+				if (booleanOutcome) {
 					if (!conditionResult) return false;
 				} else {
 					if (conditionResult) return false;
@@ -52,5 +63,37 @@ public class StatementHolder {
 	public List<Statement> getStatements() {
 		return Collections.unmodifiableList(statements);
 	}
+
+	private void writeSkippedContext(Player player, Context context, Statement statement) {
+
+		final CompositeCondition compositeCondition = statement.getCompositeCondition();
+		if (compositeCondition == null) return;
+
+		writeSkippedContext(player, context, compositeCondition);
+
+	}
+
+	private void writeSkippedContext(Player player, Context context, CompositeCondition compositeCondition) {
+
+		if (compositeCondition.hasLeft())
+			writeSkippedContext(player, context, compositeCondition.getLeft());
+
+		if (compositeCondition.hasRight())
+			writeSkippedContext(player, context, compositeCondition.getRight());
+
+		if (compositeCondition.hasCondition()) {
+			final ParsedCondition parsedCondition = compositeCondition.getParsedCondition();
+			if (parsedCondition == null) return;
+
+			final Condition condition = parsedCondition.getCondition();
+			if (condition == null) return;
+
+
+
+			condition.writeContext(player, parsedCondition.getArgs(), context);
+		}
+
+	}
+
 
 }

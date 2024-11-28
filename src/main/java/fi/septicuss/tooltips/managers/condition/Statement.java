@@ -24,7 +24,7 @@ public class Statement {
 		return (outcome != null);
 	}
 
-	public CompositeCondition getCondition() {
+	public CompositeCondition getCompositeCondition() {
 		return condition;
 	}
 
@@ -35,7 +35,7 @@ public class Statement {
 
 	public enum Outcome {
 
-		REQUIRED(true), CANCEL(false);
+		REQUIRED(true), CANCEL(false), SKIP(true);
 
 		private boolean bool;
 

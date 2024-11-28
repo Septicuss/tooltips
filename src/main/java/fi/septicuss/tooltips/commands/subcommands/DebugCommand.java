@@ -100,12 +100,12 @@ public class DebugCommand implements TooltipsSubCommand {
         for (var statement : holder.getStatements()) {
             index += 1;
             int readableIndex = index + 1;
-            if (statement == null || statement.getCondition() == null) {
+            if (statement == null || statement.getCompositeCondition() == null || statement.getOutcome() == Statement.Outcome.SKIP) {
                 Messaging.send(sender, Colors.PLUGIN + readableIndex + " (Skipped)" + Colors.INFO + " " + conditionLines.get(index));
                 continue;
             }
 
-            boolean conditionResult = statement.getCondition().check(player);
+            boolean conditionResult = statement.getCompositeCondition().check(player);
 
             Messaging.send(sender, Colors.PLUGIN + readableIndex + Colors.INFO + " " + conditionLines.get(index));
             Messaging.send(sender, Colors.INFO + "   -> " + (conditionResult ? ChatColor.GREEN + "true" : ChatColor.RED + "false"));
