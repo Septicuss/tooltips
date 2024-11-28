@@ -45,7 +45,7 @@ public class ConditionTask extends BukkitRunnable {
                 if (isSamePreset) {
                     // Same preset true again, no actions taken
                     if (conditionResult) {
-                        continue;
+                        break;
                     }
 
                     // Same preset false, reset current preset

@@ -5,7 +5,7 @@ api-version: 1.16
 
 author: Septicuss
 
-softdepend: [ PlaceholderAPI, ItemsAdder, Oraxen, WorldGuard, WorldEdit, MythicCrucible, MythicMobs, Citizens, ProtocolLib, packetevents ]
+softdepend: [ PlaceholderAPI, ItemsAdder, Nexo, Oraxen, WorldGuard, WorldEdit, MythicCrucible, MythicMobs, Citizens, ProtocolLib, packetevents ]
 
 libraries:
    - net.kyori:adventure-api:${adventure.core.version}

@@ -51,7 +51,7 @@ public class LookingAtCitizen implements Condition {
 
 	@Override
 	public Validity valid(Arguments args) {
-		if (Bukkit.getPluginManager().isPluginEnabled("Citizens"))
+		if (!Bukkit.getPluginManager().isPluginEnabled("Citizens"))
 			return Validity.of(false, "Citizens is required for this condition.");
 
 		if (CitizensAPI.getNPCRegistry() == null)
