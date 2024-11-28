@@ -47,6 +47,8 @@ public class ParsedCondition {
 			condition.writeContext(player, args, context);
 		}
 
+		context.put("condition." + condition.id(), result);
+
 		return result;
 	}
 

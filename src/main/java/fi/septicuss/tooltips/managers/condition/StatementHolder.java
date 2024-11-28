@@ -25,7 +25,7 @@ public class StatementHolder {
 	public void addStatement(Statement statement) {
 		statements.add(statement);
 	}
-	
+
 	public boolean evaluate(Player player, Context context) {
 
 		for (var statement : statements) {
@@ -42,15 +42,15 @@ public class StatementHolder {
 					continue;
 				}
 
-				final boolean booleanOutcome = statement.getOutcome().asBoolean();
-				
-				if (booleanOutcome) {
+				final boolean required = statement.getOutcome().asBoolean();
+
+				if (required) {
 					if (!conditionResult) return false;
 				} else {
 					if (conditionResult) return false;
 					else continue;
 				}
-				
+
 			}
 
 			if (!conditionResult) return false;
@@ -87,8 +87,6 @@ public class StatementHolder {
 
 			final Condition condition = parsedCondition.getCondition();
 			if (condition == null) return;
-
-
 
 			condition.writeContext(player, parsedCondition.getArgs(), context);
 		}
