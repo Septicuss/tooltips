@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import fi.septicuss.tooltips.managers.condition.Context;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
@@ -34,8 +35,34 @@ public class Region implements Condition {
 	}
 
 	@Override
+	public void writeContext(Player player, Arguments args, Context context) {
+		MultiString region = null;
+
+		if (args.has(REGION))
+			region = MultiString.of(args.get(REGION).getAsString());
+
+		if (region == null) {
+			return;
+		}
+
+		if (!CurrentAreaCache.has(player))
+			return;
+
+		for (var applicableRegion : CurrentAreaCache.get(player))
+			if (region.contains(applicableRegion)) {
+				context.put("region", applicableRegion);
+				return;
+			}
+
+	}
+
+	@Override
 	public Validity valid(Arguments args) {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "region";
+	}
 }

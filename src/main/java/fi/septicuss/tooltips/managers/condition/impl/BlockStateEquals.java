@@ -65,6 +65,11 @@ public class BlockStateEquals implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "blockstateequals";
+	}
+
 	private Map<String, String> getBlockStateMap(String blockDataString) {
 		// blockDataString is of the following format:
 		// minecraft:chest[waterlogged=false]

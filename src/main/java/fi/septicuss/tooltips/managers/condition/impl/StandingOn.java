@@ -1,6 +1,7 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
@@ -26,6 +27,11 @@ public class StandingOn implements Condition {
 	}
 
 	@Override
+	public void writeContext(Player player, Arguments args, Context context) {
+		context.put("standingon.type", player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().toString());
+	}
+
+	@Override
 	public Validity valid(Arguments args) {
 		if (!args.has(TYPE_ALIASES))
 			return Validity.of(false, quote("type") + " argument is required");
@@ -39,4 +45,8 @@ public class StandingOn implements Condition {
 		return Validity.of(true);
 	}
 
+	@Override
+	public String id() {
+		return "standingon";
+	}
 }

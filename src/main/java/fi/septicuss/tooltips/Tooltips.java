@@ -171,31 +171,30 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void registerConditions() {
-		this.conditionManager.register("day", new Day());
-		this.conditionManager.register("night", new Night());
-		this.conditionManager.register("world", new World());
-		this.conditionManager.register("gamemode", new Gamemode());
-		this.conditionManager.register("sneaking", new Sneaking());
-		this.conditionManager.register("compare", new Compare());
-		this.conditionManager.register("lookingatblock", new LookingAtBlock());
-		this.conditionManager.register("lookingatfurniture", new LookingAtFurniture(this.integrationManager));
-		this.conditionManager.register("lookingatentity", new LookingAtEntity());
-		this.conditionManager.register("lookingatmythicmob", new LookingAtMythicMob());
-		this.conditionManager.register("region", new Region());
-		this.conditionManager.register("incuboid", new InCuboid());
-		this.conditionManager.register("location", new Location());
-		this.conditionManager.register("standingon", new StandingOn());
-		this.conditionManager.register("itemnbtequals", new ItemNbtEquals());
-		this.conditionManager.register("entitynbtequals", new EntityNbtEquals());
-		this.conditionManager.register("tileentitynbtequals", new TileEntityNbtEquals());
-		this.conditionManager.register("blocknbtequals", new BlockNbtEquals());
-		this.conditionManager.register("blockstateequals", new BlockStateEquals());
-		this.conditionManager.register("time", new Time());
-		this.conditionManager.register("equipped", new Equipped());
-		this.conditionManager.register("op", new Op());
-		this.conditionManager.register("lookingatcitizen", new LookingAtCitizen());
-		this.conditionManager.register("permission", new Permission());
-		this.conditionManager.register("lookingataxgen", new LookingAtAxGen());
+		this.conditionManager.register(new Day());
+		this.conditionManager.register(new Night());
+		this.conditionManager.register(new World());
+		this.conditionManager.register(new Gamemode());
+		this.conditionManager.register(new Sneaking());
+		this.conditionManager.register(new Compare());
+		this.conditionManager.register(new LookingAtBlock());
+		this.conditionManager.register(new LookingAtFurniture(this.integrationManager));
+		this.conditionManager.register(new LookingAtEntity());
+		this.conditionManager.register(new LookingAtMythicMob());
+		this.conditionManager.register(new Region());
+		this.conditionManager.register(new InCuboid());
+		this.conditionManager.register(new Location());
+		this.conditionManager.register(new StandingOn());
+		this.conditionManager.register(new ItemNbtEquals());
+		this.conditionManager.register(new EntityNbtEquals());
+		this.conditionManager.register(new BlockNbtEquals());
+		this.conditionManager.register(new BlockStateEquals());
+		this.conditionManager.register(new Time());
+		this.conditionManager.register(new Equipped());
+		this.conditionManager.register(new Op());
+		this.conditionManager.register(new LookingAtCitizen());
+		this.conditionManager.register(new Permission());
+		this.conditionManager.register(new LookingAtAxGen());
 	}
 
 	private void registerFunctions() {

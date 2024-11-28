@@ -77,4 +77,8 @@ public class Compare implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "compare";
+	}
 }

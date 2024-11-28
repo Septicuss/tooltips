@@ -42,4 +42,8 @@ public class Location implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "location";
+	}
 }

@@ -80,4 +80,8 @@ public class BlockNbtEquals implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "blocknbtequals";
+	}
 }

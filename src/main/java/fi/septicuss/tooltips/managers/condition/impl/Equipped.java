@@ -62,4 +62,8 @@ public class Equipped implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "equipped";
+	}
 }

@@ -59,4 +59,8 @@ public class LookingAtEntity implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "lookingatentity";
+	}
 }

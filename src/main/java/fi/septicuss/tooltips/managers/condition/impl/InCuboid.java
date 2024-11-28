@@ -45,4 +45,8 @@ public class InCuboid implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "incuboid";
+	}
 }

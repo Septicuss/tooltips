@@ -79,4 +79,8 @@ public class LookingAtBlock implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "lookingatblock";
+	}
 }

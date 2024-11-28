@@ -20,4 +20,8 @@ public class Day implements Condition {
 		return Validity.of(true);
 	}
 
+	@Override
+	public String id() {
+		return "day";
+	}
 }

@@ -31,4 +31,8 @@ public class Permission implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "permission";
+	}
 }

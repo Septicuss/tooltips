@@ -41,4 +41,8 @@ public class Gamemode implements Condition {
 		return Validity.of(true);
 	}
 
+	@Override
+	public String id() {
+		return "gamemode";
+	}
 }

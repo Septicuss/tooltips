@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import fi.septicuss.tooltips.managers.condition.Context;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
@@ -18,6 +19,11 @@ public class World implements Condition {
 	}
 
 	@Override
+	public void writeContext(Player player, Arguments args, Context context) {
+		context.put("world", player.getWorld().getName());
+	}
+
+	@Override
 	public Validity valid(Arguments args) {
 		if (!args.has(WORLD)) {
 			return Validity.of(false, "Must have the world name argument");
@@ -26,4 +32,8 @@ public class World implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "world";
+	}
 }

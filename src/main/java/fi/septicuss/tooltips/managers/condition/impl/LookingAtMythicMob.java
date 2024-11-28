@@ -57,4 +57,8 @@ public class LookingAtMythicMob implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "lookingatmythicmob";
+	}
 }

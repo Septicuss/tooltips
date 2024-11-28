@@ -81,4 +81,8 @@ public class TileEntityNbtEquals implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "tileentitynbtequals";
+	}
 }

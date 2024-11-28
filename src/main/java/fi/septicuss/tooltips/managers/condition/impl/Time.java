@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import fi.septicuss.tooltips.managers.condition.Context;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
@@ -40,6 +41,11 @@ public class Time implements Condition {
 	}
 
 	@Override
+	public void writeContext(Player player, Arguments args, Context context) {
+		context.put("time", player.getWorld().getTime());
+	}
+
+	@Override
 	public Validity valid(Arguments args) {
 
 		if (!args.has(TIME)) {
@@ -60,4 +66,8 @@ public class Time implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "time";
+	}
 }

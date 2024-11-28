@@ -79,4 +79,8 @@ public class EntityNbtEquals implements Condition {
         return Validity.TRUE;
     }
 
+    @Override
+    public String id() {
+        return "entitynbtequals";
+    }
 }

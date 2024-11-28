@@ -30,8 +30,8 @@ public class ConditionManager {
 
 	}
 
-	public void register(String name, Condition condition) {
-		registeredConditions.put(name, condition);
+	public void register(Condition condition) {
+		registeredConditions.put(condition.id(), condition);
 	}
 
 	public void unregister(String name) {

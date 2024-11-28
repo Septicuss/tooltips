@@ -125,4 +125,8 @@ public class LookingAtFurniture implements Condition {
         return Validity.TRUE;
     }
 
+    @Override
+    public String id() {
+        return "lookingatfurniture";
+    }
 }

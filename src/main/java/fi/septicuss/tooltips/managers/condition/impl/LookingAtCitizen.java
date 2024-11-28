@@ -63,4 +63,8 @@ public class LookingAtCitizen implements Condition {
 		return Validity.TRUE;
 	}
 
+	@Override
+	public String id() {
+		return "lookingatcitizen";
+	}
 }

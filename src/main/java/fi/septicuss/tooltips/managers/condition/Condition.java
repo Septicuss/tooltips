@@ -16,6 +16,8 @@ public interface Condition {
 
 	Validity valid(Arguments args);
 
+	String id();
+
 	default String quote(String message) {
 		return Utils.quote(message);
 	}

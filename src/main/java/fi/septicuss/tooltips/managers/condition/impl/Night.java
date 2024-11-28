@@ -20,4 +20,8 @@ public class Night implements Condition {
 		return Validity.of(true);
 	}
 
+	@Override
+	public String id() {
+		return "night";
+	}
 }
