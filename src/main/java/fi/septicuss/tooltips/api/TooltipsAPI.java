@@ -18,8 +18,8 @@ import java.util.Set;
 
 public class TooltipsAPI {
 
-    public static void addCondition(@Nonnull String name, @Nonnull Condition condition) {
-        Tooltips.get().getConditionManager().register(name, condition);
+    public static void addCondition(@Nonnull Condition condition) {
+        Tooltips.get().getConditionManager().register(condition);
     }
 
     public static void removeCondition(@Nonnull String name) {
