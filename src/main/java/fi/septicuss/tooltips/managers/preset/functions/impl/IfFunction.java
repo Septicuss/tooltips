@@ -14,9 +14,8 @@ public class IfFunction implements Function {
         if (args.isEmpty() || args.size() < 3) return "";
 
         final Argument conditionArgument = args.get(0).process(player);
-        if (!conditionArgument.isBoolean()) return "";
 
-        if (conditionArgument.getAsBool()) {
+        if (Boolean.parseBoolean(conditionArgument.getAsString())) {
             return args.get(1).process(player).getAsString();
         }
 
