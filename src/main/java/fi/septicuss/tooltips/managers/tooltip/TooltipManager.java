@@ -54,6 +54,7 @@ public class TooltipManager {
 
 	public void runTasks() {
 		this.loadPresets(plugin.getPresetManager());
+
 		this.conditionTask = new ConditionTask(this);
 		this.conditionTask.runTaskTimer(plugin, 0L, plugin.getCheckFrequency());
 
@@ -88,6 +89,10 @@ public class TooltipManager {
 
 	public PlayerTooltipData getPlayerTooltipData(UUID uuid) {
 		return playerTooltipData.computeIfAbsent(uuid, PlayerTooltipData::new);
+	}
+
+	public void removePlayerTooltipData(Player player) {
+		playerTooltipData.remove(player.getUniqueId());
 	}
 
 	public void runActions(String action, Player player) {

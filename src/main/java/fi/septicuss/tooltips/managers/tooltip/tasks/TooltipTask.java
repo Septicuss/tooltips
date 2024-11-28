@@ -4,6 +4,7 @@ import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
 import fi.septicuss.tooltips.managers.preset.actions.DefaultTooltipAction;
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
+import fi.septicuss.tooltips.managers.preset.animation.Animations;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
@@ -47,6 +48,10 @@ public class TooltipTask extends BukkitRunnable {
         for (Player player : onlinePlayers) {
             final PlayerTooltipData data = manager.getPlayerTooltipData(player);
 
+            if (!data.hasCooldown(CooldownType.FADE_IN) && !data.hasCooldown(CooldownType.FADE_OUT)) {
+                data.tickAnimations(player);
+            }
+
             final boolean hasCurrentPreset = data.hasCurrentPreset();
             final boolean hasDisplayedPreset = data.hasDisplayedPreset();
             final boolean hasBoth = (hasCurrentPreset && hasDisplayedPreset);
@@ -56,7 +61,11 @@ public class TooltipTask extends BukkitRunnable {
 
             if (currentSameAsDisplayed) {
                 final Preset preset = manager.getPresets().get(data.getDisplayedPreset());
-                final ArrayList<String> text = process(player, preset.getText());
+                if (data.getSourceText() == null) {
+                    data.setSourceText(preset.getText());
+                }
+
+                final ArrayList<String> text = process(player, data.getSourceText());
 
                 final boolean textChanged = data.hasDisplayedText() && !(data.getDisplayedText().equals(text));
                 final boolean reshowOnChange = preset.getShowProperties().shouldRefreshOnChange();
@@ -99,6 +108,7 @@ public class TooltipTask extends BukkitRunnable {
                 final Preset preset = manager.getPresets().get(data.getDisplayedPreset());
                 hide(player, data.getDisplayedPreset(), preset);
                 data.setDisplayedPreset(null);
+                data.clearAnimations();
             }
 
             // Waiting until hidden
@@ -110,6 +120,8 @@ public class TooltipTask extends BukkitRunnable {
 
             // Start displaying the current preset
             data.setDisplayedPreset(data.getCurrentPreset());
+            if (data.getCurrentPreset() != null)
+                data.setSourceText(Animations.parse(player, manager.getPresets().get(data.getCurrentPreset()).getText()));
             data.setFirstTime(true);
             data.setTextChanged(false);
 
@@ -163,7 +175,8 @@ public class TooltipTask extends BukkitRunnable {
             }
         }
 
-        final var text = process(player, preset.getText());
+
+        final var text = process(player, data.getSourceText());
         data.setDisplayedText(text);
 
         final TitleBuilder titleBuilder = getTooltipTitle(player, data, preset);
@@ -280,7 +293,7 @@ public class TooltipTask extends BukkitRunnable {
 
         final ArrayList<String> text = (
                 savedText ? data.getSavedText() :
-                        displayedText ? data.getDisplayedText() : process(player, preset.getText())
+                        displayedText ? data.getDisplayedText() : process(player, data.getSourceText())
         );
 
         TitleBuilder builder;

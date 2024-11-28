@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.listener;
 
+import fi.septicuss.tooltips.Tooltips;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -13,6 +14,7 @@ public class PlayerConnectionListener implements Listener {
 	public void on(PlayerQuitEvent event) {
 		TooltipCache.remove(event.getPlayer());
 		LookingAtCache.remove(event.getPlayer());
+		Tooltips.get().getTooltipManager().removePlayerTooltipData(event.getPlayer());
 	}
 	
 	

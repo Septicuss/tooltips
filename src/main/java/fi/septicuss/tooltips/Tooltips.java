@@ -43,7 +43,11 @@ import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
+import fi.septicuss.tooltips.managers.preset.animation.AnimationProvider;
+import fi.septicuss.tooltips.managers.preset.animation.Animations;
+import fi.septicuss.tooltips.managers.preset.animation.impl.TypewriterAnimationProvider;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
+import fi.septicuss.tooltips.managers.preset.functions.impl.AnimationFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.CapitalizeFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.ContextFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.DataFunction;
@@ -163,6 +167,7 @@ public class Tooltips extends JavaPlugin {
 		this.registerConditions();
 		this.registerLocalPlaceholders();
 		this.registerFunctions();
+		this.registerAnimations();
 	}
 
 	private void registerConditions() {
@@ -202,6 +207,13 @@ public class Tooltips extends JavaPlugin {
 		Functions.add("lowercase", new LowercaseFunction());
 		Functions.add("uppercase", new UppercaseFunction());
 		Functions.add("if", new IfFunction());
+		Functions.add("tta", new AnimationFunction());
+	}
+
+	private void registerAnimations() {
+		final AnimationProvider typewriter = new TypewriterAnimationProvider();
+		Animations.addProvider("typewriter", typewriter);
+		Animations.addProvider("tw", typewriter);
 	}
 
 	private void registerLocalPlaceholders() {

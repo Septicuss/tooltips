@@ -1,9 +1,19 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks.data;
 
 import fi.septicuss.tooltips.managers.condition.Context;
+import fi.septicuss.tooltips.managers.preset.animation.Animation;
+import fi.septicuss.tooltips.managers.preset.animation.Animations;
+import fi.septicuss.tooltips.managers.preset.animation.ParsedAnimation;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,11 +31,17 @@ public class PlayerTooltipData {
     private final AtomicReference<String> displayedPreset = new AtomicReference<>();
     private final AtomicReference<ArrayList<String>> displayedText = new AtomicReference<>();
     private final AtomicReference<ArrayList<String>> savedText = new AtomicReference<>();
+    private final AtomicReference<List<String>> sourceText = new AtomicReference<>();
     private final AtomicBoolean textChanged = new AtomicBoolean();
     private final AtomicBoolean firstTime = new AtomicBoolean();
     private final ConcurrentHashMap<CooldownType, Long> cooldowns = new ConcurrentHashMap<>();
-    private Context context = new Context();
 
+    // Animations
+    private final ArrayList<UUID> animations = new ArrayList<>();
+    private boolean animationsSetup = false;
+
+    // Context
+    private Context context = new Context();
 
     public UUID getPlayersId() {
         return uuid;
@@ -83,6 +99,14 @@ public class PlayerTooltipData {
         return (this.savedText.get() != null);
     }
 
+    public List<String> getSourceText() {
+        return sourceText.get();
+    }
+
+    public void setSourceText(List<String> sourceText) {
+        this.sourceText.set(sourceText);
+    }
+
     public boolean hasTextChanged() {
         return this.textChanged.get();
     }
@@ -135,6 +159,53 @@ public class PlayerTooltipData {
 
     public Context getContext() {
         return this.context;
+    }
+
+    public void addAnimation(UUID uuid) {
+        this.animations.add(uuid);
+    }
+
+    public void tickAnimations(Player player) {
+        if (this.animations.isEmpty()) return;
+        if (!this.animationsSetup) setupAnimations();
+
+        ParsedAnimation previousIdentifiedAnimation = null;
+
+        for (UUID uuid : this.animations) {
+            final ParsedAnimation animation = Animations.get(uuid);
+            if (animation == null) continue;
+            if (animation.finished()) continue;
+
+            // Unaffected by order
+            if (animation.id() == -1) {
+                animation.tick(player);
+                continue;
+            }
+
+            if (previousIdentifiedAnimation == null || previousIdentifiedAnimation.finished()) {
+                previousIdentifiedAnimation = animation;
+                animation.tick(player);
+            }
+
+        }
+
+    }
+
+    private void setupAnimations() {
+        this.animations.sort((o1, o2) -> {
+            final ParsedAnimation p1 = Animations.get(o1);
+            final ParsedAnimation p2 = Animations.get(o2);
+            return Integer.compare(p1.id(), p2.id());
+        });
+        this.animationsSetup = true;
+    }
+
+    public void clearAnimations() {
+        for (UUID uuid : this.animations) {
+            Animations.stopAnimation(uuid);
+        }
+        this.animations.clear();
+        this.animationsSetup = false;
     }
 
     private long ticksToMilliseconds(long ticks) {

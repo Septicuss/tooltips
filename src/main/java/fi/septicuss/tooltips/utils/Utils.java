@@ -32,6 +32,10 @@ public class Utils {
 		return value.startsWith("'") && value.endsWith("'");
 	}
 
+	public static String removeQuotes(String value) {
+		return value.substring(1, value.length() - 1);
+	}
+
 
 	public static String[] splitStringQuotations(final String string, final char separator) {
 		return placeDelimiters(string).split(String.valueOf(DELIMITER));
