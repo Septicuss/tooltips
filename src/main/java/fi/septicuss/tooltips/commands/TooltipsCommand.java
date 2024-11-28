@@ -49,6 +49,7 @@ public class TooltipsCommand implements CommandExecutor, TabCompleter {
 		Messaging.send(sender, Colors.PLUGIN + ChatColor.BOLD + "Tooltips Help");
 		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &freload");
 		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &feval {condition}");
+		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fdebug {preset id} {player}");
 		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fsendpreset {player} {preset id} (text)");
 		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fsendtheme {player} {theme id} (text)");
 		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fvars {varcommand} (args)");
