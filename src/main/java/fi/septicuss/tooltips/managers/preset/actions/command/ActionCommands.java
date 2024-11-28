@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import fi.septicuss.tooltips.managers.preset.actions.command.impl.SkipCommand;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.Tooltips;
@@ -29,6 +30,7 @@ public class ActionCommands {
 		COMMANDS.put("sound", new SoundCommand());
 		COMMANDS.put("message", new MessageCommand());
 		COMMANDS.put("delay", new DelayCommand());
+		COMMANDS.put("skip", new SkipCommand());
 		
 		// Variables
 		

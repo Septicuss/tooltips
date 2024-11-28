@@ -18,6 +18,10 @@ public record ParsedAnimation(Animation animation, String text, Arguments argume
         this.animation().tick(player);
     }
 
+    public void skip() {
+        this.animation().skip();
+    }
+
     public boolean finished() {
         return this.animation().finished();
     }

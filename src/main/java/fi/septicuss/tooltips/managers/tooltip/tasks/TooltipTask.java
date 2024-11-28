@@ -49,7 +49,7 @@ public class TooltipTask extends BukkitRunnable {
             final PlayerTooltipData data = manager.getPlayerTooltipData(player);
 
             if (!data.hasCooldown(CooldownType.FADE_IN) && !data.hasCooldown(CooldownType.FADE_OUT)) {
-                data.tickAnimations(player);
+                data.tickAnimations();
             }
 
             final boolean hasCurrentPreset = data.hasCurrentPreset();
@@ -251,7 +251,7 @@ public class TooltipTask extends BukkitRunnable {
             final int stay = (data.hasTextChanged() ? 10 : 0);
 
             titleBuilder.setFadeIn(0);
-            titleBuilder.setStay(stay);
+            titleBuilder.setStay(stay + 3);
             titleBuilder.setFadeOut(fadeOut);
             titleBuilder.build().ifPresent(title -> title.send(player));
 

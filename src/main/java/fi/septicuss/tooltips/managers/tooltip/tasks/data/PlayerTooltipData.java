@@ -5,6 +5,7 @@ import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.preset.animation.Animation;
 import fi.septicuss.tooltips.managers.preset.animation.Animations;
 import fi.septicuss.tooltips.managers.preset.animation.ParsedAnimation;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -167,9 +168,14 @@ public class PlayerTooltipData {
         this.animations.add(uuid);
     }
 
-    public void tickAnimations(Player player) {
+    public void tickAnimations() {
         if (this.animations.isEmpty()) return;
         if (!this.animationsSetup) setupAnimations();
+
+        if (this.animationsDone)
+            this.context.put("animation.finished", "true");
+
+        final Player player = Bukkit.getPlayer(this.uuid);
 
         ParsedAnimation previousIdentifiedAnimation = null;
 
@@ -191,11 +197,44 @@ public class PlayerTooltipData {
 
         }
 
-        runAnimationFinishedAction(player);
+        runAnimationFinishedAction();
 
     }
 
-    private void runAnimationFinishedAction(Player player) {
+    public void skipCurrentAnimation() {
+        if (this.animationsDone) return;
+        if (this.animations.isEmpty()) return;
+
+        for (UUID uuid : this.animations) {
+            final ParsedAnimation animation = Animations.get(uuid);
+            if (animation == null) continue;
+            if (animation.finished()) continue;
+            if (animation.id() == -1) continue;
+
+            animation.skip();
+            this.runAction("animation-current-skipped");
+            break;
+        }
+
+    }
+
+    public void skipAllAnimations() {
+        if (this.animationsDone) return;
+        if (this.animations.isEmpty()) return;
+
+        for (UUID uuid : this.animations) {
+            final ParsedAnimation animation = Animations.get(uuid);
+            if (animation == null) continue;
+            if (animation.finished()) continue;
+            if (animation.id() == -1) continue;
+
+            animation.skip();
+            this.runAction("animation-skipped");
+        }
+
+    }
+
+    private void runAnimationFinishedAction() {
         if (this.animations.isEmpty()) return;
         if (this.animationsDone) return;
 
@@ -206,7 +245,7 @@ public class PlayerTooltipData {
         }
 
         this.animationsDone = true;
-        Tooltips.get().getTooltipManager().runActions("animation-finished", player);
+        this.runAction("animation-finished");
 
     }
 
@@ -226,6 +265,10 @@ public class PlayerTooltipData {
         this.animations.clear();
         this.animationsDone = false;
         this.animationsSetup = false;
+    }
+
+    private void runAction(String action) {
+        Tooltips.get().getTooltipManager().runActions(action, Bukkit.getPlayer(this.uuid));
     }
 
     private long ticksToMilliseconds(long ticks) {

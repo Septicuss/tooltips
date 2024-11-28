@@ -111,7 +111,15 @@ public class TypewriterAnimationProvider implements AnimationProvider {
                 } else {
                     finished = true;
                 }
-            }        }
+            }
+        }
+
+        @Override
+        public void skip() {
+            this.frame = this.frames.size();
+            this.finished = true;
+
+        }
 
         @Override
         public boolean finished() {
@@ -123,7 +131,7 @@ public class TypewriterAnimationProvider implements AnimationProvider {
         public String text() {
             if (finished)
                 return text;
-            boolean showCursor = (cursor != null && frame != 0 && frame != this.frames.size()- 1);
+            boolean showCursor = (cursor != null && frame != 0 && frame != this.frames.size() - 1);
             return this.frames.get(Math.min(frame, this.frames.size())) + (showCursor ? cursor : "");
         }
 

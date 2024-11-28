@@ -7,6 +7,8 @@ public interface Animation {
 
     void tick(Player player);
 
+    void skip();
+
     boolean finished();
 
     String text();
