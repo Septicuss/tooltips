@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks.data;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.preset.animation.Animation;
 import fi.septicuss.tooltips.managers.preset.animation.Animations;
@@ -39,6 +40,7 @@ public class PlayerTooltipData {
     // Animations
     private final ArrayList<UUID> animations = new ArrayList<>();
     private boolean animationsSetup = false;
+    private boolean animationsDone = false;
 
     // Context
     private Context context = new Context();
@@ -189,6 +191,23 @@ public class PlayerTooltipData {
 
         }
 
+        runAnimationFinishedAction(player);
+
+    }
+
+    private void runAnimationFinishedAction(Player player) {
+        if (this.animations.isEmpty()) return;
+        if (this.animationsDone) return;
+
+        for (UUID uuid : this.animations) {
+            final ParsedAnimation animation = Animations.get(uuid);
+            if (animation == null) continue;
+            if (!animation.finished()) return;
+        }
+
+        this.animationsDone = true;
+        Tooltips.get().getTooltipManager().runActions("animation-finished", player);
+
     }
 
     private void setupAnimations() {
@@ -205,6 +224,7 @@ public class PlayerTooltipData {
             Animations.stopAnimation(uuid);
         }
         this.animations.clear();
+        this.animationsDone = false;
         this.animationsSetup = false;
     }
 

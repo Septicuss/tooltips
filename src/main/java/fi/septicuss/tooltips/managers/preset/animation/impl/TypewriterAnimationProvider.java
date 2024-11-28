@@ -115,6 +115,7 @@ public class TypewriterAnimationProvider implements AnimationProvider {
 
         @Override
         public boolean finished() {
+            if (loop) return true;
             return finished;
         }
 
