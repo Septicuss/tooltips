@@ -239,7 +239,7 @@ public class Tooltips extends JavaPlugin {
 			pluginManager.registerEvents(new PlayerMovementListener(this.integrationManager), this);
 		}
 
-		this.playerInteractListener = new PlayerInteractListener();
+		this.playerInteractListener = new PlayerInteractListener(this);
 		pluginManager.registerEvents(this.playerInteractListener, this);
 		pluginManager.registerEvents(new PlayerConnectionListener(), this);
 	}
@@ -298,10 +298,6 @@ public class Tooltips extends JavaPlugin {
 		packGenerator.generate();
 
 		this.tooltipManager.runTasks();
-
-		if (this.playerInteractListener != null)
-			playerInteractListener.setTooltipManager(this.tooltipManager);
-
 	}
 
 	private void clearCache() {
