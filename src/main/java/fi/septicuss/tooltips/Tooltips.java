@@ -106,8 +106,6 @@ public class Tooltips extends JavaPlugin {
 	private ConditionManager conditionManager;
 	private TooltipManager tooltipManager;
 
-	private PlayerInteractListener playerInteractListener;
-
 	// ------------------------------------------------------
 
 	public Tooltips() {
@@ -146,8 +144,8 @@ public class Tooltips extends JavaPlugin {
 		titleManager = new TitleManager(this);
 		conditionManager = new ConditionManager();
 
-		this.loadIntegrations();
 		this.registerDefaultContent();
+		this.loadIntegrations();
 		this.reload();
 		this.loadVariables();
 		this.loadListeners();
@@ -239,8 +237,7 @@ public class Tooltips extends JavaPlugin {
 			pluginManager.registerEvents(new PlayerMovementListener(this.integrationManager), this);
 		}
 
-		this.playerInteractListener = new PlayerInteractListener(this);
-		pluginManager.registerEvents(this.playerInteractListener, this);
+		pluginManager.registerEvents(new PlayerInteractListener(this), this);
 		pluginManager.registerEvents(new PlayerConnectionListener(), this);
 	}
 
