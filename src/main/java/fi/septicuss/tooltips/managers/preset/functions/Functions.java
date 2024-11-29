@@ -38,6 +38,7 @@ public class Functions {
      * @return Result string list, with all valid functions parsed and executed
      */
     public static @Nonnull List<String> parse(Player player, String preset, List<String> text) {
+        if (preset == null) return text;
         final List<String> result = new ArrayList<>();
 
         for (String line : text) {

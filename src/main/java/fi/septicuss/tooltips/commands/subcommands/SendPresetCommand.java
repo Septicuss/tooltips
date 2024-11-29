@@ -1,25 +1,25 @@
 package fi.septicuss.tooltips.commands.subcommands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.commands.TooltipsSubCommand;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.title.TitleBuilder;
+import fi.septicuss.tooltips.managers.tooltip.Tooltip;
+import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
+import fi.septicuss.tooltips.managers.tooltip.tasks.data.CooldownType;
+import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
+import fi.septicuss.tooltips.utils.Colors;
+import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.google.common.collect.Lists;
-
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.managers.preset.Preset;
-import fi.septicuss.tooltips.managers.title.TitleBuilder;
-import fi.septicuss.tooltips.managers.tooltip.Tooltip;
-import fi.septicuss.tooltips.utils.Colors;
-import fi.septicuss.tooltips.utils.Messaging;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SendPresetCommand implements TooltipsSubCommand {
 
@@ -34,7 +34,7 @@ public class SendPresetCommand implements TooltipsSubCommand {
 
 		Player target = null;
 		Preset preset = null;
-		List<String> extra = Lists.newArrayList();
+		ArrayList<String> extra = new ArrayList<>();
 
 		if (args.length < 2) {
 			warn(sender, "Missing target");
@@ -66,14 +66,17 @@ public class SendPresetCommand implements TooltipsSubCommand {
 			for (int i = 3; i < args.length; i++) {
 				builder.append(args[i] + " ");
 			}
-			
+
 			String text = Text.processText(target, builder.toString().strip());
 			extra.addAll(Arrays.asList(text.split("\\\\n")));
 		}
 
 		// Sending
+		final TooltipManager manager = plugin.getTooltipManager();
+		final PlayerTooltipData data = manager.getPlayerTooltipData(target);
+		data.setSentPreset(preset.getId());
 
-		Tooltip tooltip = plugin.getTooltipManager().getTooltip(target, preset, extra);
+		final Tooltip tooltip = manager.getTooltip(target, preset, extra);
 
 		TitleBuilder titleBuilder = new TitleBuilder(plugin.getTitleManager());
 		titleBuilder.setSubtitle(tooltip.getComponent());

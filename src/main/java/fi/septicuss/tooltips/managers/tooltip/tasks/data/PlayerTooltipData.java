@@ -46,6 +46,9 @@ public class PlayerTooltipData {
     // Context
     private Context context = new Context();
 
+    // Send preset
+    private String sentPreset;
+
     public UUID getPlayersId() {
         return uuid;
     }
@@ -76,6 +79,14 @@ public class PlayerTooltipData {
 
     public boolean hasDisplayedPreset() {
         return (this.displayedPreset.get() != null);
+    }
+
+    public void setSentPreset(String sentPreset) {
+        this.sentPreset = sentPreset;
+    }
+
+    public String getSentPreset() {
+        return sentPreset;
     }
 
     public ArrayList<String> getDisplayedText() {

@@ -21,7 +21,7 @@ public class Text {
     public static List<String> processText(final Player player, final List<String> text) {
         final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);
         final List<String> placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
-        final List<String> functionsParsed = Functions.parse(player, playerTooltipData.getDisplayedPreset(), placeholdersReplaced);
+        final List<String> functionsParsed = Functions.parse(player, playerTooltipData.hasDisplayedPreset() ? playerTooltipData.getDisplayedPreset() : playerTooltipData.getSentPreset(), placeholdersReplaced);
         return Animations.parse(player, functionsParsed);
     }
 
