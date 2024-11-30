@@ -2,6 +2,7 @@ package fi.septicuss.tooltips.managers.preset.actions.command.impl.vars;
 
 import java.util.List;
 
+import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -123,7 +124,7 @@ public class SetVarCommand extends VarCommand implements ActionCommand {
 			return value;
 		
 		value = value.replace("%player%", target.getName());
-		value = Placeholders.replacePlaceholders(target, value);
+		value = Text.processText(target, value);
 		return value;
 	}
 
