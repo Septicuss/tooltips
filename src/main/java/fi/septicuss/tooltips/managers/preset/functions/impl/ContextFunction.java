@@ -7,6 +7,7 @@ import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.preset.functions.Function;
 import fi.septicuss.tooltips.managers.preset.functions.FunctionContext;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
+import fi.septicuss.tooltips.utils.Utils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -26,13 +27,21 @@ public class ContextFunction implements Function {
     @Override
     public String handle(Player player, FunctionContext context, List<Argument> args) {
         if (args.isEmpty()) return "";
-        final String key = args.get(0).process(player).getAsString();
+
+        final String path = args.get(0).process(player).getAsString();
+        final String queryPath = Utils.stripQueryPath(path);
+
         final PlayerTooltipData tooltipData = plugin.getTooltipManager().getPlayerTooltipData(player);
 
         final Context tooltipContext = tooltipData.getContext();
-        if (!tooltipContext.has(key)) return "";
+        if (!tooltipContext.has(queryPath)) return "";
 
-        return Objects.requireNonNull(tooltipContext.get(key)).toString();
+        final Object value = tooltipContext.get(queryPath);
+        if (value == null) return "";
+
+        final Object result = Utils.queryObject(path, value);
+
+        return result.toString();
     }
 
 }

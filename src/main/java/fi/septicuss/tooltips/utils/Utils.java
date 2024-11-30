@@ -25,6 +25,87 @@ public class Utils {
 	private static final Pattern PATTERN = Pattern.compile("#" + "([A-Fa-f0-9]{6})");
 	private static final char DELIMITER = '\uF0A2';
 
+	/**
+	 * Strip a path like meow.meow[3] from possible query-related features.
+	 * <ul>
+	 *     <li>meow.meow[3] -> meow.meow</li>
+	 *     <li>meow.meow[length] -> meow.meow</li>
+	 * </ul>
+	 *
+	 * @param path Path
+	 * @return Stripped query path
+	 */
+	public static String stripQueryPath(String path) {
+		if (!path.contains("[") ||!path.contains("]")) return path;
+
+		String newPath = path;
+
+		if (path.endsWith("]") && path.contains("[")) {
+			int startIndex = path.lastIndexOf('[');
+			int endIndex = path.lastIndexOf(']');
+
+			final String contentInsideBrackets = path.substring(startIndex + 1, endIndex);
+
+			if (Utils.isInteger(contentInsideBrackets) || contentInsideBrackets.equalsIgnoreCase("length")) {
+				newPath = newPath.substring(0, startIndex);
+			}
+		}
+
+		return newPath;
+	}
+
+	/**
+	 * Used to query an object for information with a yaml-like path.
+	 * Currently supported:
+	 * <ul>
+	 *     <li>Indexing lists, by having a [x] at the end</li>
+	 *     <li>Length of lists, by having a [length] at the end</li>
+	 * </ul>
+	 * Right now supports indexing lists, by having a [x] at the end
+	 *
+	 * @param path Path
+	 * @param object Object to be queried
+	 * @return Object result of the query
+	 */
+	public static Object queryObject(String path, Object object) {
+		if (!path.contains("[") ||!path.contains("]")) return object;
+
+		boolean length = false;
+		int index = -1;
+
+		if (path.endsWith("]") && path.contains("[")) {
+			int startIndex = path.lastIndexOf('[');
+			int endIndex = path.lastIndexOf(']');
+
+			final String contentInsideBrackets = path.substring(startIndex + 1, endIndex);
+
+
+			if (Utils.isInteger(contentInsideBrackets)) {
+				index = Integer.parseInt(contentInsideBrackets);
+			} else if (contentInsideBrackets.equalsIgnoreCase("length")) {
+				length = true;
+			}
+		}
+
+		if (object instanceof List<?> list) {
+			if (length) {
+				return list.size();
+			}
+
+			final boolean hasIndex = index != -1;
+			final boolean indexInBounds = list.size() > index;
+
+			if (hasIndex && indexInBounds) {
+				return list.get(index).toString();
+			}
+
+			final List<String> stringList = list.stream().map(Object::toString).toList();
+			return String.join(", ", stringList);
+		}
+
+		return object;
+	}
+
 	public static boolean isSurroundedByQuotes(String value) {
 		if (value.startsWith("\"") && value.endsWith("\"")) {
 			return true;

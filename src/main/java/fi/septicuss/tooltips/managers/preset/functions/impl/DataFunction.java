@@ -5,6 +5,7 @@ import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.functions.Function;
 import fi.septicuss.tooltips.managers.preset.functions.FunctionContext;
+import fi.septicuss.tooltips.utils.Utils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -30,31 +31,14 @@ public class DataFunction implements Function {
         final ConfigurationSection data = getPresetDataSection(preset);
         if (data == null) return "";
 
-        String path = args.get(0).process(player).getAsString();
-        int index = -1;
+        final String path = args.get(0).process(player).getAsString();
+        final String queryPath = Utils.stripQueryPath(path);
 
-        // ...[x] used for indexing lists
-        if (path.length() > 3 && path.endsWith("]") && path.charAt(path.length() - 3) == '[') {
-            index = Character.digit(path.charAt(path.length() - 2), 10);
-            path = path.substring(0, path.length() - 3);
-        }
+        final Object object = data.get(queryPath);
+        if (object == null) return "";
 
-        final Object result = data.get(path);
+        final Object result = Utils.queryObject(path, object);
         if (result == null) return "";
-
-        if (result instanceof List) {
-            final List<?> list = data.getList(path);
-            final boolean hasIndex = index != -1;
-            final boolean indexInBounds = list.size() > index;
-
-            if (hasIndex && indexInBounds) {
-                return list.get(index).toString();
-            }
-
-
-            final List<String> stringList = list.stream().map(Object::toString).toList();
-            return String.join(", ", stringList);
-        }
 
         return result.toString();
     }
