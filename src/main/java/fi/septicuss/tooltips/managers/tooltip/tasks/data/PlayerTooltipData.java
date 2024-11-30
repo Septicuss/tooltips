@@ -18,6 +18,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +40,7 @@ public class PlayerTooltipData {
     private final ConcurrentHashMap<CooldownType, Long> cooldowns = new ConcurrentHashMap<>();
 
     // Animations
-    private final ArrayList<UUID> animations = new ArrayList<>();
+    private final List<UUID> animations = new CopyOnWriteArrayList<>();
     private boolean animationsSetup = false;
     private boolean animationsDone = false;
 
@@ -188,7 +189,7 @@ public class PlayerTooltipData {
 
         final Player player = Bukkit.getPlayer(this.uuid);
 
-        ParsedAnimation previousIdentifiedAnimation = null;
+        ParsedAnimation previousAnimation = null;
 
         for (UUID uuid : this.animations) {
             final ParsedAnimation animation = Animations.get(uuid);
@@ -201,8 +202,8 @@ public class PlayerTooltipData {
                 continue;
             }
 
-            if (previousIdentifiedAnimation == null || previousIdentifiedAnimation.finished()) {
-                previousIdentifiedAnimation = animation;
+            if (previousAnimation == null || previousAnimation.finished()) {
+                previousAnimation = animation;
                 animation.tick(player);
             }
 
@@ -260,7 +261,8 @@ public class PlayerTooltipData {
 
     }
 
-    private void setupAnimations() {
+    public synchronized void setupAnimations() {
+        if (this.animations.isEmpty()) return;
         this.animations.sort((o1, o2) -> {
             final ParsedAnimation p1 = Animations.get(o1);
             final ParsedAnimation p2 = Animations.get(o2);

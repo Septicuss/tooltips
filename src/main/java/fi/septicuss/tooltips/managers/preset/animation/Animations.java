@@ -154,9 +154,6 @@ public class Animations {
                 continue;
             }
 
-
-
-
             final String textArgument = arguments.get("text", "t").getAsString();
             final UUID animationId = newAnimation(name, textArgument, arguments);
             data.addAnimation(animationId);

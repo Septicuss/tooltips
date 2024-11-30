@@ -294,7 +294,7 @@ public class Tooltips extends JavaPlugin {
 		packGenerator.registerGenerator(new TextureGenerator());
 		packGenerator.generate();
 
-		this.tooltipManager.runTasks();
+		Bukkit.getScheduler().runTaskLater(this, () -> this.tooltipManager.runTasks(), 10L);
 	}
 
 	private void clearCache() {
