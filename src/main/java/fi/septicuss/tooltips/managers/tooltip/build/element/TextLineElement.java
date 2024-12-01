@@ -57,8 +57,7 @@ public class TextLineElement implements TooltipElement{
 
         final TagResolver[] iconTagResolverArray = this.tagResolvers.toArray(new TagResolver[0]);
 
-        final Component component = AdventureUtils.MINIMESSAGE
-                .deserialize(textLine.getText(), iconTagResolverArray);
+        Component component = AdventureUtils.MINIMESSAGE.deserialize(textLine.getText().replace('§', ' '), iconTagResolverArray);
 
         final Iterator<Component> iterator = component.iterator(ComponentIteratorType.DEPTH_FIRST);
 

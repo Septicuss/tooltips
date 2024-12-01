@@ -113,20 +113,5 @@ public class MultiLocation {
 		
 		return locations;
 	}
-	
-	public static void main(String[] args) {
-		
-		String test = "[]";
 
-		Validity validity = validityOf(test);
-		
-		if (validity.isValid()) {
-			System.out.println("Valid");
-		} else {
-			System.out.println(validity.getReason());
-			
-		}
-		
-	}
-	
 }
