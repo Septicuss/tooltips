@@ -68,6 +68,7 @@ public class Utils {
 	 * @return Object result of the query
 	 */
 	public static Object queryObject(String path, Object object) {
+		if (object == null) return null;
 		if (!path.contains("[") ||!path.contains("]")) return object;
 
 		boolean length = false;
@@ -99,7 +100,11 @@ public class Utils {
 				return list.get(index).toString();
 			}
 
-			final List<String> stringList = list.stream().map(Object::toString).toList();
+			final List<String> stringList = new ArrayList<>();
+			for (var value : list) {
+				if (value == null) continue;
+				stringList.add(value.toString());
+			}
 			return String.join(", ", stringList);
 		}
 

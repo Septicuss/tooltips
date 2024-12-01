@@ -7,6 +7,8 @@ import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Text {
@@ -22,7 +24,20 @@ public class Text {
         final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);
         final List<String> placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
         final List<String> functionsParsed = Functions.parse(player, playerTooltipData.hasDisplayedPreset() ? playerTooltipData.getDisplayedPreset() : playerTooltipData.getSentPreset(), placeholdersReplaced);
-        return Animations.parse(player, functionsParsed);
+        final List<String> result = new ArrayList<>();
+        for (String line : functionsParsed) {
+            if (line.contains("\n")) {
+                line = line.replace("\n", "\\n");
+            }
+
+            if (line.contains("\\n")) {
+                result.addAll(Arrays.asList(line.split("\\\\n")));
+            } else {
+                result.add(line);
+            }
+        }
+
+        return Animations.parse(player, result);
     }
 
 }
