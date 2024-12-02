@@ -24,15 +24,7 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
 
     private static final Map<UUID, TooltipsConversationData> CONVERSATION_DATA = new HashMap<>();
     private static final Set<UUID> CONVERSATIONS = new HashSet<>();
-
-    public static TooltipsConversationData getData(Player player) {
-        return CONVERSATION_DATA.get(player.getUniqueId());
-    }
-
-    public static boolean isInConversation(Player player) {
-        return CONVERSATIONS.contains(player.getUniqueId());
-    }
-
+    private static boolean STOP = false;
     private final Conversation conversation;
     private final Player player;
     private boolean ending = false;
@@ -45,6 +37,19 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
         this.addActiveConversation();
 
         Bukkit.getPluginManager().registerEvents(this, Tooltips.get());
+    }
+
+    public static TooltipsConversationData getData(Player player) {
+        return CONVERSATION_DATA.get(player.getUniqueId());
+    }
+
+    public static boolean isInConversation(Player player) {
+        return CONVERSATIONS.contains(player.getUniqueId());
+    }
+
+    public static void endConversations() {
+        STOP = true;
+        CONVERSATIONS.clear();
     }
 
     @EventHandler
@@ -98,22 +103,29 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
         this.ending = true;
 
         Bukkit.getScheduler().runTaskTimer(Tooltips.get(), (task) -> {
-
-            boolean online = this.player.isOnline();
-            boolean end = !online || this.getData().shouldEnd();
-
-            if (end) {
-                Bukkit.getScheduler().runTaskLater(Tooltips.get(), () -> {
-                    HandlerList.unregisterAll(this);
-
-                    CONVERSATION_DATA.remove(player.getUniqueId());
-                    this.removeActiveConversation();
-                }, 5L);
+            if (STOP) {
+                HandlerList.unregisterAll(TooltipsConversationIO.this);
                 task.cancel();
+                return;
             }
 
+            final boolean online = player.isOnline();
+            final boolean end = (STOP || !online || getData().shouldEnd());
+
+            if (!end) {
+                return;
+            }
+
+            Bukkit.getScheduler().runTaskLater(Tooltips.get(), () -> {
+                HandlerList.unregisterAll(TooltipsConversationIO.this);
+
+                CONVERSATION_DATA.remove(player.getUniqueId());
+                this.removeActiveConversation();
+            }, 5L);
+            task.cancel();
 
         }, 0L, 1L);
+
 
     }
 

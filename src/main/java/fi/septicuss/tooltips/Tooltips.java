@@ -158,6 +158,9 @@ public class Tooltips extends JavaPlugin {
 		if (this.tooltipManager != null)
 			this.tooltipManager.stopTasks();
 
+		if (this.integrationManager != null)
+			this.integrationManager.disable();
+
 		Variables.PERSISTENT.save();
 	}
 

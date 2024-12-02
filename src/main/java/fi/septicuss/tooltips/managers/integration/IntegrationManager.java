@@ -88,6 +88,14 @@ public class IntegrationManager {
 
     }
 
+    public void disable() {
+
+        if (isPresent("BetonQuest")) {
+            TooltipsConversationIO.endConversations();
+        }
+
+    }
+
     public Optional<FurnitureWrapper> getFurniture(final @Nonnull Block block) {
         for (FurnitureProvider provider : this.furnitureProviders.values()) {
             final FurnitureWrapper furniture = provider.getFurniture(block);

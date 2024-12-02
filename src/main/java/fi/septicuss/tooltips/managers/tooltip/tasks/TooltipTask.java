@@ -59,8 +59,11 @@ public class TooltipTask extends BukkitRunnable {
 
             if (currentSameAsDisplayed) {
                 final Preset preset = manager.getPresets().get(data.getDisplayedPreset());
-                if (data.getSourceText() == null) {
+                final boolean redisplayQueued = data.isRedisplayQueued();
+
+                if (data.getSourceText() == null || redisplayQueued) {
                     data.setSourceText(Animations.parse(player, preset.getText()));
+                    data.setRedisplayQueued(false);
                 }
 
                 final ArrayList<String> text = process(player, data.getSourceText());
@@ -69,7 +72,7 @@ public class TooltipTask extends BukkitRunnable {
                 final boolean reshowOnChange = preset.getShowProperties().shouldRefreshOnChange();
 
                 // Text of the same preset has changed
-                if (textChanged) {
+                if (textChanged || redisplayQueued) {
 
                     // Only reshow tooltip if configured so
                     if (reshowOnChange) {

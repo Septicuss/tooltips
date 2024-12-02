@@ -38,6 +38,7 @@ public class PlayerTooltipData {
     private final AtomicBoolean textChanged = new AtomicBoolean();
     private final AtomicBoolean firstTime = new AtomicBoolean();
     private final ConcurrentHashMap<CooldownType, Long> cooldowns = new ConcurrentHashMap<>();
+    private final AtomicBoolean redisplayQueued = new AtomicBoolean();
 
     // Animations
     private final List<UUID> animations = new CopyOnWriteArrayList<>();
@@ -174,6 +175,14 @@ public class PlayerTooltipData {
 
     public Context getContext() {
         return this.context;
+    }
+
+    public boolean isRedisplayQueued() {
+        return this.redisplayQueued.get();
+    }
+
+    public void setRedisplayQueued(boolean redisplayQueued) {
+        this.redisplayQueued.set(redisplayQueued);
     }
 
     public void addAnimation(UUID uuid) {
