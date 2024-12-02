@@ -58,6 +58,7 @@ import fi.septicuss.tooltips.managers.preset.functions.impl.IfFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.LowercaseFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.ParseFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.PreprocessFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.StripFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.UppercaseFunction;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
@@ -213,6 +214,7 @@ public class Tooltips extends JavaPlugin {
 		Functions.add("parse", new ParseFunction());
 		Functions.add("tta", new AnimationFunction());
 		Functions.add("preprocess", new PreprocessFunction());
+		Functions.add("strip", new StripFunction());
 	}
 
 	private void registerAnimations() {
