@@ -50,6 +50,9 @@ public class ProtocolLibTitle extends Title<ProtocolLibPacketProvider> {
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(Tooltips.get(), () -> {
+            if (player == null || !player.isOnline())
+                return;
+
             try {
                 for (PacketContainer packet : this.packets) {
                     protocolManager.sendServerPacket(player, packet);

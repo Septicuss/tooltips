@@ -29,6 +29,9 @@ public class PacketEventsTitle extends Title<PacketEventsPacketProvider> {
     @Override
     public void send(Player player) {
         final var user = PacketEvents.getAPI().getPlayerManager().getUser(player);
+        if (user == null) {
+            return;
+        }
         for (var packet : this.packets) {
             user.sendPacket(packet);
         }
