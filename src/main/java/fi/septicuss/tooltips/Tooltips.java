@@ -45,6 +45,7 @@ import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.animation.AnimationProvider;
 import fi.septicuss.tooltips.managers.preset.animation.Animations;
+import fi.septicuss.tooltips.managers.preset.animation.impl.StaticAnimationProvider;
 import fi.septicuss.tooltips.managers.preset.animation.impl.TypewriterAnimationProvider;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.preset.functions.impl.AnimationFunction;
@@ -144,8 +145,8 @@ public class Tooltips extends JavaPlugin {
 		titleManager = new TitleManager(this);
 		conditionManager = new ConditionManager();
 
-		this.registerDefaultContent();
 		this.loadIntegrations();
+		this.registerDefaultContent();
 		this.reload();
 		this.loadVariables();
 		this.loadListeners();
@@ -213,6 +214,9 @@ public class Tooltips extends JavaPlugin {
 		final AnimationProvider typewriter = new TypewriterAnimationProvider();
 		Animations.addProvider("typewriter", typewriter);
 		Animations.addProvider("tw", typewriter);
+		final AnimationProvider staticProvider = new StaticAnimationProvider();
+		Animations.addProvider("static", staticProvider);
+		Animations.addProvider("s", staticProvider);
 	}
 
 	private void registerLocalPlaceholders() {
