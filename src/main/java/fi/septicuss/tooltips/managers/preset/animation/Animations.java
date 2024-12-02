@@ -62,10 +62,101 @@ public class Animations {
         return result;
     }
 
-    public static boolean hasAnimations(Player player, List<String> text) {
-        for (String line : text)
-            if (hasAnimations(player, line)) return true;
-        return false;
+    public static String stripAnimations(String text) {
+        final StringBuilder builder = new StringBuilder();
+
+        if (text.indexOf('<') == -1 || text.indexOf('>') == -1) {
+            return text;
+        }
+
+        for (int index = 0; index < text.length(); index++) {
+
+            // <...>
+            // ^
+            final int openingSign = text.indexOf('<', index);
+            if (openingSign == -1) {
+                builder.append(text.substring(index));
+                break;
+            }
+
+            // <...>
+            //     ^
+            int closingSign = -1;
+            int level = 1;
+
+            // j = <...
+            //     ^
+            for (int j = openingSign + 1; j < text.length(); j++) {
+                if (text.charAt(j) == '<') {
+                    level++;
+                } else if (text.charAt(j) == '>') {
+                    level--;
+
+                    if (level == 0) {
+                        // <...>
+                        //     ^
+                        closingSign = j;
+                        break;
+                    }
+                }
+            }
+
+            // > Not found
+            if (closingSign == -1) {
+                builder.append(text, index, openingSign + 1);
+                index = openingSign;
+                continue;
+            }
+
+            builder.append(text, index, openingSign);
+            index = openingSign;
+
+            // <...>
+            //  ^^^
+            final String content = text.substring(openingSign + 1, closingSign);
+            final List<String> tokens = tokenizeTagContents(content);
+
+            // <meow ...>
+            //  ^^^^
+            final String name = tokens.get(0);
+
+            if (!doesProviderExist(name)) {
+                builder.append(text, index, closingSign + 1);
+                index = closingSign;
+                continue;
+            }
+
+            final Arguments arguments = new Arguments();
+
+            for (int i = 1; i < tokens.size(); i++) {
+                String token = tokens.get(i);
+
+                if (token.contains("=")) {
+                    String[] parts = token.split("=", 2);
+                    String key = parts[0].strip();
+                    String value = parts[1].strip();
+
+                    if (Utils.isSurroundedByQuotes(value)) {
+                        value = Utils.removeQuotes(value);
+                    }
+
+                    arguments.add(key, new Argument(value));
+                } else {
+                    arguments.add(token.strip(), new Argument("true"));
+                }
+            }
+
+            if (!arguments.has("text", "t")) {
+                builder.append(text, index, closingSign + 1);
+                index = closingSign;
+                continue;
+            }
+
+            builder.append(arguments.get("text", "t").getAsString());
+            index = closingSign;
+        }
+
+        return builder.toString();
     }
 
     public static boolean hasAnimations(Player player, String text) {
