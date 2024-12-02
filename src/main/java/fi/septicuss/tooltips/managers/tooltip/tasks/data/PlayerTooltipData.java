@@ -214,7 +214,6 @@ public class PlayerTooltipData {
     }
 
     public void skipCurrentAnimation() {
-        if (this.animationsDone) return;
         if (this.animations.isEmpty()) return;
 
         for (UUID uuid : this.animations) {
@@ -231,7 +230,6 @@ public class PlayerTooltipData {
     }
 
     public void skipAllAnimations() {
-        if (this.animationsDone) return;
         if (this.animations.isEmpty()) return;
 
         for (UUID uuid : this.animations) {

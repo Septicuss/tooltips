@@ -2,6 +2,11 @@ package fi.septicuss.tooltips.managers.integration;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.AxGensIntegration;
+import fi.septicuss.tooltips.managers.integration.impl.betonquest.BetonQuestCondition;
+import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.EndConversationCommand;
+import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.NextOptionCommand;
+import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.SelectOptionCommand;
+import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIO;
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
@@ -14,6 +19,8 @@ import fi.septicuss.tooltips.managers.integration.providers.AreaProvider;
 import fi.septicuss.tooltips.managers.integration.providers.FurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.providers.PacketProvider;
 import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
+import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
+import org.betonquest.betonquest.BetonQuest;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -69,6 +76,14 @@ public class IntegrationManager {
             if (expansion.isRegistered())
                 expansion.unregister();
             expansion.register();
+        }
+
+        if (isPresent("BetonQuest")) {
+            BetonQuest.getInstance().registerConversationIO("tooltips", TooltipsConversationIO.class);
+            Tooltips.get().getConditionManager().register(new BetonQuestCondition());
+            ActionCommands.addCommand("selectoption", new SelectOptionCommand());
+            ActionCommands.addCommand("endconversation", new EndConversationCommand());
+            ActionCommands.addCommand("nextoption", new NextOptionCommand());
         }
 
     }

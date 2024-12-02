@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import fi.septicuss.tooltips.managers.preset.actions.command.impl.RedisplayCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.SkipCommand;
 import org.bukkit.entity.Player;
 
@@ -31,6 +32,7 @@ public class ActionCommands {
 		COMMANDS.put("message", new MessageCommand());
 		COMMANDS.put("delay", new DelayCommand());
 		COMMANDS.put("skip", new SkipCommand());
+		COMMANDS.put("redisplay", new RedisplayCommand());
 		
 		// Variables
 		
@@ -44,6 +46,10 @@ public class ActionCommands {
 		COMMANDS.put("setvar", new SetVarCommand(false));
 		COMMANDS.put("clearvar", new ClearVarCommand(false));
 		COMMANDS.put("clearvars", new ClearVarsCommand(false));
+	}
+
+	public static void addCommand(String name, ActionCommand actionCommand) {
+		COMMANDS.put(name, actionCommand);
 	}
 
 	public static boolean isValidCommand(String fullCommand) {

@@ -5,7 +5,6 @@ import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
 import fi.septicuss.tooltips.managers.preset.actions.DefaultTooltipAction;
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.managers.preset.animation.Animations;
-import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
@@ -13,7 +12,6 @@ import fi.septicuss.tooltips.managers.tooltip.tasks.data.CooldownType;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import fi.septicuss.tooltips.utils.Text;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -62,7 +60,7 @@ public class TooltipTask extends BukkitRunnable {
             if (currentSameAsDisplayed) {
                 final Preset preset = manager.getPresets().get(data.getDisplayedPreset());
                 if (data.getSourceText() == null) {
-                    data.setSourceText(preset.getText());
+                    data.setSourceText(Animations.parse(player, preset.getText()));
                 }
 
                 final ArrayList<String> text = process(player, data.getSourceText());
@@ -310,6 +308,7 @@ public class TooltipTask extends BukkitRunnable {
     }
 
     private ArrayList<String> process(Player player, List<String> text) {
+        if (text == null) return new ArrayList<>();
         return new ArrayList<>(Text.processText(player, text));
     }
 
