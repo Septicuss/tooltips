@@ -187,6 +187,7 @@ public class PlayerTooltipData {
 
     public void addAnimation(UUID uuid) {
         this.animations.add(uuid);
+        this.animationsSetup = false;
     }
 
     public void tickAnimations() {

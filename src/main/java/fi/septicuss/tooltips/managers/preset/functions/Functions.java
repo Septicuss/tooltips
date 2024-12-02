@@ -30,6 +30,14 @@ public class Functions {
         FUNCTIONS.remove(name.toLowerCase());
     }
 
+    public static String parse(Player player, String preset, String text) {
+        return parse(player, preset, text, null);
+    }
+
+    public static List<String> parse(Player player, String preset, List<String> text) {
+        return parse(player, preset,  text, null);
+    }
+
     /**
      * Process the given text for any functions ($function()) and replace them with the output of function.
      *
@@ -37,12 +45,12 @@ public class Functions {
      * @param text Text to parse functions from
      * @return Result string list, with all valid functions parsed and executed
      */
-    public static @Nonnull List<String> parse(Player player, String preset, List<String> text) {
+    public static @Nonnull List<String> parse(Player player, String preset, List<String> text, List<String> whitelist) {
         if (preset == null) return text;
         final List<String> result = new ArrayList<>();
 
         for (String line : text) {
-            result.add(parse(player, preset, line));
+            result.add(parse(player, preset, line, whitelist));
         }
 
         return result;
@@ -55,7 +63,7 @@ public class Functions {
      * @param text Text to parse functions from
      * @return Result string, with all valid functions parsed and executed
      */
-    public static @Nonnull String parse(Player player, @Nonnull String preset, @Nonnull String text) {
+    public static @Nonnull String parse(Player player, @Nonnull String preset, @Nonnull String text, List<String> whitelist) {
         final StringBuilder builder = new StringBuilder();
 
         if (text.indexOf('$') == -1) {
@@ -120,6 +128,15 @@ public class Functions {
                 builder.append(text, index, openingBracket + 1);
                 index = openingBracket;
                 continue;
+            }
+
+            if (whitelist != null && !whitelist.isEmpty()) {
+                if (!whitelist.contains(name.toLowerCase())) {
+                    builder.append(text, index, openingBracket + 1);
+                    index = openingBracket;
+                    continue;
+                }
+
             }
 
             final Function function = FUNCTIONS.get(name);
