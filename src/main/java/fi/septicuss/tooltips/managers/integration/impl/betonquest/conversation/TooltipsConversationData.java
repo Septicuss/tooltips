@@ -71,6 +71,7 @@ public class TooltipsConversationData {
 
     public void clearOptions() {
         this.options.clear();
+        this.selectedOption = 0;
     }
 
     public void nextOption() {
