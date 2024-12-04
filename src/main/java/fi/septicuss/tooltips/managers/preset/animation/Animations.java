@@ -3,6 +3,7 @@ package fi.septicuss.tooltips.managers.preset.animation;
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import fi.septicuss.tooltips.utils.Utils;
 import org.bukkit.entity.Player;
@@ -264,6 +265,7 @@ public class Animations {
                 }
             }
 
+
             // > Not found
             if (closingSign == -1) {
                 builder.append(text, index, openingSign + 1);
@@ -278,6 +280,7 @@ public class Animations {
             //  ^^^
             final String content = text.substring(openingSign + 1, closingSign);
             final List<String> tokens = tokenizeTagContents(content);
+
 
             // <meow ...>
             //  ^^^^
@@ -303,19 +306,13 @@ public class Animations {
                         value = Utils.removeQuotes(value);
                     }
 
-                    arguments.add(key, new Argument(value).process(player));
+                    arguments.add(key, new Argument(Functions.parse(player, data.getCurrentPreset(), value)));
                 } else {
                     arguments.add(token.strip(), new Argument("true"));
                 }
             }
 
-            if (!arguments.has("text", "t")) {
-                builder.append(text, index, closingSign + 1);
-                index = closingSign;
-                continue;
-            }
-
-            final String textArgument = arguments.get("text", "t").getAsString();
+            final String textArgument = arguments.has("text", "t") ?  arguments.get("text", "t").getAsString() : null;
             final UUID animationId = newAnimation(name, textArgument, arguments);
             data.addAnimation(animationId);
 
@@ -358,18 +355,5 @@ public class Animations {
 
         return tokens;
     }
-
-    private static void calculateDelays(Arguments arguments) {
-
-        final Map<Integer, Integer> durationOfId = new HashMap<>();
-
-        for (String key : arguments.keys()) {
-            final Argument argument = arguments.get(key);
-
-        }
-
-
-    }
-
 
 }

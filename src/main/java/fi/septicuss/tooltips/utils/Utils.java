@@ -112,6 +112,7 @@ public class Utils {
 	}
 
 	public static boolean isSurroundedByQuotes(String value) {
+		if (value.length() <= 1) return false;
 		if (value.startsWith("\"") && value.endsWith("\"")) {
 			return true;
 		}

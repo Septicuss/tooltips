@@ -191,7 +191,10 @@ public class PlayerTooltipData {
     }
 
     public void tickAnimations() {
-        if (this.animations.isEmpty()) return;
+        if (this.animations.isEmpty()) {
+            runAnimationFinishedAction();
+            return;
+        }
         if (!this.animationsSetup) setupAnimations();
 
         if (this.animationsDone)
@@ -255,8 +258,11 @@ public class PlayerTooltipData {
     }
 
     private void runAnimationFinishedAction() {
-        if (this.animations.isEmpty()) return;
         if (this.animationsDone) return;
+        if (this.animations.isEmpty()) {
+            this.runAction("animation-finished");
+            return;
+        }
 
         for (UUID uuid : this.animations) {
             final ParsedAnimation animation = Animations.get(uuid);

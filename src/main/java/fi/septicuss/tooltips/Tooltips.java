@@ -36,7 +36,6 @@ import fi.septicuss.tooltips.managers.condition.impl.Permission;
 import fi.septicuss.tooltips.managers.condition.impl.Region;
 import fi.septicuss.tooltips.managers.condition.impl.Sneaking;
 import fi.septicuss.tooltips.managers.condition.impl.StandingOn;
-import fi.septicuss.tooltips.managers.condition.impl.TileEntityNbtEquals;
 import fi.septicuss.tooltips.managers.condition.impl.Time;
 import fi.septicuss.tooltips.managers.condition.impl.World;
 import fi.septicuss.tooltips.managers.icon.IconManager;
@@ -45,7 +44,6 @@ import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
 import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.preset.animation.AnimationProvider;
 import fi.septicuss.tooltips.managers.preset.animation.Animations;
-import fi.septicuss.tooltips.managers.preset.animation.impl.StaticAnimationProvider;
 import fi.septicuss.tooltips.managers.preset.animation.impl.TypewriterAnimationProvider;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.preset.functions.impl.AnimationFunction;
@@ -58,6 +56,7 @@ import fi.septicuss.tooltips.managers.preset.functions.impl.IfFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.LowercaseFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.ParseFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.PreprocessFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.StaticFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.StripFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.UppercaseFunction;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
@@ -215,15 +214,13 @@ public class Tooltips extends JavaPlugin {
 		Functions.add("tta", new AnimationFunction());
 		Functions.add("preprocess", new PreprocessFunction());
 		Functions.add("strip", new StripFunction());
+		Functions.add("static", new StaticFunction());
 	}
 
 	private void registerAnimations() {
 		final AnimationProvider typewriter = new TypewriterAnimationProvider();
 		Animations.addProvider("typewriter", typewriter);
 		Animations.addProvider("tw", typewriter);
-		final AnimationProvider staticProvider = new StaticAnimationProvider();
-		Animations.addProvider("static", staticProvider);
-		Animations.addProvider("s", staticProvider);
 	}
 
 	private void registerLocalPlaceholders() {

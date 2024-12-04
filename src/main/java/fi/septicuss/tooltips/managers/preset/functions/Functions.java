@@ -155,6 +155,11 @@ public class Functions {
             for (String argumentString : argumentStrings) {
                 argumentString = argumentString.strip();
 
+                if (function.isAcceptRawInput()) {
+                    arguments.add(new Argument(argumentString));
+                    continue;
+                }
+
                 if (Utils.isSurroundedByQuotes(argumentString)) {
                     final int length = argumentString.length();
                     argumentString = argumentString.substring(1, length - 1);

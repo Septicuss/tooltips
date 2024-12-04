@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Text {
 
-    private static final List<String> PREPROCESS_FUNCTIONS = List.of("preprocess", "strip");
+    private static final List<String> PREPROCESS_FUNCTIONS = List.of("preprocess", "strip", "static");
 
     public static List<String> preprocessText(final Player player, final List<String> text) {
         final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);

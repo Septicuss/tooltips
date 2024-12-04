@@ -10,4 +10,8 @@ public interface Function {
 
     String handle(Player player, FunctionContext context, List<Argument> args);
 
+    default boolean isAcceptRawInput() {
+        return false;
+    }
+
 }
