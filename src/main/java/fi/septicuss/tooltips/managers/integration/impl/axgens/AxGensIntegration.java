@@ -4,7 +4,7 @@ import com.artillexstudios.axgens.api.AxGensAPI;
 import com.artillexstudios.axgens.generators.Generator;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.cache.integrations.axgens.AxGensCache;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
+import fi.septicuss.tooltips.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 

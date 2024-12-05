@@ -11,7 +11,6 @@ import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Expr;
 import fi.septicuss.tooltips.utils.Expr.Builder;
 import fi.septicuss.tooltips.utils.Utils;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import fi.septicuss.tooltips.utils.validation.Validity;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import fi.septicuss.tooltips.utils.variable.Variables.VariableProvider;

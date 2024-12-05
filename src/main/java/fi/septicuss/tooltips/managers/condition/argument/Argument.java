@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
 import fi.septicuss.tooltips.managers.condition.type.LocationArgument;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 
 public class Argument {
 

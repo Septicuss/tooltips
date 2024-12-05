@@ -77,9 +77,6 @@ import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
-import fi.septicuss.tooltips.utils.placeholder.impl.PersistentVariablePlaceholder;
-import fi.septicuss.tooltips.utils.placeholder.impl.VariablePlaceholder;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -171,7 +168,6 @@ public class Tooltips extends JavaPlugin {
 
 	private void registerDefaultContent() {
 		this.registerConditions();
-		this.registerLocalPlaceholders();
 		this.registerFunctions();
 		this.registerAnimations();
 	}
@@ -217,7 +213,7 @@ public class Tooltips extends JavaPlugin {
 		Functions.add("preprocess", new PreprocessFunction());
 		Functions.add("strip", new StripFunction());
 		Functions.add("static", new StaticFunction());
-		
+
 		// Variables
 		Functions.add("var", new VarFunction());
 		Functions.add("pvar", new PVarFunction());
@@ -229,11 +225,6 @@ public class Tooltips extends JavaPlugin {
 		Animations.addProvider("tw", typewriter);
 	}
 
-	private void registerLocalPlaceholders() {
-		Placeholders.addLocal("var", new VariablePlaceholder());
-		Placeholders.addLocal("persistentvar", new PersistentVariablePlaceholder());
-	}
-	
 	private void loadVariables() {
 		final File variablesDirectory = new File(getDataFolder(), ".data/variables");
 		Variables.PERSISTENT.load(variablesDirectory);

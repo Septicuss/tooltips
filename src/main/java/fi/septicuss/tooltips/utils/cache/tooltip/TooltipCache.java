@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import fi.septicuss.tooltips.utils.Text;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.title.TitleBuilder;

@@ -4,7 +4,6 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.preset.animation.Animations;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

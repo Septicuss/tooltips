@@ -19,7 +19,6 @@ import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Messaging;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 
 public class SendThemeCommand implements TooltipsSubCommand {
 

@@ -12,7 +12,6 @@ import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
-import fi.septicuss.tooltips.utils.placeholder.Placeholders;
 import fi.septicuss.tooltips.utils.validation.Validity;
 
 public class DelayCommand implements ActionCommand {
