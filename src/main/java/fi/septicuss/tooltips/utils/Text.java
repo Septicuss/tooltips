@@ -14,26 +14,26 @@ public class Text {
 
     private static final List<String> PREPROCESS_FUNCTIONS = List.of("preprocess", "strip", "static");
 
-    public static List<String> preprocessText(final Player player, final List<String> text) {
-        final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);
+    public static List<String> preprocessAnimatedText(final Player player, final List<String> text) {
         final List<String> placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
-        final List<String> functionsParsed = Functions.parse(player, playerTooltipData.hasDisplayedPreset() ? playerTooltipData.getDisplayedPreset() : playerTooltipData.getSentPreset(), placeholdersReplaced, PREPROCESS_FUNCTIONS);
+        final List<String> functionsParsed = Functions.parse(player, Text.getPreset(player), placeholdersReplaced, PREPROCESS_FUNCTIONS);
         return Animations.parse(player, functionsParsed);
     }
 
     public static String processText(final Player player, final String text) {
-        final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);
         final String placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
-        final String functionsParsed = Functions.parse(player, playerTooltipData.getDisplayedPreset(), placeholdersReplaced);
-        return Animations.parse(player, functionsParsed);
+        return Functions.parse(player, Text.getPreset(player), placeholdersReplaced);
     }
 
     public static List<String> processText(final Player player, final List<String> text) {
-        final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);
         final List<String> placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
-        final List<String> functionsParsed = Functions.parse(player, playerTooltipData.hasDisplayedPreset() ? playerTooltipData.getDisplayedPreset() : playerTooltipData.getSentPreset(), placeholdersReplaced);
+        final List<String> functionsParsed = Functions.parse(player, Text.getPreset(player), placeholdersReplaced);
+        return Text.splitText(functionsParsed);
+    }
+
+    public static List<String> splitText(List<String> text) {
         final List<String> result = new ArrayList<>();
-        for (String line : functionsParsed) {
+        for (String line : text) {
             if (line.contains("\n")) {
                 line = line.replace("\n", "\\n");
             }
@@ -44,8 +44,12 @@ public class Text {
                 result.add(line);
             }
         }
+        return result;
+    }
 
-        return Animations.parse(player, result);
+    private static String getPreset(Player player) {
+        final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);
+        return playerTooltipData.hasDisplayedPreset() ? playerTooltipData.getDisplayedPreset() : playerTooltipData.getSentPreset();
     }
 
 }

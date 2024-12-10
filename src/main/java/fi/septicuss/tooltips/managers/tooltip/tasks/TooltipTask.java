@@ -4,8 +4,6 @@ import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
 import fi.septicuss.tooltips.managers.preset.actions.DefaultTooltipAction;
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
-import fi.septicuss.tooltips.managers.preset.animation.Animations;
-import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.preset.show.ShowProperties;
 import fi.septicuss.tooltips.managers.title.TitleBuilder;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
@@ -63,7 +61,7 @@ public class TooltipTask extends BukkitRunnable {
                 final boolean redisplayQueued = data.isRedisplayQueued();
 
                 if (data.getSourceText() == null || redisplayQueued) {
-                    data.setSourceText(Text.preprocessText(player, preset.getText()));
+                    data.setSourceText(Text.preprocessAnimatedText(player, preset.getText()));
                     data.setRedisplayQueued(false);
                 }
 
@@ -123,7 +121,7 @@ public class TooltipTask extends BukkitRunnable {
             // Start displaying the current preset
             data.setDisplayedPreset(data.getCurrentPreset());
             if (data.getCurrentPreset() != null)
-                data.setSourceText(Text.preprocessText(player, manager.getPresets().get(data.getCurrentPreset()).getText()));
+                data.setSourceText(Text.preprocessAnimatedText(player, manager.getPresets().get(data.getCurrentPreset()).getText()));
             data.setFirstTime(true);
             data.setTextChanged(false);
 
