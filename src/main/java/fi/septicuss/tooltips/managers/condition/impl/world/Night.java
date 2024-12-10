@@ -1,31 +1,27 @@
-package fi.septicuss.tooltips.managers.condition.impl;
+package fi.septicuss.tooltips.managers.condition.impl.world;
 
-import fi.septicuss.tooltips.managers.condition.Context;
 import org.bukkit.entity.Player;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.validation.Validity;
 
-public class Op implements Condition {
+public class Night implements Condition {
 
 	@Override
 	public boolean check(Player player, Arguments args) {
-		return player.isOp();
-	}
+		long worldTime = player.getWorld().getTime();
 
-	@Override
-	public void writeContext(Player player, Arguments args, Context context) {
-		context.put("op", player.isOp());
+		return (worldTime >= 13000);
 	}
 
 	@Override
 	public Validity valid(Arguments args) {
-		return Validity.TRUE;
+		return Validity.of(true);
 	}
 
 	@Override
 	public String id() {
-		return "op";
+		return "night";
 	}
 }

@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.condition.impl;
+package fi.septicuss.tooltips.managers.condition.impl.equals;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

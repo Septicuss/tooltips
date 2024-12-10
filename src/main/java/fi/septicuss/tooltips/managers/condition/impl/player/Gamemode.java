@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.condition.impl;
+package fi.septicuss.tooltips.managers.condition.impl.player;
 
 import fi.septicuss.tooltips.managers.condition.Context;
 import org.bukkit.GameMode;

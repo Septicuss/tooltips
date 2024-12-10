@@ -1,17 +1,17 @@
-package fi.septicuss.tooltips.managers.condition.impl;
+package fi.septicuss.tooltips.managers.condition.impl.equals;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTBlockWrapper;
+import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTTileEntityWrapper;
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
 
-public class BlockNbtEquals implements Condition {
+public class TileEntityNbtEquals implements Condition {
 
 	private static final String[] DISTANCE = { "d", "dist", "distance" };
 	private static final String[] KEY = { "key", "k" };
@@ -23,7 +23,7 @@ public class BlockNbtEquals implements Condition {
 
 		if (args.has(DISTANCE))
 			distance = args.get(DISTANCE).getAsInt();
-
+		
 		var rayTrace = Utils.getRayTraceResult(player, distance);
 		
 		if (rayTrace == null || rayTrace.getHitBlock() == null)
@@ -32,7 +32,7 @@ public class BlockNbtEquals implements Condition {
 		Block block = rayTrace.getHitBlock();
 
 		String key = args.get(KEY).getAsString();
-		var compound = new NBTBlockWrapper(block).getCompound();
+		var compound = new NBTTileEntityWrapper(block.getState()).getCompound();
 
 		Argument valueArg = args.get(VALUE);
 
@@ -44,8 +44,9 @@ public class BlockNbtEquals implements Condition {
 					continue;
 				}
 				compound = compound.getCompound(split[i]);
-				if (compound == null)
+				if (compound == null) {
 					return false;
+				}
 			}
 		}
 
@@ -65,8 +66,8 @@ public class BlockNbtEquals implements Condition {
 
 	@Override
 	public Validity valid(Arguments args) {
-		if (Bukkit.getPluginManager().isPluginEnabled("NBTAPI")) {
-			return Validity.of(false, "Cannot use blocknbtequals because NBTAPI is not installed");
+		if (!Bukkit.getPluginManager().isPluginEnabled("NBTAPI")) {
+			return Validity.of(false, "Cannot use entitynbtequals because NBTAPI is not installed");
 		}
 
 		if (!args.has(KEY)) {
@@ -82,6 +83,6 @@ public class BlockNbtEquals implements Condition {
 
 	@Override
 	public String id() {
-		return "blocknbtequals";
+		return "tileentitynbtequals";
 	}
 }

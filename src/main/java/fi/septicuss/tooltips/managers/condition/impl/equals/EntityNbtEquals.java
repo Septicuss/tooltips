@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.condition.impl;
+package fi.septicuss.tooltips.managers.condition.impl.equals;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;

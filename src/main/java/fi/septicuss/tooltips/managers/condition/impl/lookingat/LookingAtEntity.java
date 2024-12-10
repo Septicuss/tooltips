@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.condition.impl;
+package fi.septicuss.tooltips.managers.condition.impl.lookingat;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

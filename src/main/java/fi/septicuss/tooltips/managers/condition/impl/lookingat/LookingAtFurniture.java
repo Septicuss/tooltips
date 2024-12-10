@@ -1,4 +1,4 @@
-package fi.septicuss.tooltips.managers.condition.impl;
+package fi.septicuss.tooltips.managers.condition.impl.lookingat;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Condition;
