@@ -125,10 +125,10 @@ public class Utils {
 
 
 	public static String[] splitStringQuotations(final String string, final char separator) {
-		return placeDelimiters(string).split(String.valueOf(DELIMITER));
+		return placeDelimiters(string, separator).split(String.valueOf(DELIMITER));
 	}
 
-	private static String placeDelimiters(final String string) {
+	private static String placeDelimiters(final String string, final char separator) {
 		final StringBuilder modifiedStringBuilder = new StringBuilder(string);
 
 		char previousCharacter = DELIMITER;
@@ -146,14 +146,14 @@ public class Utils {
 				continue;
 			}
 
-			boolean charIsColon = (character == ',');
+			boolean charIsSeparator = (character == separator);
 			boolean lastCharWasQuote = previousCharacter == startingQuote;
 
-			if (isStartingQuoteUnset && charIsColon) {
+			if (isStartingQuoteUnset && charIsSeparator) {
 				modifiedStringBuilder.setCharAt(i, DELIMITER);
 			}
 
-			if (!isStartingQuoteUnset && lastCharWasQuote && charIsColon) {
+			if (!isStartingQuoteUnset && lastCharWasQuote && charIsSeparator) {
 				modifiedStringBuilder.setCharAt(i, DELIMITER);
 				startingQuote = ' ';
 			}
