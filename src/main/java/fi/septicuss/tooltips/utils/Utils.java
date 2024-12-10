@@ -125,44 +125,35 @@ public class Utils {
 
 
 	public static String[] splitStringQuotations(final String string, final char separator) {
-		return placeDelimiters(string, separator).split(String.valueOf(DELIMITER));
+		return stringToDelimited(string, separator).split(String.valueOf(DELIMITER));
 	}
 
-	private static String placeDelimiters(final String string, final char separator) {
-		final StringBuilder modifiedStringBuilder = new StringBuilder(string);
-
-		char previousCharacter = DELIMITER;
-		char startingQuote = ' ';
+	private static String stringToDelimited(final String string, final char separator) {
+		StringBuilder builder = new StringBuilder(string.length());
+		char startingQuote = 0;
 
 		for (int i = 0; i < string.length(); i++) {
-			final char character = string.charAt(i);
+			char current = string.charAt(i);
 
-			boolean isStartingQuoteUnset = (startingQuote == ' ');
-			boolean isQuoteCharacter = (character == '\"' || character == '\'');
-
-			if (isStartingQuoteUnset && isQuoteCharacter) {
-				startingQuote = character;
-				previousCharacter = character;
-				continue;
+			if (startingQuote == 0) {
+				// Outside quotes
+				if (current == '\"' || current == '\'') {
+					startingQuote = current;
+				} else if (current == separator) {
+					builder.append(DELIMITER);
+					continue;
+				}
+			} else if (current == startingQuote) {
+				// Inside quotes
+				startingQuote = 0;
 			}
 
-			boolean charIsSeparator = (character == separator);
-			boolean lastCharWasQuote = previousCharacter == startingQuote;
-
-			if (isStartingQuoteUnset && charIsSeparator) {
-				modifiedStringBuilder.setCharAt(i, DELIMITER);
-			}
-
-			if (!isStartingQuoteUnset && lastCharWasQuote && charIsSeparator) {
-				modifiedStringBuilder.setCharAt(i, DELIMITER);
-				startingQuote = ' ';
-			}
-
-			previousCharacter = character;
+			builder.append(current);
 		}
 
-		return modifiedStringBuilder.toString();
+		return builder.toString();
 	}
+
 
 	public static String color(String message) {
 		Matcher matcher = PATTERN.matcher(message);

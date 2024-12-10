@@ -35,8 +35,8 @@ public class Compare implements Condition {
 				operation = Operation.parseOperation(args.get(OPERATION_ALIASES).getAsString());
 			}
 
-			double first = firstArg.getAsDouble();
-			double second = secondArg.getAsDouble();
+			float first = firstArg.getAsFloat();
+			float second = secondArg.getAsFloat();
 
 			switch (operation) {
 			case EQUAL:

@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class used for adding and parsing textual functions.
@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class Functions {
 
-    private static final Map<String, Function> FUNCTIONS = new HashMap<>();
+    private static final Map<String, Function> FUNCTIONS = new ConcurrentHashMap<>();
 
     public static Function get(String name) {
         return FUNCTIONS.get(name);
