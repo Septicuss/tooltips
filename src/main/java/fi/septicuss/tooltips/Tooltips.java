@@ -86,7 +86,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class Tooltips extends JavaPlugin {
@@ -97,6 +99,7 @@ public class Tooltips extends JavaPlugin {
 	private static Tooltips INSTANCE;
 	private static Logger LOGGER;
 	private static boolean USE_SPACES;
+	public static HashSet<String> WARNINGS = new HashSet<>();
 
 	private IntegrationManager integrationManager;
 	private TitleManager titleManager;
@@ -263,6 +266,8 @@ public class Tooltips extends JavaPlugin {
 
 	public void reload() {
 
+		WARNINGS.clear();
+
 		// Stop already running tasks
 		if (this.tooltipManager != null) {
 			this.tooltipManager.stopTasks();
@@ -377,6 +382,12 @@ public class Tooltips extends JavaPlugin {
 
 	public static void warn(String message) {
 		Messaging.send(Bukkit.getConsoleSender(), ChatColor.RED + "[Tooltips] WARNING: " + message);
+	}
+
+	public static void warn(String key, String message) {
+		if (WARNINGS.contains(key)) return;
+		Messaging.send(Bukkit.getConsoleSender(), ChatColor.RED + "[Tooltips] WARNING: " + message);
+		WARNINGS.add(key);
 	}
 
 	public static void log(String message) {

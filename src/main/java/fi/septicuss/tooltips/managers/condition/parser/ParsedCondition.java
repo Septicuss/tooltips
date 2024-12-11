@@ -27,16 +27,16 @@ public class ParsedCondition {
 		final Condition condition = this.getCondition();
 
 		if (condition == null) {
-			Tooltips.warn("Tried to run an unknown condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName));
+			Tooltips.warn("condition-" + conditionName + "-" + presetName, "Tried to run an unknown condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName));
 			return false;
 		}
 
 		final Validity validity = condition.valid(args);
 
 		if (!validity.isValid()) {
-			Tooltips.warn("Failed to parse condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName) + "");
+			Tooltips.warn("condition-" + conditionName + "-" + presetName, "Failed to parse condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName) + "");
 			if (validity.hasReason()) {
-				Tooltips.warn("  -> " + validity.getReason());
+				Tooltips.warn("condition-" + conditionName + "-" + presetName, "  -> " + validity.getReason());
 			}
 			return false;
 		}

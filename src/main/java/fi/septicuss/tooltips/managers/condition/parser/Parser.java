@@ -11,6 +11,10 @@ public interface Parser<T> {
 		Tooltips.warn(message);
 	}
 
+	default void warn(String key, String message) {
+		Tooltips.warn(key, message);
+	}
+
 	default String quote(String message) {
 		return Utils.quote(message);
 	}

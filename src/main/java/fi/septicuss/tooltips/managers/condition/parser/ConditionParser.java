@@ -35,7 +35,7 @@ public class ConditionParser implements Parser<ParsedCondition> {
 		String argLine = from.substring(firstBracket + 1, from.length() - 1);
 
 		if (!conditionManager.exists(name)) {
-			warn("Failed to parse unknown condition " + quote(name) + " in preset " + quote(presetName) + " (2)");
+			warn("condition-" + name + "-" + presetName, "Failed to parse unknown condition " + quote(name) + " in preset " + quote(presetName) + " (2)");
 			return null;
 		}
 
