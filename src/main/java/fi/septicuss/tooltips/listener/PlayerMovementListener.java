@@ -3,6 +3,7 @@ package fi.septicuss.tooltips.listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.providers.AreaProvider;
 import org.bukkit.Location;
@@ -31,7 +32,9 @@ public class PlayerMovementListener implements Listener {
 			return;
 		}
 
-		cacheApplicableAreas(event.getPlayer(), to);
+		if (!integrationManager.getAreaProviders().isEmpty()) {
+			cacheApplicableAreas(event.getPlayer(), to);
+		}
 
 	}
 
@@ -40,6 +43,11 @@ public class PlayerMovementListener implements Listener {
 
 		for (AreaProvider provider : integrationManager.getAreaProviders().values()) {
 			final List<String> providerAreas = provider.getApplicableAreas(location);
+
+			if (providerAreas == null) {
+				continue;
+			}
+
 			for (String area : providerAreas) {
 				applicable.add(provider.identifier().toLowerCase() + ":" + area);
 			}
