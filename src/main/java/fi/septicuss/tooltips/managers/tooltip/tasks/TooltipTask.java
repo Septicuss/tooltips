@@ -44,6 +44,7 @@ public class TooltipTask extends BukkitRunnable {
         outer:
         for (Player player : onlinePlayers) {
             final PlayerTooltipData data = manager.getPlayerTooltipData(player);
+            data.swapContext();
 
             if (!data.hasCooldown(CooldownType.FADE_IN) && !data.hasCooldown(CooldownType.FADE_OUT)) {
                 data.tickAnimations();

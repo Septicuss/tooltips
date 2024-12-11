@@ -46,7 +46,8 @@ public class PlayerTooltipData {
     private boolean animationsDone = false;
 
     // Context
-    private Context context = new Context();
+    private Context activeContext;
+    private Context pendingContext;
 
     // Send preset
     private String sentPreset;
@@ -169,12 +170,17 @@ public class PlayerTooltipData {
         return meow;
     }
 
-    public void resetContext() {
-        this.context = new Context();
+    public synchronized void swapContext() {
+        if (pendingContext == null) return;
+        activeContext = pendingContext.clone();
     }
 
-    public Context getContext() {
-        return this.context;
+    public synchronized Context getActiveContext() {
+        return activeContext;
+    }
+
+    public synchronized void updatePendingContext(Context newContext) {
+        pendingContext = newContext;
     }
 
     public boolean isRedisplayQueued() {
@@ -198,7 +204,7 @@ public class PlayerTooltipData {
         if (!this.animationsSetup) setupAnimations();
 
         if (this.animationsDone)
-            this.context.put("animation.finished", "true");
+            this.pendingContext.put("animation.finished", "true");
 
         final Player player = Bukkit.getPlayer(this.uuid);
 

@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.utils.rays;
 
+import fi.septicuss.tooltips.Tooltips;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -20,6 +21,13 @@ public class Rays {
 
     public static final ConcurrentHashMap<Integer, RayTraceResult> CACHED_BLOCK_RAYS = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<Integer, RayTraceResult> CACHED_ENTITY_RAYS = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Integer, RayTraceResult> CACHED_FURNITURE_RAYS = new ConcurrentHashMap<>();
+
+
+    public static void cachedRay(String id, Player player, RayTraceResult result) {
+
+    }
+
 
     public static BiFunction<Entity, List<EntityType>, Predicate<Entity>> DEFAULT_ENTITY_FILTER = (source, filter) -> {
         return entity -> {
@@ -81,15 +89,38 @@ public class Rays {
         final World world = origin.getWorld();
         if (world == null) return null;
 
-        final RayTraceResult result = world.rayTrace(origin, direction, distance, FluidCollisionMode.NEVER, false, 0, filter);
+        RayTraceResult result = world.rayTrace(origin, direction, distance, FluidCollisionMode.NEVER, true, 0.5, filter);
 
         Rays.cacheEntityResult(hash, result);
+        return result;
+    }
+
+    public static RayTraceResult furnitureRayTrace(Player player, float distance) {
+        final Location origin = player.getEyeLocation();
+        final Vector direction = origin.getDirection();
+
+        final int hash = getHash(origin, direction, distance);
+        if (CACHED_FURNITURE_RAYS.containsKey(hash)) return CACHED_FURNITURE_RAYS.get(hash);
+
+        final World world = origin.getWorld();
+        if (world == null) return null;
+
+        final Predicate<Entity> furniturePredicate = entity -> {
+            for (final var provider : Tooltips.get().getIntegrationManager().getFurnitureProviders().values())
+                if (provider.getFurniture(entity) != null) return true;
+            return false;
+        };
+
+        final RayTraceResult result = world.rayTrace(origin, direction, distance, FluidCollisionMode.NEVER, true, 0.6, furniturePredicate);
+        Rays.cacheFurnitureResult(hash, result);
+
         return result;
     }
 
     public static void clearCache() {
         CACHED_BLOCK_RAYS.clear();
         CACHED_ENTITY_RAYS.clear();
+        CACHED_FURNITURE_RAYS.clear();
     }
 
     private static void cacheBlockResult(final int hash, final RayTraceResult result) {
@@ -100,6 +131,11 @@ public class Rays {
     private static void cacheEntityResult(final int hash, final RayTraceResult result) {
         if (result == null) return;
         CACHED_ENTITY_RAYS.put(hash, result);
+    }
+
+    private static void cacheFurnitureResult(final int hash, final RayTraceResult result) {
+        if (result == null) return;
+        CACHED_FURNITURE_RAYS.put(hash, result);
     }
 
 

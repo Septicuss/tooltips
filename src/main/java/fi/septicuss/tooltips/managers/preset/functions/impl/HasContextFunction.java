@@ -24,7 +24,7 @@ public class HasContextFunction implements Function {
         final String key = args.get(0).process(player).getAsString();
         final PlayerTooltipData tooltipData = plugin.getTooltipManager().getPlayerTooltipData(player);
 
-        final Context tooltipContext = tooltipData.getContext();
+        final Context tooltipContext = tooltipData.getActiveContext();
         return (tooltipContext.has(key) && tooltipContext.get(key) != null ? "true" : "false");
     }
 

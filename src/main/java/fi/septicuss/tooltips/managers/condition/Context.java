@@ -4,12 +4,16 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Context {
+public class Context implements Cloneable{
 
     private final Map<String, Object> context;
 
     public Context() {
         this.context = new HashMap<>();
+    }
+
+    public Context(Map<String, Object> context) {
+        this.context = context;
     }
 
     public @Nullable Object get(String key) {
@@ -36,5 +40,8 @@ public class Context {
         return this.context;
     }
 
-
+    @Override
+    public Context clone() {
+        return new Context(this.context);
+    }
 }

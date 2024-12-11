@@ -7,6 +7,7 @@ import fi.septicuss.tooltips.managers.preset.PresetManager;
 import fi.septicuss.tooltips.managers.theme.Theme;
 import fi.septicuss.tooltips.managers.title.TitleManager;
 import fi.septicuss.tooltips.managers.tooltip.build.TooltipBuilder;
+import fi.septicuss.tooltips.managers.tooltip.tasks.CacheTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.ConditionTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.TooltipTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
@@ -29,6 +30,7 @@ public class TooltipManager {
 	// Tasks
 	private ConditionTask conditionTask;
 	private TooltipTask tooltipTask;
+	private CacheTask cacheTask;
 
 	// Variables
 	private final Map<UUID, PlayerTooltipData> playerTooltipData = new ConcurrentHashMap<>();
@@ -60,6 +62,9 @@ public class TooltipManager {
 
 		this.tooltipTask = new TooltipTask(this);
 		this.tooltipTask.runTaskTimerAsynchronously(plugin, 0L, 1L);
+
+		this.cacheTask = new CacheTask();
+		this.cacheTask.runTaskTimerAsynchronously(plugin, 0L, 20 * 20 /* Every 20 seconds */);
 	}
 
 	public void stopTasks() {
@@ -69,6 +74,9 @@ public class TooltipManager {
 		if (this.tooltipTask != null)
 			this.tooltipTask.cancel();
 		this.tooltipTask = null;
+		if (this.cacheTask != null)
+			this.cacheTask.cancel();
+		this.cacheTask = null;
 	}
 
 	private void loadPresets(PresetManager presetManager) {

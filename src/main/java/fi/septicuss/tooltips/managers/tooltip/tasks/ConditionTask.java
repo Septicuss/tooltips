@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks;
 
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import org.bukkit.Bukkit;
@@ -29,13 +30,13 @@ public class ConditionTask extends BukkitRunnable {
         for (Player player : onlinePlayers) {
 
             final PlayerTooltipData data = manager.getPlayerTooltipData(player);
-            data.resetContext();
+            final Context context = new Context();
 
             for (var holderEntry : manager.getHolders().entrySet()) {
                 var id = holderEntry.getKey();
                 var holder = holderEntry.getValue();
 
-                final boolean conditionResult = holder.evaluate(player, data.getContext());
+                final boolean conditionResult = holder.evaluate(player, context);
 
                 final boolean hasCurrentPreset = data.hasCurrentPreset();
                 final boolean isSamePreset = hasCurrentPreset && data.getCurrentPreset().equals(id);
@@ -59,6 +60,8 @@ public class ConditionTask extends BukkitRunnable {
                     break;
                 }
             }
+
+            data.updatePendingContext(context);
 
 
         }

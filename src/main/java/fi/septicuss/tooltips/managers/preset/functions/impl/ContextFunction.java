@@ -33,7 +33,7 @@ public class ContextFunction implements Function {
 
         final PlayerTooltipData tooltipData = plugin.getTooltipManager().getPlayerTooltipData(player);
 
-        final Context tooltipContext = tooltipData.getContext();
+        final Context tooltipContext = tooltipData.getActiveContext();
         if (!tooltipContext.has(queryPath)) return "";
 
         final Object value = tooltipContext.get(queryPath);

@@ -8,6 +8,7 @@ import fi.septicuss.tooltips.managers.condition.type.MultiString;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
 import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.utils.rays.Rays;
 import fi.septicuss.tooltips.utils.validation.Validity;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -71,7 +72,8 @@ public class LookingAtFurniture implements Condition {
             return Tooltips.FURNITURE_ENTITIES.contains(entity.getType());
         });
 
-        var rayTrace = Utils.getRayTrace(player, distance, blockPredicate, entityFilter);
+
+        var rayTrace = Rays.furnitureRayTrace(player, distance);
 
         if (rayTrace == null) {
             return null;
