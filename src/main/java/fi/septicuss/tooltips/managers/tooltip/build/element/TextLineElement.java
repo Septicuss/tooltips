@@ -127,6 +127,22 @@ public class TextLineElement implements TooltipElement{
                 // TEXT
                 for (char character : content.toCharArray()) {
                     final Widths.SizedChar sizedChar = Widths.getSizedChar(character);
+
+                    // Handle special language characters, which offset on top of other characters
+                    if (sizedChar.hasOverridingWidth() && sizedChar.getOverridingWidth() < 0) {
+
+                        var textFont = (offset ? textLine.getOffsetFont() : textLine.getRegularFont());
+                        var text = Component.text(stringBuilder.toString())
+                                .font(textFont)
+                                .color(child.color());
+                        builder.append(text);
+                        builder.append(Spaces.getOffset((int) sizedChar.getOverridingWidth()));
+
+                        stringBuilder.setLength(0);
+                        stringBuilder.append(character);
+                        continue;
+                    }
+
                     final double addedWidth = getCharWidth(character, sizedChar);
 
                     this.totalWidth += addedWidth;
