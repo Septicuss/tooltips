@@ -1,6 +1,5 @@
 package fi.septicuss.tooltips;
 
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fi.septicuss.tooltips.commands.TooltipsCommand;
@@ -15,27 +14,27 @@ import fi.septicuss.tooltips.listener.PlayerConnectionListener;
 import fi.septicuss.tooltips.listener.PlayerInteractListener;
 import fi.septicuss.tooltips.listener.PlayerMovementListener;
 import fi.septicuss.tooltips.managers.condition.ConditionManager;
+import fi.septicuss.tooltips.managers.condition.impl.Compare;
 import fi.septicuss.tooltips.managers.condition.impl.equals.BlockNbtEquals;
 import fi.septicuss.tooltips.managers.condition.impl.equals.BlockStateEquals;
-import fi.septicuss.tooltips.managers.condition.impl.Compare;
-import fi.septicuss.tooltips.managers.condition.impl.world.Day;
 import fi.septicuss.tooltips.managers.condition.impl.equals.EntityNbtEquals;
-import fi.septicuss.tooltips.managers.condition.impl.player.Equipped;
-import fi.septicuss.tooltips.managers.condition.impl.player.Gamemode;
-import fi.septicuss.tooltips.managers.condition.impl.world.InCuboid;
 import fi.septicuss.tooltips.managers.condition.impl.equals.ItemNbtEquals;
-import fi.septicuss.tooltips.managers.condition.impl.world.Location;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtBlock;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtCitizen;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtEntity;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtFurniture;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtMythicMob;
-import fi.septicuss.tooltips.managers.condition.impl.world.Night;
+import fi.septicuss.tooltips.managers.condition.impl.player.Equipped;
+import fi.septicuss.tooltips.managers.condition.impl.player.Gamemode;
 import fi.septicuss.tooltips.managers.condition.impl.player.Op;
 import fi.septicuss.tooltips.managers.condition.impl.player.Permission;
-import fi.septicuss.tooltips.managers.condition.impl.world.Region;
 import fi.septicuss.tooltips.managers.condition.impl.player.Sneaking;
 import fi.septicuss.tooltips.managers.condition.impl.player.StandingOn;
+import fi.septicuss.tooltips.managers.condition.impl.world.Day;
+import fi.septicuss.tooltips.managers.condition.impl.world.InCuboid;
+import fi.septicuss.tooltips.managers.condition.impl.world.Location;
+import fi.septicuss.tooltips.managers.condition.impl.world.Night;
+import fi.septicuss.tooltips.managers.condition.impl.world.Region;
 import fi.septicuss.tooltips.managers.condition.impl.world.Time;
 import fi.septicuss.tooltips.managers.condition.impl.world.World;
 import fi.septicuss.tooltips.managers.icon.IconManager;
@@ -76,30 +75,26 @@ import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
-import fi.septicuss.tooltips.utils.font.Widths.SizedChar;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.HashSet;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class Tooltips extends JavaPlugin {
 
 	public static Gson GSON = new GsonBuilder().create();
-	public static boolean SUPPORT_DISPLAY_ENTITIES;
-	public static List<EntityType> FURNITURE_ENTITIES;
+	public static HashSet<String> WARNINGS = new HashSet<>();
+
 	private static Tooltips INSTANCE;
 	private static Logger LOGGER;
 	private static boolean USE_SPACES;
-	public static HashSet<String> WARNINGS = new HashSet<>();
 
 	private IntegrationManager integrationManager;
 	private TitleManager titleManager;
@@ -114,35 +109,13 @@ public class Tooltips extends JavaPlugin {
 
 	public Tooltips() {
 		INSTANCE = this;
-		SUPPORT_DISPLAY_ENTITIES = checkIfSupportsDisplayEntities();
-		LOGGER = getLogger();
-
-		FURNITURE_ENTITIES = Lists.newArrayList();
-		FURNITURE_ENTITIES.add(EntityType.ITEM_FRAME);
-		FURNITURE_ENTITIES.add(EntityType.ARMOR_STAND);
-
-		if (SUPPORT_DISPLAY_ENTITIES) {
-			FURNITURE_ENTITIES.add(EntityType.ITEM_DISPLAY);
-			FURNITURE_ENTITIES.add(EntityType.BLOCK_DISPLAY);
-			FURNITURE_ENTITIES.add(EntityType.INTERACTION);
-		}
-
-	}
-
-	private static boolean checkIfSupportsDisplayEntities() {
-		try {
-			Class.forName("org.bukkit.entity.ItemDisplay");
-			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
-		}
+		LOGGER = super.getLogger();
 	}
 
 	// ------------------------------------------------------
 
 	@Override
 	public void onEnable() {
-		FileSetup.performMigration(this);
 		FileSetup.setupFiles(this);
 
 		titleManager = new TitleManager(this);
@@ -176,30 +149,32 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void registerConditions() {
-		this.conditionManager.register(new Day());
-		this.conditionManager.register(new Night());
-		this.conditionManager.register(new World());
-		this.conditionManager.register(new Gamemode());
-		this.conditionManager.register(new Sneaking());
-		this.conditionManager.register(new Compare());
-		this.conditionManager.register(new LookingAtBlock());
-		this.conditionManager.register(new LookingAtFurniture(this.integrationManager));
-		this.conditionManager.register(new LookingAtEntity());
-		this.conditionManager.register(new LookingAtMythicMob());
-		this.conditionManager.register(new Region());
-		this.conditionManager.register(new InCuboid());
-		this.conditionManager.register(new Location());
-		this.conditionManager.register(new StandingOn());
-		this.conditionManager.register(new ItemNbtEquals());
-		this.conditionManager.register(new EntityNbtEquals());
-		this.conditionManager.register(new BlockNbtEquals());
-		this.conditionManager.register(new BlockStateEquals());
-		this.conditionManager.register(new Time());
-		this.conditionManager.register(new Equipped());
-		this.conditionManager.register(new Op());
-		this.conditionManager.register(new LookingAtCitizen());
-		this.conditionManager.register(new Permission());
-		this.conditionManager.register(new LookingAtAxGen());
+		this.conditionManager.register(
+				new Day(),
+				new Night(),
+				new World(),
+				new Gamemode(),
+				new Sneaking(),
+				new Compare(),
+				new LookingAtBlock(),
+				new LookingAtFurniture(this.integrationManager),
+				new LookingAtEntity(),
+				new LookingAtMythicMob(),
+				new Region(),
+				new InCuboid(),
+				new Location(),
+				new StandingOn(),
+				new ItemNbtEquals(),
+				new EntityNbtEquals(),
+				new BlockNbtEquals(),
+				new BlockStateEquals(),
+				new Time(),
+				new Equipped(),
+				new Op(),
+				new LookingAtCitizen(),
+				new Permission(),
+				new LookingAtAxGen()
+		);
 	}
 
 	private void registerFunctions() {
@@ -250,7 +225,7 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	private void loadCommands() {
-		TooltipsCommand tooltipsCommand = new TooltipsCommand(this);
+		final TooltipsCommand tooltipsCommand = new TooltipsCommand(this);
 		tooltipsCommand.register("sendtheme", new SendThemeCommand(this));
 		tooltipsCommand.register("sendpreset", new SendPresetCommand(this));
 		tooltipsCommand.register("reload", new ReloadCommand(this));
@@ -259,7 +234,7 @@ public class Tooltips extends JavaPlugin {
 		tooltipsCommand.register("listvars", new ListVarsCommand());
 		tooltipsCommand.register("debug", new DebugCommand(this));
 
-		PluginCommand tooltipsPluginCommand = getCommand("tooltips");
+		final PluginCommand tooltipsPluginCommand = Objects.requireNonNull(super.getCommand("tooltips"));
 		tooltipsPluginCommand.setExecutor(tooltipsCommand);
 		tooltipsPluginCommand.setTabCompleter(tooltipsCommand);
 	}
@@ -274,8 +249,7 @@ public class Tooltips extends JavaPlugin {
 		}
 
 		this.reloadConfig();
-
-		clearCache();
+		this.clearCache();
 
 		FileSetup.setupFiles(this);
 
@@ -292,10 +266,8 @@ public class Tooltips extends JavaPlugin {
 		themeManager.loadFrom(new File(getDataFolder(), "themes"));
 		presetManager.loadFrom(this, new File(getDataFolder(), "presets"));
 
-		Widths.loadCustomWidths(new File(getDataFolder(), ".data/widths.yml"));
+		Widths.loadOverridingWidths(new File(getDataFolder(), ".data/widths.yml"));
 		
-		addSpaceCharWidth(USE_SPACES);
-
 		PackGenerator packGenerator = new PackGenerator(this);
 		packGenerator.registerGenerator(new SpaceGenerator(USE_SPACES));
 		packGenerator.registerGenerator(new ThemeGenerator(themeManager));
@@ -310,24 +282,6 @@ public class Tooltips extends JavaPlugin {
 	private void clearCache() {
 		TooltipCache.clear();
 		FurnitureCache.clear();
-	}
-
-	private void addSpaceCharWidth(boolean useSpaces) {
-
-		SizedChar space = new SizedChar(' ');
-
-		if (useSpaces) {
-			space.setHeight(1);
-			space.setAbsoluteWidth(1);
-			space.setImageHeight(1);
-		} else {
-			space.setHeight(1);
-			space.setAbsoluteWidth(1);
-			space.setImageHeight(1);
-		}
-
-		Widths.add(space);
-
 	}
 
 	// ------------------------------------------------------

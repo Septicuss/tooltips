@@ -1,6 +1,10 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks;
 
+import fi.septicuss.tooltips.managers.integration.impl.axgens.AxGensCache;
+import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
+import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.rays.Rays;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -12,6 +16,12 @@ public class CacheTask extends BukkitRunnable {
     public void run() {
 
         Rays.clearCache();
+        TooltipCache.clear();
+        FurnitureCache.clear();
+
+        if (Bukkit.getPluginManager().isPluginEnabled("AxGens")) {
+            AxGensCache.clear();
+        }
 
     }
 

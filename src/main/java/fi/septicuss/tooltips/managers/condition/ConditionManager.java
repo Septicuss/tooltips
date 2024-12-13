@@ -34,6 +34,11 @@ public class ConditionManager {
 		registeredConditions.put(condition.id(), condition);
 	}
 
+	public void register(Condition... conditions) {
+		for (var condition : conditions)
+			this.register(condition);
+	}
+
 	public void unregister(String name) {
 		registeredConditions.remove(name);
 	}

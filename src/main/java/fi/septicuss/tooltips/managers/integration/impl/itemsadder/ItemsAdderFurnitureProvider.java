@@ -29,10 +29,6 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
             return null;
         }
 
-        if (!Tooltips.FURNITURE_ENTITIES.contains(entity.getType())) {
-            return null;
-        }
-
         try {
             final CustomFurniture furniture = CustomFurniture.byAlreadySpawned(entity);
             return this.getWrapperFromFurniture(furniture);

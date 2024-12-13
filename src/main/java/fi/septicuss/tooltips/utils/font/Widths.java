@@ -7,11 +7,20 @@ import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-// Credit goes to https://github.com/Ehhthan for width size code
 public class Widths {
 
+	private static final SizedChar SPACE;
 	private static final HashMap<Character, SizedChar> WIDTH_MAP = new HashMap<>();
 	private static final HashMap<Character, SizedChar> ICON_WIDTH_MAP = new HashMap<Character, SizedChar>();
+
+	static {
+		SPACE = new SizedChar(' ');
+		SPACE.setHeight(1);
+		SPACE.setAbsoluteWidth(1);
+		SPACE.setImageHeight(1);
+
+		Widths.add(SPACE);
+	}
 
 	// -- SCHEMAS --
 
@@ -40,7 +49,7 @@ public class Widths {
 		}
 	}
 	
-	public static void loadCustomWidths(File customWidthsFile) {
+	public static void loadOverridingWidths(File customWidthsFile) {
 		YamlConfiguration widths = YamlConfiguration.loadConfiguration(customWidthsFile);
 		
 		for (String key : widths.getKeys(false)) {
@@ -87,19 +96,6 @@ public class Widths {
 		final SizedChar sizedChar = getSizedChar(character, image, definedHeight);
 		sizedChar.setIcon(true);
 		WIDTH_MAP.put(character, sizedChar);
-	}
-
-	public static double getWidth(char character) {
-		final SizedChar sizedChar = getSizedChar(character);
-		return sizedChar.getRealWidth();
-	}
-
-	public static double getWidth(String string) {
-		double total = 0;
-		for (char character : string.toCharArray()) {
-			total += getWidth(character);
-		}
-		return total += string.length();
 	}
 
 	// -- INTERNAL

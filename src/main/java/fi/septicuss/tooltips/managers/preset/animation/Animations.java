@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -158,70 +157,6 @@ public class Animations {
         }
 
         return builder.toString();
-    }
-
-    public static boolean hasAnimations(Player player, String text) {
-        if (text.indexOf('<') == -1 || text.indexOf('>') == -1) {
-            return false;
-        }
-
-        for (int index = 0; index < text.length(); index++) {
-
-            // <...>
-            // ^
-            final int openingSign = text.indexOf('<', index);
-            if (openingSign == -1) {
-                break;
-            }
-
-            // <...>
-            //     ^
-            int closingSign = -1;
-            int level = 1;
-
-            // j = <...
-            //     ^
-            for (int j = openingSign + 1; j < text.length(); j++) {
-                if (text.charAt(j) == '<') {
-                    level++;
-                } else if (text.charAt(j) == '>') {
-                    level--;
-
-                    if (level == 0) {
-                        // <...>
-                        //     ^
-                        closingSign = j;
-                        break;
-                    }
-                }
-            }
-
-            // > Not found
-            if (closingSign == -1) {
-                index = openingSign;
-                continue;
-            }
-
-            index = openingSign;
-
-            // <...>
-            //  ^^^
-            final String content = text.substring(openingSign + 1, closingSign);
-            final List<String> tokens = tokenizeTagContents(content);
-
-            // <meow ...>
-            //  ^^^^
-            final String name = tokens.get(0);
-
-            if (!doesProviderExist(name)) {
-                continue;
-            }
-
-            return true;
-        }
-
-
-        return false;
     }
 
     public static String parse(Player player, String text) {

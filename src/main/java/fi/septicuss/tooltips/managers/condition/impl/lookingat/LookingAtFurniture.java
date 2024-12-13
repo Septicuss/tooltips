@@ -28,7 +28,6 @@ public class LookingAtFurniture implements Condition {
         this.integrationManager = integrationManager;
     }
 
-
     @Override
     public boolean check(Player player, Arguments args) {
         return (getLookedAtFurniture(player, args) != null);
@@ -57,21 +56,6 @@ public class LookingAtFurniture implements Condition {
             id = MultiString.of(args.get(ID).getAsString());
 
         final MultiString finalizedId = id;
-
-        Predicate<Block> blockPredicate = (block -> {
-            if (block == null) return false;
-            final Optional<FurnitureWrapper> optionalFurniture = integrationManager.getFurniture(block);
-            if (optionalFurniture.isEmpty()) return false;
-            if (finalizedId == null) return true;
-            return (finalizedId.contains(optionalFurniture.get().id()));
-        });
-
-        Predicate<Entity> entityFilter = (entity -> {
-            if (entity == null) return false;
-            if (entity.equals(player)) return false;
-            return Tooltips.FURNITURE_ENTITIES.contains(entity.getType());
-        });
-
 
         var rayTrace = Rays.furnitureRayTrace(player, distance);
 

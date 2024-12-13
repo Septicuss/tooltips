@@ -1,5 +1,9 @@
 package fi.septicuss.tooltips.utils;
 
+import fi.septicuss.tooltips.Tooltips;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,15 +13,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.security.CodeSource;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import fi.septicuss.tooltips.Tooltips;
 
 public class FileSetup {
 
@@ -153,43 +150,4 @@ public class FileSetup {
 
 	}
 	
-	public static void performMigration(Tooltips plugin) {
-		
-		File dataFolder = plugin.getDataFolder();
-
-		File oldVariablesFolder = new File(dataFolder, "data/variables");
-		File newVariablesFolder = new File(dataFolder, ".data/variables");
-
-		if (oldVariablesFolder != null && oldVariablesFolder.exists()) {
-			FileUtils.copyFiles(oldVariablesFolder, newVariablesFolder);
-		}
-		
-		Set<File> deletedFiles = new HashSet<>();
-		
-		deletedFiles.add(new File(dataFolder, "generated"));
-		deletedFiles.add(new File(dataFolder, "data"));
-		
-		deletedFiles.forEach(file -> {
-			if (file.isDirectory()) {
-				FileUtils.cleanDirectory(file);
-			}
-			
-			file.delete();
-		});
-
-		File fontsFile = new File(dataFolder, ".data/schemas/fonts.yml");
-		FileConfiguration fonts = YamlConfiguration.loadConfiguration(fontsFile);
-		
-		if (fonts.isSet("providers.space.height")) {
-			if (fonts.getInt("providers.space.height") != 2) {
-				fontsFile.delete();
-			}
-		} else {
-			fontsFile.delete();
-		}
-		
-		
-	}
-	
-
 }

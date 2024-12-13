@@ -1,7 +1,7 @@
 package fi.septicuss.tooltips.managers.integration;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.managers.integration.impl.axgens.AxGensIntegration;
+import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.BetonQuestCondition;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.EndConversationCommand;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.NextOptionCommand;
@@ -68,7 +68,7 @@ public class IntegrationManager {
         }
 
         if (isPresent("AxGens")) {
-            AxGensIntegration.registerIntegration();
+            Tooltips.get().getConditionManager().register(new LookingAtAxGen());
         }
 
         if (isPresent("PlaceholderAPI")) {
