@@ -48,9 +48,7 @@ public class PlayerMovementListener implements Listener {
 				continue;
 			}
 
-			for (String area : providerAreas) {
-				applicable.add(provider.identifier().toLowerCase() + ":" + area);
-			}
+			applicable.addAll(providerAreas);
 		}
 
 		CurrentAreaCache.put(player, applicable);
