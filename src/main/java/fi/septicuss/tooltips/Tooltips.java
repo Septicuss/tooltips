@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import fi.septicuss.tooltips.integrations.axgens.AxGensIntegration;
 import fi.septicuss.tooltips.integrations.axgens.LookingAtAxGen;
+import fi.septicuss.tooltips.integrations.nexo.NexoFurnitureProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -261,6 +262,7 @@ public class Tooltips extends JavaPlugin {
 				case ORAXEN -> new OraxenFurnitureProvider();
 				case ITEMSADDER -> new ItemsAdderFurnitureProvider();
 				case CRUCIBLE -> new CrucibleFurnitureProvider();
+				case NEXO -> new NexoFurnitureProvider();
 				default -> null;
 				};
 

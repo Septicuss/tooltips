@@ -8,12 +8,13 @@ public enum IntegratedPlugin {
 	WORLDGUARD("WorldGuard"),
 	ITEMSADDER("ItemsAdder"),
 	ORAXEN("Oraxen"),
+	NEXO("Nexo"),
 	CRUCIBLE("MythicCrucible"),
 	NBTAPI("NBTAPI"),
 	CITIZENS("Citizens"),
 	MYTHICMOBS("MythicMobs");
 
-	public static final IntegratedPlugin[] FURNITURE_PLUGINS = { IntegratedPlugin.ORAXEN, IntegratedPlugin.CRUCIBLE, IntegratedPlugin.ITEMSADDER };
+	public static final IntegratedPlugin[] FURNITURE_PLUGINS = { IntegratedPlugin.ORAXEN, IntegratedPlugin.CRUCIBLE, IntegratedPlugin.ITEMSADDER,  IntegratedPlugin.NEXO,};
 	public static final IntegratedPlugin[] AREA_PLUGINS = { IntegratedPlugin.WORLDGUARD };
 	public static final IntegratedPlugin[] PACKET_PLUGINS = { IntegratedPlugin.PROTOCOLLIB, IntegratedPlugin.PACKETEVENTS };
 

@@ -99,6 +99,10 @@
 			<id>Artillex-Studios</id>
 			<url>https://repo.artillex-studios.com/releases/</url>
 		</repository>
+		<!--		<repository>-->
+		<!--			<id>nexomc-releases</id>-->
+		<!--			<url>https://repo.nexomc.com/releases</url>-->
+		<!--		</repository>-->
 	</repositories>
 
 	<dependencies>
@@ -185,6 +189,19 @@
 			<artifactId>AxGensAPI</artifactId>
 			<version>13</version>
 			<scope>provided</scope>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.nexomc</groupId>-->
+<!--			<artifactId>nexo</artifactId>-->
+<!--			<version>0.6.0</version>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>com.nexomc</groupId>
+			<artifactId>nexo</artifactId>
+			<version>0.7.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/nexo-0.7-dev-1734462302579.jar</systemPath>
 		</dependency>
 	</dependencies>
 </project>
