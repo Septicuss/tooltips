@@ -2,12 +2,10 @@ package fi.septicuss.tooltips.integrations.nexo;
 
 import com.google.common.collect.Lists;
 import com.nexomc.nexo.api.NexoFurniture;
+import com.nexomc.nexo.api.NexoItems;
+import com.nexomc.nexo.items.ItemBuilder;
 import fi.septicuss.tooltips.integrations.FurnitureProvider;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureWrapper;
-import io.th0rgal.oraxen.api.OraxenItems;
-import io.th0rgal.oraxen.items.ItemBuilder;
-import io.th0rgal.oraxen.mechanics.MechanicFactory;
-import io.th0rgal.oraxen.mechanics.MechanicsManager;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 
@@ -40,27 +38,16 @@ public class NexoFurnitureProvider implements FurnitureProvider {
 
     @Override
     public List<FurnitureWrapper> getAllFurniture() {
-
         List<FurnitureWrapper> wrappers = Lists.newArrayList();
-        MechanicFactory furnitureFactory = MechanicsManager.getMechanicFactory("furniture");
 
-        for (var id : furnitureFactory.getItems()) {
+        for (var id : NexoFurniture.furnitureIDs()) {
+            if (id == null) continue;
 
-            if (id == null)
-                continue;
+            ItemBuilder builder = NexoItems.itemFromId(id);
 
-            ItemBuilder builder = OraxenItems.getItemById(id);
+            if (builder == null) continue;
 
-            if (builder == null)
-                continue;
-
-            String name;
-
-            if (builder.hasItemName())
-                name = builder.getItemName();
-            else
-                name = builder.getType().toString();
-
+            String name = builder.hasItemName() ? builder.getItemName().toString() : builder.getType().toString();
             wrappers.add(new FurnitureWrapper(id, name));
         }
 
