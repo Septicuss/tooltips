@@ -28,7 +28,7 @@ public class Compare implements Condition {
 
 		secondArg = secondArg.process(player);
 
-		if (firstArg.isNumber() && secondArg.isNumber()) {
+		if (firstArg.isNumber() && (secondArg.isNumber() || secondArg.getAsString().isEmpty())) {
 			Operation operation = Operation.EQUAL;
 
 			if (args.has(OPERATION_ALIASES)) {

@@ -46,8 +46,8 @@ public class PlayerTooltipData {
     private boolean animationsDone = false;
 
     // Context
-    private Context activeContext;
-    private Context pendingContext;
+    private Context activeContext = new Context();
+    private Context pendingContext = new Context();
 
     // Send preset
     private String sentPreset;
@@ -179,8 +179,16 @@ public class PlayerTooltipData {
         return activeContext;
     }
 
+    public synchronized Context getPendingContext() {
+        return pendingContext;
+    }
+
     public synchronized void updatePendingContext(Context newContext) {
         pendingContext = newContext;
+    }
+
+    public synchronized void clearPendingContext() {
+        pendingContext = new Context();
     }
 
     public boolean isRedisplayQueued() {

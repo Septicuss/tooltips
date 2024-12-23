@@ -36,6 +36,10 @@ public class Context implements Cloneable{
         this.context.remove(key);
     }
 
+    public void merge(Context otherContext) {
+        this.context.putAll(otherContext.contextMap());
+    }
+
     public Map<String, Object> contextMap() {
         return this.context;
     }

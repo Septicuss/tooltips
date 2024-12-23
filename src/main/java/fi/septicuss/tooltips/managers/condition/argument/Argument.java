@@ -40,7 +40,11 @@ public class Argument {
 	}
 	
 	public float getAsFloat() {
-		return Float.parseFloat(value);
+		try {
+			return Float.parseFloat(value);
+		} catch (NumberFormatException e) {
+			return 0f;
+		}
 	}
 
 	public <E extends Enum<E>> EnumOptions<E> getAsEnumOptions(Class<E> enumType) {

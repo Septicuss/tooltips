@@ -64,6 +64,7 @@ import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.theme.ThemeManager;
 import fi.septicuss.tooltips.managers.title.TitleManager;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
+import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import fi.septicuss.tooltips.pack.PackGenerator;
 import fi.septicuss.tooltips.pack.impl.IconGenerator;
 import fi.septicuss.tooltips.pack.impl.LineGenerator;
@@ -79,6 +80,7 @@ import fi.septicuss.tooltips.utils.variable.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -288,6 +290,10 @@ public class Tooltips extends JavaPlugin {
 
 	public static Tooltips get() {
 		return INSTANCE;
+	}
+
+	public static PlayerTooltipData getPlayerTooltipData(Player player) {
+		return INSTANCE.getTooltipManager().getPlayerTooltipData(player);
 	}
 
 	public IntegrationManager getIntegrationManager() {
