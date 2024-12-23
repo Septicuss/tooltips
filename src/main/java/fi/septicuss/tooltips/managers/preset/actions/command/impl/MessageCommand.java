@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.preset.actions.command.impl;
 
+import fi.septicuss.tooltips.utils.AdventureUtils;
 import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.entity.Player;
 
@@ -12,12 +13,10 @@ public class MessageCommand implements ActionCommand {
 
 	@Override
 	public void run(Player player, Arguments arguments) {
-		
+
 		String message = appendFrom(convertArgumentsToArray(arguments), 0);
-		message = Utils.color(Text.processText(player, message));
-		
-		player.sendMessage(message);
-		
+		AdventureUtils.sendMessage(player, message);
+
 	}
 
 	@Override

@@ -6,6 +6,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import fi.septicuss.tooltips.utils.AdventureUtils;
+import net.citizensnpcs.api.util.Messaging;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +16,6 @@ import org.bukkit.command.TabCompleter;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.utils.Colors;
-import fi.septicuss.tooltips.utils.Messaging;
 import net.md_5.bungee.api.ChatColor;
 
 public class TooltipsCommand implements CommandExecutor, TabCompleter {
@@ -32,7 +34,7 @@ public class TooltipsCommand implements CommandExecutor, TabCompleter {
 			return sendHelp(sender, command, label, args);
 		} else {
 			if (!sender.hasPermission(subcommand.getPermission())) {
-				Messaging.send(sender, Colors.WARN + "[!] No permission");
+				AdventureUtils.sendMessage(sender, Colors.WARN + "[!] No permission");
 				return true;
 			}
 			subcommand.onCommand(sender, command, label, args);
@@ -42,18 +44,18 @@ public class TooltipsCommand implements CommandExecutor, TabCompleter {
 
 	protected boolean sendHelp(CommandSender sender, Command command, String label, String[] args) {
 		if (!sender.hasPermission("tooltips.command.help")) {
-			Messaging.send(sender, Colors.WARN + "[!] No permission");
+			AdventureUtils.sendMessage(sender, Colors.WARN + "[!] No permission");
 			return true;
 		}
-		
-		Messaging.send(sender, Colors.PLUGIN + ChatColor.BOLD + "Tooltips Help");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &freload");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &feval {condition}");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fdebug {preset id} {player}");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fsendpreset {player} {preset id} (text)");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fsendtheme {player} {theme id} (text)");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &fvars {varcommand} (args)");
-		Messaging.send(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt &flistvars {scope}");
+
+		AdventureUtils.sendMessage(sender, Colors.PLUGIN  + "Tooltips Help");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>reload");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>eval {condition}");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>debug {preset id} {player}");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>sendpreset {player} {preset id} (text)");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>sendtheme {player} {theme id} (text)");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>vars {varcommand} (args)");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>listvars {scope}");
 		return true;
 	}
 

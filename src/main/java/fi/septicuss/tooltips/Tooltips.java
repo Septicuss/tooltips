@@ -71,12 +71,13 @@ import fi.septicuss.tooltips.pack.impl.LineGenerator;
 import fi.septicuss.tooltips.pack.impl.SpaceGenerator;
 import fi.septicuss.tooltips.pack.impl.TextureGenerator;
 import fi.septicuss.tooltips.pack.impl.ThemeGenerator;
+import fi.septicuss.tooltips.utils.AdventureUtils;
 import fi.septicuss.tooltips.utils.FileSetup;
-import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.cache.furniture.FurnitureCache;
 import fi.septicuss.tooltips.utils.cache.tooltip.TooltipCache;
 import fi.septicuss.tooltips.utils.font.Widths;
 import fi.septicuss.tooltips.utils.variable.Variables;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
@@ -98,6 +99,7 @@ public class Tooltips extends JavaPlugin {
 	private static Logger LOGGER;
 	private static boolean USE_SPACES;
 
+	private BukkitAudiences adventure;
 	private IntegrationManager integrationManager;
 	private TitleManager titleManager;
 	private SchemaManager schemaManager;
@@ -120,6 +122,8 @@ public class Tooltips extends JavaPlugin {
 	public void onEnable() {
 		FileSetup.setupFiles(this);
 
+		this.adventure = BukkitAudiences.create(this);
+
 		titleManager = new TitleManager(this);
 		conditionManager = new ConditionManager();
 
@@ -138,6 +142,11 @@ public class Tooltips extends JavaPlugin {
 
 		if (this.integrationManager != null)
 			this.integrationManager.disable();
+
+		if(this.adventure != null) {
+			this.adventure.close();
+			this.adventure = null;
+		}
 
 		Variables.PERSISTENT.save();
 	}
@@ -296,6 +305,13 @@ public class Tooltips extends JavaPlugin {
 		return INSTANCE.getTooltipManager().getPlayerTooltipData(player);
 	}
 
+	public BukkitAudiences getAdventure() {
+		if(this.adventure == null) {
+			throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+		}
+		return this.adventure;
+	}
+
 	public IntegrationManager getIntegrationManager() {
 		return integrationManager;
 	}
@@ -341,17 +357,17 @@ public class Tooltips extends JavaPlugin {
 	}
 
 	public static void warn(String message) {
-		Messaging.send(Bukkit.getConsoleSender(), ChatColor.RED + "[Tooltips] WARNING: " + message);
+		AdventureUtils.sendMessage(Bukkit.getConsoleSender(), ChatColor.RED + "[Tooltips] WARNING: " + message);
 	}
 
 	public static void warn(String key, String message) {
 		if (WARNINGS.contains(key)) return;
-		Messaging.send(Bukkit.getConsoleSender(), ChatColor.RED + "[Tooltips] WARNING: " + message);
+		AdventureUtils.sendMessage(Bukkit.getConsoleSender(), ChatColor.RED + "[Tooltips] WARNING: " + message);
 		WARNINGS.add(key);
 	}
 
 	public static void log(String message) {
-		Messaging.send(Bukkit.getConsoleSender(), "[Tooltips] " + message);
+		AdventureUtils.sendMessage(Bukkit.getConsoleSender(), "[Tooltips] " + message);
 	}
 
 	public static File getPackAssetsFolder() {

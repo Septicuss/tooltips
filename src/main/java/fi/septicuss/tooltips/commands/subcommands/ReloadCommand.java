@@ -1,14 +1,13 @@
 package fi.septicuss.tooltips.commands.subcommands;
 
-import java.util.List;
-
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.commands.TooltipsSubCommand;
+import fi.septicuss.tooltips.utils.AdventureUtils;
+import fi.septicuss.tooltips.utils.Colors;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.utils.Colors;
-import fi.septicuss.tooltips.utils.Messaging;
+import java.util.List;
 
 public class ReloadCommand implements TooltipsSubCommand {
 
@@ -20,9 +19,9 @@ public class ReloadCommand implements TooltipsSubCommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Messaging.send(sender, Colors.PLUGIN + "Reloading plugin...");
+		AdventureUtils.sendMessage(sender, Colors.PLUGIN + "Reloading plugin...");
 		plugin.reload();
-		Messaging.send(sender, Colors.PLUGIN + "Reloaded!");
+		AdventureUtils.sendMessage(sender, Colors.PLUGIN + "Reloaded!");
 	}
 
 	@Override

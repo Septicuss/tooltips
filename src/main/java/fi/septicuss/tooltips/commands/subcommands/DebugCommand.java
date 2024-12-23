@@ -5,8 +5,9 @@ import fi.septicuss.tooltips.commands.TooltipsSubCommand;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.condition.Statement;
 import fi.septicuss.tooltips.managers.condition.StatementHolder;
+import fi.septicuss.tooltips.utils.AdventureUtils;
 import fi.septicuss.tooltips.utils.Colors;
-import fi.septicuss.tooltips.utils.Messaging;
+import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -28,7 +29,7 @@ public class DebugCommand implements TooltipsSubCommand {
     public void onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (args.length < 2) {
-            Messaging.send(sender, Colors.WARN + "[!] Missing preset ID");
+            AdventureUtils.sendMessage(sender, Colors.WARN + "[!] Missing preset ID");
             return;
         }
 
@@ -44,7 +45,7 @@ public class DebugCommand implements TooltipsSubCommand {
 
         if (target == null) {
             if (!(sender instanceof Player player)) {
-                Messaging.send(sender, Colors.WARN + "[!] Invalid or missing target player");
+                AdventureUtils.sendMessage(sender, Colors.WARN + "[!] Invalid or missing target player");
                 return;
             }
 
@@ -80,7 +81,7 @@ public class DebugCommand implements TooltipsSubCommand {
             conditionLines = section.getStringList("conditions");;
 
         if (conditionLines == null || conditionLines.isEmpty()) {
-            Messaging.send(sender, Colors.WARN + "[!] This preset does not have any conditions");
+            AdventureUtils.sendMessage(sender, Colors.WARN + "[!] This preset does not have any conditions");
             return;
         }
 
@@ -91,9 +92,9 @@ public class DebugCommand implements TooltipsSubCommand {
             holder.addStatement(statement);
         }
 
-        Messaging.send(sender, " ");
-        Messaging.send(sender, Colors.PLUGIN + "Debugging preset " + Colors.INFO + preset.getId() + Colors.PLUGIN + " for player " + Colors.INFO + player.getName());
-        Messaging.send(sender, " ");
+        AdventureUtils.sendMessage(sender, " ");
+        AdventureUtils.sendMessage(sender, Colors.PLUGIN + "Debugging preset " + Colors.INFO + preset.getId() + Colors.PLUGIN + " for player " + Colors.INFO + player.getName());
+        AdventureUtils.sendMessage(sender, " ");
 
         int index = -1;
 
@@ -101,14 +102,14 @@ public class DebugCommand implements TooltipsSubCommand {
             index += 1;
             int readableIndex = index + 1;
             if (statement == null || statement.getCompositeCondition() == null || statement.getOutcome() == Statement.Outcome.SKIP) {
-                Messaging.send(sender, Colors.PLUGIN + readableIndex + " (Skipped)" + Colors.INFO + " " + conditionLines.get(index));
+                AdventureUtils.sendMessage(sender, Colors.PLUGIN + readableIndex + " (Skipped)" + Colors.INFO + " " + conditionLines.get(index));
                 continue;
             }
 
             boolean conditionResult = statement.getCompositeCondition().check(player);
 
-            Messaging.send(sender, Colors.PLUGIN + readableIndex + Colors.INFO + " " + conditionLines.get(index));
-            Messaging.send(sender, Colors.INFO + "   -> " + (conditionResult ? ChatColor.GREEN + "true" : ChatColor.RED + "false"));
+            AdventureUtils.sendMessage(sender, Colors.PLUGIN + readableIndex + Colors.INFO + " " + conditionLines.get(index));
+            AdventureUtils.sendMessage(sender, Colors.INFO + "   -> " + (conditionResult ? ChatColor.GREEN + "true" : ChatColor.RED + "false"));
 
             if (statement.hasOutcome()) {
                 boolean outcome = statement.getOutcome().asBoolean();
@@ -116,13 +117,13 @@ public class DebugCommand implements TooltipsSubCommand {
                 if (outcome) {
                     // REQUIRED
                     if (!conditionResult) {
-                        Messaging.send(sender, ChatColor.RED + "> Stopping at " + readableIndex + Colors.INFO + ", because outcome is REQUIRED and condition was " + ChatColor.RED + "false.");
+                        AdventureUtils.sendMessage(sender, ChatColor.RED + "> Stopping at " + readableIndex + Colors.INFO + ", because outcome is REQUIRED and condition was " + ChatColor.RED + "false.");
                         return;
                     }
                 } else {
                     // CANCEL
                     if (conditionResult) {
-                        Messaging.send(sender, ChatColor.RED + "> Stopping at " + readableIndex + Colors.INFO + ", because outcome is CANCEL and result was " + ChatColor.GREEN + "true.");
+                        AdventureUtils.sendMessage(sender, ChatColor.RED + "> Stopping at " + readableIndex + Colors.INFO + ", because outcome is CANCEL and result was " + ChatColor.GREEN + "true.");
                         return;
                     }
                     continue;
@@ -131,13 +132,13 @@ public class DebugCommand implements TooltipsSubCommand {
             }
 
             if (!conditionResult) {
-                Messaging.send(sender, ChatColor.RED + "> Stopping at " + readableIndex + Colors.INFO + ", because condition was " + ChatColor.RED + "false.");
+                AdventureUtils.sendMessage(sender, ChatColor.RED + "> Stopping at " + readableIndex + Colors.INFO + ", because condition was " + ChatColor.RED + "false.");
                 return;
             }
 
         }
 
-        Messaging.send(sender, Colors.INFO + "> A tooltip " + ChatColor.GREEN + "would show!");
+        AdventureUtils.sendMessage(sender, Colors.INFO + "> A tooltip " + ChatColor.GREEN + "would show!");
 
     }
 }

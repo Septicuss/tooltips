@@ -154,22 +154,6 @@ public class Utils {
 		return builder.toString();
 	}
 
-
-	public static String color(String message) {
-		Matcher matcher = PATTERN.matcher(message);
-		StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
-		while (matcher.find()) {
-			String group = matcher.group(1);
-			matcher.appendReplacement(buffer,
-					COLOR_CHAR + "x" + COLOR_CHAR + group.charAt(0) + COLOR_CHAR + group.charAt(1) + COLOR_CHAR
-							+ group.charAt(2) + COLOR_CHAR + group.charAt(3) + COLOR_CHAR + group.charAt(4) + COLOR_CHAR
-							+ group.charAt(5));
-		}
-
-		String processedString = ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
-		return processedString;
-	}
-
 	public static String withSuffix(long count) {
 		if (count < 1000) return "" + count;
 		int exp = (int) (Math.log(count) / Math.log(1000));
@@ -260,12 +244,6 @@ public class Utils {
 			if (validEntities == null || validEntities.isEmpty()) return true;
 			return (validEntities.contains(entity.getType()));
 		});
-	}
-
-	public static List<String> color(List<String> message) {
-		List<String> result = new ArrayList<>();
-		message.forEach(line -> result.add(color(line)));
-		return result;
 	}
 
 	public static List<String> stripColor(List<String> message) {

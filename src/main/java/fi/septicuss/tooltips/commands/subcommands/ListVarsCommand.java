@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fi.septicuss.tooltips.utils.AdventureUtils;
+import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -16,7 +18,6 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.utils.Colors;
-import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import net.md_5.bungee.api.ChatColor;
 
@@ -111,7 +112,7 @@ public class ListVarsCommand implements TooltipsSubCommand {
 	private void printPlayerVars(CommandSender sender, OfflinePlayer player) {
 
 		if (player == null || !player.hasPlayedBefore()) {
-			Messaging.send(sender, Colors.INFO + "Couldn't find that player.");
+			AdventureUtils.sendMessage(sender, Colors.INFO + "Couldn't find that player.");
 			return;
 		}
 
@@ -179,7 +180,7 @@ public class ListVarsCommand implements TooltipsSubCommand {
 	}
 
 	private void print(CommandSender sender, String message) {
-		Messaging.send(sender, message);
+		AdventureUtils.sendMessage(sender, message);
 	}
 
 	private List<String> filter(List<String> list, String keyWord) {
@@ -187,7 +188,7 @@ public class ListVarsCommand implements TooltipsSubCommand {
 	}
 
 	private void warn(CommandSender sender, String message) {
-		Messaging.send(sender, Colors.WARN + "[!] " + message);
+		AdventureUtils.sendMessage(sender, Colors.WARN + "[!] " + message);
 	}
 
 }

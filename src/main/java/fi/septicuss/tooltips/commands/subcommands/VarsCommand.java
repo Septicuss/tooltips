@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fi.septicuss.tooltips.utils.AdventureUtils;
+import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,7 +21,6 @@ import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.VarCommand;
 import fi.septicuss.tooltips.utils.Colors;
-import fi.septicuss.tooltips.utils.Messaging;
 import fi.septicuss.tooltips.utils.validation.Validity;
 
 public class VarsCommand implements TooltipsSubCommand {
@@ -154,11 +155,11 @@ public class VarsCommand implements TooltipsSubCommand {
 	}
 	
 	private void info(CommandSender sender, String message) {
-		Messaging.send(sender, Colors.PLUGIN + "[!] " + message);
+		AdventureUtils.sendMessage(sender, Colors.PLUGIN + "[!] " + message);
 	}
 	
 	private void warn(CommandSender sender, String message) {
-		Messaging.send(sender, Colors.WARN + "[!] " + message);
+		AdventureUtils.sendMessage(sender, Colors.WARN + "[!] " + message);
 	}
 
 	private void cacheCommands() {
