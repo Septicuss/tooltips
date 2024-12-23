@@ -6,15 +6,12 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public class Rays {
@@ -23,20 +20,6 @@ public class Rays {
     public static final ConcurrentHashMap<Integer, RayTraceResult> CACHED_ENTITY_RAYS = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<Integer, RayTraceResult> CACHED_FURNITURE_RAYS = new ConcurrentHashMap<>();
 
-
-    public static void cachedRay(String id, Player player, RayTraceResult result) {
-
-    }
-
-
-    public static BiFunction<Entity, List<EntityType>, Predicate<Entity>> DEFAULT_ENTITY_FILTER = (source, filter) -> {
-        return entity -> {
-            if (entity == null) return false;
-            if (entity.equals(source)) return false;
-            if (filter == null || filter.isEmpty()) return true;
-            return (filter.contains(entity.getType()));
-        };
-    };
 
     public static RayTraceResult combinedRayTrace(Player player, float distance) {
         return combinedRayTrace(player, distance, null, null);
@@ -137,7 +120,6 @@ public class Rays {
         if (result == null) return;
         CACHED_FURNITURE_RAYS.put(hash, result);
     }
-
 
     private static int getHash(final Location origin, final Vector direction, final float distance) {
         return Objects.hash(origin, direction, distance);

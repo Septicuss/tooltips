@@ -183,10 +183,6 @@ public class PlayerTooltipData {
         return activeContext;
     }
 
-    public synchronized Context getPendingContext() {
-        return pendingContext;
-    }
-
     public synchronized void updatePendingContext(Context newContext) {
         pendingContext = newContext;
     }
