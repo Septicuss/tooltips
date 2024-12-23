@@ -1,10 +1,11 @@
 package fi.septicuss.tooltips.managers.condition.argument;
 
-import fi.septicuss.tooltips.utils.Text;
-import org.bukkit.entity.Player;
-
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
 import fi.septicuss.tooltips.managers.condition.type.LocationArgument;
+import fi.septicuss.tooltips.utils.Text;
+import org.bukkit.entity.Player;
 
 public class Argument {
 
@@ -17,6 +18,11 @@ public class Argument {
 	public Argument process(Player player) {
 		if (player == null) return this;
 		return new Argument(Text.processText(player, value));
+	}
+
+	public Argument process(Player player, Context context) {
+		if (player == null) return this;
+		return new Argument(Text.processTextWithContext(player, this.value, context));
 	}
 
 	public String getAsString() {

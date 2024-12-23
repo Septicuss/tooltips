@@ -31,7 +31,7 @@ public class DataFunction implements Function {
         final ConfigurationSection data = getPresetDataSection(preset);
         if (data == null) return "";
 
-        final String path = args.get(0).process(player).getAsString();
+        final String path = args.get(0).process(player, context.context()).getAsString();
         final String queryPath = Utils.stripQueryPath(path);
 
         final Object object = data.get(queryPath);

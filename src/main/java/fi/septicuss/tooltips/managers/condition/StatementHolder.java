@@ -8,6 +8,7 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.libs.org.snakeyaml
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.composite.CompositeCondition;
 import fi.septicuss.tooltips.managers.condition.parser.ParsedCondition;
+import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import org.bukkit.entity.Player;
 
 public class StatementHolder {
@@ -26,19 +27,19 @@ public class StatementHolder {
 		statements.add(statement);
 	}
 
-	public boolean evaluate(Player player, Context context) {
+	public boolean evaluate(Player player, PlayerTooltipData data) {
 
 		for (var statement : statements) {
 			if (statement == null || statement.getCompositeCondition() == null)
 				continue;
 
-			boolean conditionResult = statement.getCompositeCondition().check(player, context);
+			boolean conditionResult = statement.getCompositeCondition().check(player, data.getPendingContext());
 
 			if (statement.hasOutcome()) {
 				final var outcome = statement.getOutcome();
 
 				if (outcome == Statement.Outcome.SKIP) {
-					writeSkippedContext(player, context, statement);
+					this.writeSkippedContext(player, data.getPendingContext(), statement);
 					continue;
 				}
 
@@ -53,7 +54,9 @@ public class StatementHolder {
 
 			}
 
+
 			if (!conditionResult) return false;
+
 		}
 
 		return true;

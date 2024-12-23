@@ -1,5 +1,7 @@
 package fi.septicuss.tooltips.managers.preset.functions;
 
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.utils.Utils;
 import org.bukkit.entity.Player;
@@ -8,6 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,8 +33,12 @@ public class Functions {
         FUNCTIONS.remove(name.toLowerCase());
     }
 
+    public static String parseSingleLineWithContext(Player player, String preset, String text, Context context) {
+        return parse(player, preset, text, null, context);
+    }
+
     public static String parse(Player player, String preset, String text) {
-        return parse(player, preset, text, null);
+        return parse(player, preset, text, null, null);
     }
 
     public static List<String> parse(Player player, String preset, List<String> text) {
@@ -50,7 +57,7 @@ public class Functions {
         final List<String> result = new ArrayList<>();
 
         for (String line : text) {
-            result.add(parse(player, preset, line, whitelist));
+            result.add(parse(player, preset, line, whitelist, null));
         }
 
         return result;
@@ -63,7 +70,8 @@ public class Functions {
      * @param text Text to parse functions from
      * @return Result string, with all valid functions parsed and executed
      */
-    public static @Nonnull String parse(Player player, @Nonnull String preset, @Nonnull String text, List<String> whitelist) {
+    public static @Nonnull String parse(Player player, @Nonnull String preset, @Nonnull String text, List<String> whitelist, Context context) {
+        Objects.requireNonNull(preset);
         final StringBuilder builder = new StringBuilder();
 
         if (text.indexOf('$') == -1) {
@@ -168,7 +176,11 @@ public class Functions {
                 arguments.add(new Argument(argumentString.strip()));
             }
 
-            builder.append(function.handle(player, new FunctionContext(preset), arguments));
+            if (context == null) {
+                context = Tooltips.getPlayerTooltipData(player).getActiveContext();
+            }
+
+            builder.append(function.handle(player, new FunctionContext(preset, context), arguments));
             index = closingBracket;
 
         }

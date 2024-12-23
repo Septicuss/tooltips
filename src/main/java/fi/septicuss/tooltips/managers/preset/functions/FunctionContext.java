@@ -1,5 +1,7 @@
 package fi.septicuss.tooltips.managers.preset.functions;
 
-public record FunctionContext(String preset) {
+import fi.septicuss.tooltips.managers.condition.Context;
+
+public record FunctionContext(String preset, Context context) {
 
 }

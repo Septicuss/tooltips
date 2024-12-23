@@ -51,6 +51,7 @@ public class PlayerTooltipData {
 
     // Send preset
     private String sentPreset;
+    private String checkedPreset;
 
     public UUID getPlayersId() {
         return uuid;
@@ -90,6 +91,14 @@ public class PlayerTooltipData {
 
     public String getSentPreset() {
         return sentPreset;
+    }
+
+    public void setCheckedPreset(String checkedPreset) {
+        this.checkedPreset = checkedPreset;
+    }
+
+    public String getCheckedPreset() {
+        return checkedPreset;
     }
 
     public ArrayList<String> getDisplayedText() {

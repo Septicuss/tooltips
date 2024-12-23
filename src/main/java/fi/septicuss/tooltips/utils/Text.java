@@ -1,6 +1,7 @@
 package fi.septicuss.tooltips.utils;
 
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.preset.animation.Animations;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
@@ -23,6 +24,11 @@ public class Text {
     public static String processText(final Player player, final String text) {
         final String placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
         return Functions.parse(player, Text.getPreset(player), placeholdersReplaced);
+    }
+
+    public static String processTextWithContext(final Player player, final String text, Context context) {
+        final String placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
+        return Functions.parse(player, Text.getPreset(player), placeholdersReplaced, null, context);
     }
 
     public static List<String> processText(final Player player, final List<String> text) {
@@ -49,7 +55,8 @@ public class Text {
 
     private static String getPreset(Player player) {
         final PlayerTooltipData playerTooltipData = Tooltips.get().getTooltipManager().getPlayerTooltipData(player);
-        return playerTooltipData.hasDisplayedPreset() ? playerTooltipData.getDisplayedPreset() : playerTooltipData.getSentPreset();
+        final String preset = playerTooltipData.hasDisplayedPreset() ? playerTooltipData.getDisplayedPreset() : playerTooltipData.getSentPreset();
+        return preset == null ? playerTooltipData.getCheckedPreset() : preset;
     }
 
 }

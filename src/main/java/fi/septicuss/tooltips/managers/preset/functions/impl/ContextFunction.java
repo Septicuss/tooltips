@@ -28,7 +28,7 @@ public class ContextFunction implements Function {
     public String handle(Player player, FunctionContext context, List<Argument> args) {
         if (args.isEmpty()) return "";
 
-        final String path = args.get(0).process(player).getAsString();
+        final String path = args.get(0).process(player, context.context()).getAsString();
         final String queryPath = Utils.stripQueryPath(path);
 
         final PlayerTooltipData tooltipData = plugin.getTooltipManager().getPlayerTooltipData(player);
