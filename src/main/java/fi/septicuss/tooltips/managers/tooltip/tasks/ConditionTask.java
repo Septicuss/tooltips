@@ -35,10 +35,10 @@ public class ConditionTask extends BukkitRunnable {
                 var id = holderEntry.getKey();
                 var holder = holderEntry.getValue();
 
-                data.clearPendingContext();
+                data.clearWorkingContext();
                 data.setCheckedPreset(id);
 
-                final boolean conditionResult = holder.evaluate(player, data);
+                final boolean conditionResult = holder.evaluate(player, data.getWorkingContext());
 
                 final boolean hasCurrentPreset = data.hasCurrentPreset();
                 final boolean isSamePreset = hasCurrentPreset && data.getCurrentPreset().equals(id);
@@ -48,6 +48,8 @@ public class ConditionTask extends BukkitRunnable {
                 if (isSamePreset) {
                     // Same preset true again, no actions taken
                     if (conditionResult) {
+                        data.clearPendingContext();
+                        data.updatePendingContext(data.getWorkingContext());
                         break;
                     }
 
@@ -58,6 +60,8 @@ public class ConditionTask extends BukkitRunnable {
 
                 /* Handling a new preset */
                 if (conditionResult) {
+                    data.clearPendingContext();
+                    data.updatePendingContext(data.getWorkingContext());
                     data.setCurrentPreset(id);
                     break;
                 }

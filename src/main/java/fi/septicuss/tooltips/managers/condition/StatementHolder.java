@@ -27,19 +27,19 @@ public class StatementHolder {
 		statements.add(statement);
 	}
 
-	public boolean evaluate(Player player, PlayerTooltipData data) {
+	public boolean evaluate(Player player, Context context) {
 
 		for (var statement : statements) {
 			if (statement == null || statement.getCompositeCondition() == null)
 				continue;
 
-			boolean conditionResult = statement.getCompositeCondition().check(player, data.getPendingContext());
+			boolean conditionResult = statement.getCompositeCondition().check(player, context);
 
 			if (statement.hasOutcome()) {
 				final var outcome = statement.getOutcome();
 
 				if (outcome == Statement.Outcome.SKIP) {
-					this.writeSkippedContext(player, data.getPendingContext(), statement);
+					this.writeSkippedContext(player, context, statement);
 					continue;
 				}
 
