@@ -1,11 +1,11 @@
 package fi.septicuss.tooltips.pack;
 
-import java.io.File;
-import java.util.LinkedList;
-
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.Utils;
+
+import java.io.File;
+import java.util.LinkedList;
 
 public class PackGenerator {
 

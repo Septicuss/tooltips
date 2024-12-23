@@ -7,7 +7,6 @@ import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.type.MultiString;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
-import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.rays.Rays;
 import fi.septicuss.tooltips.utils.validation.Validity;
 import org.bukkit.block.Block;
@@ -15,7 +14,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class LookingAtFurniture implements Condition {
 

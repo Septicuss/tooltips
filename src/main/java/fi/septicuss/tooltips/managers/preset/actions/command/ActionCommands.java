@@ -1,26 +1,25 @@
 package fi.septicuss.tooltips.managers.preset.actions.command;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import fi.septicuss.tooltips.managers.preset.actions.command.impl.RedisplayCommand;
-import fi.septicuss.tooltips.managers.preset.actions.command.impl.SkipCommand;
-import org.bukkit.entity.Player;
-
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.DelayCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.MessageCommand;
+import fi.septicuss.tooltips.managers.preset.actions.command.impl.RedisplayCommand;
+import fi.septicuss.tooltips.managers.preset.actions.command.impl.SkipCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.SoundCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.ClearVarCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.ClearVarsCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.SavePersistentVarsCommand;
 import fi.septicuss.tooltips.managers.preset.actions.command.impl.vars.SetVarCommand;
-import fi.septicuss.tooltips.managers.condition.argument.Argument;
-import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
+import org.bukkit.entity.Player;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class ActionCommands {
 

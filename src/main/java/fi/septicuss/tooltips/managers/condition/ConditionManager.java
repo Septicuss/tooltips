@@ -1,14 +1,13 @@
 package fi.septicuss.tooltips.managers.condition;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.managers.condition.parser.ArgumentParser;
 import fi.septicuss.tooltips.managers.condition.parser.CompositeConditionParser;
 import fi.septicuss.tooltips.managers.condition.parser.ConditionParser;
 import fi.septicuss.tooltips.managers.condition.parser.StatementParser;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class ConditionManager {
 

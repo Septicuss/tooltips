@@ -1,9 +1,8 @@
 package fi.septicuss.tooltips.managers.integration.impl.nbtapi;
 
-import org.bukkit.entity.Entity;
-
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTEntity;
+import org.bukkit.entity.Entity;
 
 public class NBTEntityWrapper extends NBTWrapper<Entity> {
 

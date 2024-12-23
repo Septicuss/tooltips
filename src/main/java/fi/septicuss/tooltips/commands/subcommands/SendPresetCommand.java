@@ -10,7 +10,6 @@ import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import fi.septicuss.tooltips.utils.AdventureUtils;
 import fi.septicuss.tooltips.utils.Colors;
 import fi.septicuss.tooltips.utils.Text;
-import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

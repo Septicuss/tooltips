@@ -1,5 +1,9 @@
 package fi.septicuss.tooltips.utils;
 
+import fi.septicuss.tooltips.Tooltips;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +13,6 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import fi.septicuss.tooltips.Tooltips;
 
 public class FileUtils {
 

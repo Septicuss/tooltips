@@ -1,15 +1,15 @@
 package fi.septicuss.tooltips.pack.impl;
 
+import fi.septicuss.tooltips.pack.Generator;
+import fi.septicuss.tooltips.pack.PackData;
+import fi.septicuss.tooltips.utils.FileUtils;
+import fi.septicuss.tooltips.utils.NamespacedPath;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-
-import fi.septicuss.tooltips.pack.Generator;
-import fi.septicuss.tooltips.pack.PackData;
-import fi.septicuss.tooltips.utils.FileUtils;
-import fi.septicuss.tooltips.utils.NamespacedPath;
 
 public class TextureGenerator implements Generator {
 

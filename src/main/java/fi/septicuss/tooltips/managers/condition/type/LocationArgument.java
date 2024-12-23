@@ -1,10 +1,9 @@
 package fi.septicuss.tooltips.managers.condition.type;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class LocationArgument {
 

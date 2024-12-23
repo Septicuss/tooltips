@@ -1,6 +1,5 @@
 package fi.septicuss.tooltips.managers.condition.argument;
 
-import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
 import fi.septicuss.tooltips.managers.condition.type.LocationArgument;

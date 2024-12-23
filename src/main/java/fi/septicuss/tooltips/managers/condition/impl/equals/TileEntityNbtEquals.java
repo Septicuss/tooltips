@@ -1,15 +1,14 @@
 package fi.septicuss.tooltips.managers.condition.impl.equals;
 
-import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-
-import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTTileEntityWrapper;
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTTileEntityWrapper;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
+import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 public class TileEntityNbtEquals implements Condition {
 

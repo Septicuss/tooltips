@@ -1,9 +1,7 @@
 package fi.septicuss.tooltips.managers.condition.parser;
 
-import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.ConditionManager;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
-import fi.septicuss.tooltips.utils.validation.Validity;
 
 public class ConditionParser implements Parser<ParsedCondition> {
 

@@ -4,16 +4,12 @@ import com.nexomc.nexo.api.NexoFurniture;
 import com.nexomc.nexo.api.NexoItems;
 import com.nexomc.nexo.items.ItemBuilder;
 import com.nexomc.nexo.mechanics.furniture.FurnitureMechanic;
-import com.nexomc.nexo.mechanics.furniture.IFurniturePacketManager;
 import fi.septicuss.tooltips.managers.integration.providers.FurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.util.BoundingBox;
-import org.bukkit.util.RayTraceResult;
 import org.jetbrains.annotations.Nullable;
 
 

@@ -1,11 +1,11 @@
 package fi.septicuss.tooltips.utils.font;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Widths {
 

@@ -1,13 +1,12 @@
 package fi.septicuss.tooltips.managers.icon;
 
-import java.io.File;
-
-import org.bukkit.configuration.ConfigurationSection;
-
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.utils.NamespacedPath;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validatable;
+import org.bukkit.configuration.ConfigurationSection;
+
+import java.io.File;
 
 public class Icon implements Validatable {
 

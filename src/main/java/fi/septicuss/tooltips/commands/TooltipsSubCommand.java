@@ -1,9 +1,9 @@
 package fi.septicuss.tooltips.commands;
 
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+
+import java.util.List;
 
 public interface TooltipsSubCommand {
 	

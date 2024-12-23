@@ -1,9 +1,5 @@
 package fi.septicuss.tooltips.managers.condition.impl.lookingat;
 
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
@@ -11,6 +7,9 @@ import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
 import fi.septicuss.tooltips.managers.condition.type.MultiLocation;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 public class LookingAtBlock implements Condition {
 

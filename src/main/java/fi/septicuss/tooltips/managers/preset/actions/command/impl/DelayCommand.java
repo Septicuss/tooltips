@@ -1,18 +1,17 @@
 package fi.septicuss.tooltips.managers.preset.actions.command.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
+import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
 import fi.septicuss.tooltips.utils.Text;
+import fi.septicuss.tooltips.utils.validation.Validity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
-import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
-import fi.septicuss.tooltips.managers.condition.argument.Argument;
-import fi.septicuss.tooltips.managers.condition.argument.Arguments;
-import fi.septicuss.tooltips.utils.validation.Validity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DelayCommand implements ActionCommand {
 

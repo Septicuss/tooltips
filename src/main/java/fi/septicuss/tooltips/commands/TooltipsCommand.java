@@ -1,22 +1,19 @@
 package fi.septicuss.tooltips.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.utils.AdventureUtils;
-import net.citizensnpcs.api.util.Messaging;
-import net.kyori.adventure.text.Component;
+import fi.septicuss.tooltips.utils.Colors;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.utils.Colors;
-import net.md_5.bungee.api.ChatColor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 public class TooltipsCommand implements CommandExecutor, TabCompleter {
 

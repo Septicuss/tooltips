@@ -1,10 +1,10 @@
 package fi.septicuss.tooltips.utils.cache.player;
 
+import org.bukkit.entity.Player;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import org.bukkit.entity.Player;
 
 public class LookingAtCache {
 

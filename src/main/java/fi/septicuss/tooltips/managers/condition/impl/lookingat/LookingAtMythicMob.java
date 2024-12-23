@@ -1,15 +1,14 @@
 package fi.septicuss.tooltips.managers.condition.impl.lookingat;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.type.MultiString;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class LookingAtMythicMob implements Condition {
 

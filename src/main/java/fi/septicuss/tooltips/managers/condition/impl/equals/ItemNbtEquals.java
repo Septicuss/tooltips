@@ -1,15 +1,14 @@
 package fi.septicuss.tooltips.managers.condition.impl.equals;
 
+import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTItemWrapper;
+import fi.septicuss.tooltips.utils.validation.Validity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-
-import fi.septicuss.tooltips.managers.integration.impl.nbtapi.NBTItemWrapper;
-import fi.septicuss.tooltips.managers.condition.Condition;
-import fi.septicuss.tooltips.managers.condition.argument.Argument;
-import fi.septicuss.tooltips.managers.condition.argument.Arguments;
-import fi.septicuss.tooltips.utils.validation.Validity;
 
 public class ItemNbtEquals implements Condition {
 

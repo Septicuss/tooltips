@@ -1,9 +1,7 @@
 package fi.septicuss.tooltips.managers.condition.composite;
 
-import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.parser.ParsedCondition;
-import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import org.bukkit.entity.Player;
 
 public class CompositeCondition {

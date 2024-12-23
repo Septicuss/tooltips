@@ -1,15 +1,14 @@
 package fi.septicuss.tooltips.managers.preset.actions.command.impl.vars;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
-import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
 import fi.septicuss.tooltips.utils.Placeholders;
+import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
 import fi.septicuss.tooltips.utils.variable.Variables;
 import fi.septicuss.tooltips.utils.variable.Variables.VariableProvider;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class ClearVarsCommand extends VarCommand implements ActionCommand {
 

@@ -1,14 +1,13 @@
 package fi.septicuss.tooltips.pack;
 
+import com.google.gson.JsonObject;
+import fi.septicuss.tooltips.utils.NamespacedPath;
+import fi.septicuss.tooltips.utils.Utils;
+
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.google.gson.JsonObject;
-
-import fi.septicuss.tooltips.utils.NamespacedPath;
-import fi.septicuss.tooltips.utils.Utils;
 
 public class PackData {
 

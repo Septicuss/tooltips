@@ -1,18 +1,16 @@
 package fi.septicuss.tooltips.listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.integration.IntegrationManager;
 import fi.septicuss.tooltips.managers.integration.providers.AreaProvider;
+import fi.septicuss.tooltips.utils.cache.area.CurrentAreaCache;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import fi.septicuss.tooltips.utils.cache.area.CurrentAreaCache;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerMovementListener implements Listener {
 

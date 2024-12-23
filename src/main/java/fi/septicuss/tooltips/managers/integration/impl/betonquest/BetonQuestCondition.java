@@ -4,8 +4,8 @@ import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationData;
-import fi.septicuss.tooltips.utils.validation.Validity;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIO;
+import fi.septicuss.tooltips.utils.validation.Validity;
 import org.bukkit.entity.Player;
 
 public class BetonQuestCondition implements Condition {

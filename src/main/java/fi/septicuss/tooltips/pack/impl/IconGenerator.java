@@ -1,12 +1,7 @@
 package fi.septicuss.tooltips.pack.impl;
 
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.icon.Icon;
 import fi.septicuss.tooltips.managers.icon.IconManager;
@@ -15,6 +10,10 @@ import fi.septicuss.tooltips.pack.PackData;
 import fi.septicuss.tooltips.pack.PackData.ProviderType;
 import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.Utils;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 public class IconGenerator implements Generator {
 

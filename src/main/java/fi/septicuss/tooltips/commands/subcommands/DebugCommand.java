@@ -2,12 +2,11 @@ package fi.septicuss.tooltips.commands.subcommands;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.condition.Statement;
 import fi.septicuss.tooltips.managers.condition.StatementHolder;
+import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.utils.AdventureUtils;
 import fi.septicuss.tooltips.utils.Colors;
-import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

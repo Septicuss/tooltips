@@ -1,6 +1,5 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks;
 
-import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import org.bukkit.Bukkit;

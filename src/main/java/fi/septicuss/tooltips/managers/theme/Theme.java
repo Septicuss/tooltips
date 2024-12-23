@@ -1,17 +1,15 @@
 package fi.septicuss.tooltips.managers.theme;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import net.kyori.adventure.key.Key;
-import org.bukkit.configuration.ConfigurationSection;
-
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.utils.NamespacedPath;
 import fi.septicuss.tooltips.utils.validation.Validatable;
+import net.kyori.adventure.key.Key;
+import org.bukkit.configuration.ConfigurationSection;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Theme implements Validatable {
 

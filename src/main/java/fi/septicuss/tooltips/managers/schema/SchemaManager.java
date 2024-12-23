@@ -1,5 +1,15 @@
 package fi.septicuss.tooltips.managers.schema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.utils.font.Widths;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,19 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.imageio.ImageIO;
-
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.utils.Utils;
-import fi.septicuss.tooltips.utils.font.Widths;
 
 /**
  * Parses schemas defined in .data/schemas/....yml into JSON providers

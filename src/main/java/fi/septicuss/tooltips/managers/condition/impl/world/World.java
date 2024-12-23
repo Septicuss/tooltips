@@ -1,12 +1,11 @@
 package fi.septicuss.tooltips.managers.condition.impl.world;
 
-import fi.septicuss.tooltips.managers.condition.Context;
-import org.bukkit.entity.Player;
-
 import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.type.MultiString;
 import fi.septicuss.tooltips.utils.validation.Validity;
+import org.bukkit.entity.Player;
 
 public class World implements Condition {
 

@@ -11,7 +11,6 @@ import fi.septicuss.tooltips.utils.Utils;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * $context(key)

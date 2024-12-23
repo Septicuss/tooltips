@@ -1,18 +1,16 @@
 package fi.septicuss.tooltips.managers.theme;
 
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.utils.FileUtils;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import fi.septicuss.tooltips.utils.FileUtils;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-
-import fi.septicuss.tooltips.Tooltips;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ThemeManager {
 	

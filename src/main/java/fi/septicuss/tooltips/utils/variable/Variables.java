@@ -1,5 +1,13 @@
 package fi.septicuss.tooltips.utils.variable;
 
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.condition.argument.Argument;
+import fi.septicuss.tooltips.managers.condition.argument.Arguments;
+import fi.septicuss.tooltips.utils.FileUtils;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,15 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.managers.condition.argument.Argument;
-import fi.septicuss.tooltips.managers.condition.argument.Arguments;
-import fi.septicuss.tooltips.utils.FileUtils;
 
 public class Variables {
 

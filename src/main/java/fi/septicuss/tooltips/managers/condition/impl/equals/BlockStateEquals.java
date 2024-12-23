@@ -1,15 +1,14 @@
 package fi.septicuss.tooltips.managers.condition.impl.equals;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-
 import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.utils.Utils;
 import fi.septicuss.tooltips.utils.validation.Validity;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockStateEquals implements Condition {
 

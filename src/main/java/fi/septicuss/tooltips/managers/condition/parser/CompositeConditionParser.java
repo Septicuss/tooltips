@@ -1,8 +1,8 @@
 package fi.septicuss.tooltips.managers.condition.parser;
 
 import fi.septicuss.tooltips.managers.condition.composite.CompositeCondition;
-import fi.septicuss.tooltips.managers.condition.composite.CompositeConditionBuilder;
 import fi.septicuss.tooltips.managers.condition.composite.CompositeCondition.Operator;
+import fi.septicuss.tooltips.managers.condition.composite.CompositeConditionBuilder;
 import fi.septicuss.tooltips.utils.Utils;
 
 public class CompositeConditionParser implements Parser<CompositeCondition> {

@@ -1,15 +1,14 @@
 package fi.septicuss.tooltips.utils.cache.tooltip;
 
+import fi.septicuss.tooltips.managers.title.TitleBuilder;
+import fi.septicuss.tooltips.utils.Text;
+import org.bukkit.entity.Player;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import fi.septicuss.tooltips.utils.Text;
-import org.bukkit.entity.Player;
-
-import fi.septicuss.tooltips.managers.title.TitleBuilder;
 
 public class TooltipCache {
 

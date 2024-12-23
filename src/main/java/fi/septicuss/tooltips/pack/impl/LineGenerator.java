@@ -1,17 +1,7 @@
 package fi.septicuss.tooltips.pack.impl;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
 import fi.septicuss.tooltips.managers.schema.SchemaPart;
@@ -20,6 +10,14 @@ import fi.septicuss.tooltips.pack.PackData;
 import fi.septicuss.tooltips.pack.PackData.ProviderType;
 import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.Utils;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LineGenerator implements Generator {
 

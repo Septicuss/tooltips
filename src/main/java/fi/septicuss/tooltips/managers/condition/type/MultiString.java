@@ -1,8 +1,8 @@
 package fi.septicuss.tooltips.managers.condition.type;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
+
+import java.util.List;
 
 public class MultiString {
 

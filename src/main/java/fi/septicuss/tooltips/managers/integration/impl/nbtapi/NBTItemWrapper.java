@@ -1,9 +1,8 @@
 package fi.septicuss.tooltips.managers.integration.impl.nbtapi;
 
-import org.bukkit.inventory.ItemStack;
-
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.inventory.ItemStack;
 
 public class NBTItemWrapper extends NBTWrapper<ItemStack> {
 

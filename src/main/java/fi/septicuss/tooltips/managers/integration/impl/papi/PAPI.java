@@ -1,11 +1,10 @@
 package fi.septicuss.tooltips.managers.integration.impl.papi;
 
-import java.util.List;
-
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.clip.placeholderapi.PlaceholderAPI;
+import java.util.List;
 
 public class PAPI {
 

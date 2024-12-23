@@ -1,15 +1,7 @@
 package fi.septicuss.tooltips.pack.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.pack.Generator;
 import fi.septicuss.tooltips.pack.PackData;
@@ -17,6 +9,13 @@ import fi.septicuss.tooltips.pack.PackData.ProviderType;
 import fi.septicuss.tooltips.utils.FileSetup;
 import fi.septicuss.tooltips.utils.FileUtils;
 import fi.septicuss.tooltips.utils.font.Spaces;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class SpaceGenerator implements Generator {
 

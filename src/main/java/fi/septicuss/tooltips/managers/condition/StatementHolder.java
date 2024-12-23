@@ -1,15 +1,12 @@
 package fi.septicuss.tooltips.managers.condition;
 
+import fi.septicuss.tooltips.managers.condition.composite.CompositeCondition;
+import fi.septicuss.tooltips.managers.condition.parser.ParsedCondition;
+import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.libs.org.snakeyaml.engine.v2.api.lowlevel.Parse;
-import fi.septicuss.tooltips.managers.condition.argument.Arguments;
-import fi.septicuss.tooltips.managers.condition.composite.CompositeCondition;
-import fi.septicuss.tooltips.managers.condition.parser.ParsedCondition;
-import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
-import org.bukkit.entity.Player;
 
 public class StatementHolder {
 

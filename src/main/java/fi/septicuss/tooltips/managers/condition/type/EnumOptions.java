@@ -1,11 +1,11 @@
 package fi.septicuss.tooltips.managers.condition.type;
 
+import fi.septicuss.tooltips.utils.Utils;
+import fi.septicuss.tooltips.utils.validation.Validity;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import fi.septicuss.tooltips.utils.Utils;
-import fi.septicuss.tooltips.utils.validation.Validity;
 
 public class EnumOptions<E extends Enum<E>> {
 

@@ -1,25 +1,23 @@
 package fi.septicuss.tooltips.commands.subcommands;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.commands.TooltipsSubCommand;
+import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.utils.AdventureUtils;
-import net.citizensnpcs.api.util.Messaging;
+import fi.septicuss.tooltips.utils.Colors;
+import fi.septicuss.tooltips.utils.variable.Variables;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.commands.TooltipsSubCommand;
-import fi.septicuss.tooltips.managers.condition.argument.Argument;
-import fi.septicuss.tooltips.utils.Colors;
-import fi.septicuss.tooltips.utils.variable.Variables;
-import net.md_5.bungee.api.ChatColor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ListVarsCommand implements TooltipsSubCommand {
 

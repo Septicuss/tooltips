@@ -1,7 +1,6 @@
 package fi.septicuss.tooltips.managers.integration.impl.itemsadder;
 
 import dev.lone.itemsadder.api.CustomFurniture;
-import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.integration.providers.FurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
 import org.bukkit.block.Block;

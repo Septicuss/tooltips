@@ -1,9 +1,8 @@
 package fi.septicuss.tooltips.managers.integration.impl.nbtapi;
 
-import org.bukkit.block.Block;
-
 import de.tr7zw.nbtapi.NBTBlock;
 import de.tr7zw.nbtapi.NBTCompound;
+import org.bukkit.block.Block;
 
 public class NBTBlockWrapper extends NBTWrapper<Block> {
 
