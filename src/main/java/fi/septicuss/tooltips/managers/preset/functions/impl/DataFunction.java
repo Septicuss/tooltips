@@ -34,6 +34,8 @@ public class DataFunction implements Function {
         final String path = args.get(0).process(player, context.context()).getAsString();
         final String queryPath = Utils.stripQueryPath(path);
 
+        if (path.endsWith(".")) return "";
+
         final Object object = data.get(queryPath);
         if (object == null) return "";
 
