@@ -16,8 +16,7 @@ public class Text {
     private static final List<String> PREPROCESS_FUNCTIONS = List.of("preprocess", "strip", "static");
 
     public static List<String> preprocessAnimatedText(final Player player, final List<String> text) {
-        final List<String> placeholdersReplaced = Placeholders.replacePlaceholders(player, text);
-        final List<String> functionsParsed = Functions.parse(player, Text.getPreset(player), placeholdersReplaced, PREPROCESS_FUNCTIONS);
+        final List<String> functionsParsed = Functions.parse(player, Text.getPreset(player), text, PREPROCESS_FUNCTIONS);
         return Animations.parse(player, functionsParsed);
     }
 
