@@ -9,6 +9,7 @@ softdepend: [ PlaceholderAPI, ItemsAdder, Nexo, Oraxen, WorldGuard, WorldEdit, M
 
 libraries:
    - net.kyori:adventure-api:${adventure.core.version}
+   - net.kyori:adventure-platform-bukkit:${adventure.bukkit.version}
    - net.kyori:adventure-text-minimessage:${adventure.core.version}
    - net.kyori:adventure-text-serializer-plain:${adventure.core.version}
    - net.kyori:adventure-text-serializer-gson:${adventure.core.version}

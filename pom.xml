@@ -48,6 +48,7 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<adventure.core.version>4.17.0</adventure.core.version>
+		<adventure.bukkit.version>4.3.0</adventure.bukkit.version>
 	</properties>
 
 	<repositories>
@@ -118,16 +119,25 @@
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-api</artifactId>
 			<version>${adventure.core.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.kyori</groupId>
+			<artifactId>adventure-platform-bukkit</artifactId>
+			<version>${adventure.bukkit.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-text-minimessage</artifactId>
 			<version>${adventure.core.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.kyori</groupId>
 			<artifactId>adventure-text-serializer-plain</artifactId>
 			<version>${adventure.core.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.kyori</groupId>
@@ -139,6 +149,7 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
