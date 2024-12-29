@@ -17,7 +17,7 @@ public class Region implements Condition {
 		MultiString region = null;
 
 		if (args.has(REGION))
-			region = MultiString.of(args.get(REGION).getAsString());
+			region = MultiString.of(args.get(REGION).process(player).getAsString());
 
 		if (region == null) {
 			return CurrentAreaCache.has(player);
