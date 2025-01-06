@@ -75,11 +75,52 @@ public class AdventureUtils {
                 continue;
             }
 
-            final char nextChar = chars[i+1];
-            if (COLOR_CHAR_MAP.containsKey(nextChar)) {
-                builder.append(COLOR_CHAR_MAP.get(nextChar));
-                i++;
+            switch (chars[i+1]) {
+                case '0' -> builder.append("<black>");
+                case '1' -> builder.append("<dark_blue>");
+                case '2' -> builder.append("<dark_green>");
+                case '3' -> builder.append("<dark_aqua>");
+                case '4' -> builder.append("<dark_red>");
+                case '5' -> builder.append("<dark_purple>");
+                case '6' -> builder.append("<gold>");
+                case '7' -> builder.append("<gray>");
+                case '8' -> builder.append("<dark_gray>");
+                case '9' -> builder.append("<blue>");
+                case 'a' -> builder.append("<green>");
+                case 'b' -> builder.append("<aqua>");
+                case 'c' -> builder.append("<red>");
+                case 'd' -> builder.append("<light_purple>");
+                case 'e' -> builder.append("<yellow>");
+                case 'f' -> builder.append("<white>");
+                case 'r' -> builder.append("<reset>");
+                case 'x' -> {
+                    if (i + 13 >= chars.length
+                            || !isLegacyColorCode(chars[i+2])
+                            || !isLegacyColorCode(chars[i+4])
+                            || !isLegacyColorCode(chars[i+6])
+                            || !isLegacyColorCode(chars[i+8])
+                            || !isLegacyColorCode(chars[i+10])
+                            || !isLegacyColorCode(chars[i+12])) {
+                        builder.append(chars[i]);
+                        continue;
+                    }
+                    builder
+                            .append("<#")
+                            .append(chars[i+3])
+                            .append(chars[i+5])
+                            .append(chars[i+7])
+                            .append(chars[i+9])
+                            .append(chars[i+11])
+                            .append(chars[i+13])
+                            .append(">");
+                    i += 12;
+                }
+                default -> {
+                    builder.append(chars[i]);
+                    continue;
+                }
             }
+            i++;
 
         }
 
