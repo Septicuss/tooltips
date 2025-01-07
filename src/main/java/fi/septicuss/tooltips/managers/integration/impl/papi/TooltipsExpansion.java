@@ -25,6 +25,11 @@ public class TooltipsExpansion extends PlaceholderExpansion {
 	}
 
 	@Override
+	public boolean persist() {
+		return true;
+	}
+
+	@Override
 	public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
 
 		String[] paramArgs = params.split("_");
