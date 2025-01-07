@@ -180,7 +180,8 @@ public class Functions {
                 context = Tooltips.getPlayerTooltipData(player).getActiveContext();
             }
 
-            builder.append(function.handle(player, new FunctionContext(preset, context), arguments));
+            final String output = function.handle(player, new FunctionContext(preset, context), arguments);
+            builder.append(output);
             index = closingBracket;
 
         }

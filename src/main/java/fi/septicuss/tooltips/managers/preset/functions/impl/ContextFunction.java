@@ -30,9 +30,7 @@ public class ContextFunction implements Function {
         final String path = args.get(0).process(player, context.context()).getAsString();
         final String queryPath = Utils.stripQueryPath(path);
 
-        final PlayerTooltipData tooltipData = plugin.getTooltipManager().getPlayerTooltipData(player);
-
-        final Context tooltipContext = tooltipData.getActiveContext();
+        final Context tooltipContext = context.context();
         if (!tooltipContext.has(queryPath)) return "";
 
         final Object value = tooltipContext.get(queryPath);

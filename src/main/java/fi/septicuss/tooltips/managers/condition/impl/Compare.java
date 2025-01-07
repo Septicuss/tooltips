@@ -1,6 +1,8 @@
 package fi.septicuss.tooltips.managers.condition.impl;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.type.Operation;
@@ -19,13 +21,15 @@ public class Compare implements Condition {
 		Argument firstArg = args.get(FIRST_VALUE_ALIASES);
 		Argument secondArg = args.get(SECOND_VALUE_ALIASES);
 
-		firstArg = firstArg.process(player);
+		final Context workingContext = Tooltips.getPlayerTooltipData(player).getWorkingContext();
+		
+		firstArg = firstArg.process(player, workingContext);
 
 		if (secondArg == null) {
 			return firstArg.getAsBool();
 		}
 
-		secondArg = secondArg.process(player);
+		secondArg = secondArg.process(player, workingContext);
 
 		if (firstArg.isNumber() && (secondArg.isNumber() || secondArg.getAsString().isEmpty())) {
 			Operation operation = Operation.EQUAL;
