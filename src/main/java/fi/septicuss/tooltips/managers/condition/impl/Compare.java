@@ -61,6 +61,25 @@ public class Compare implements Condition {
 	}
 
 	@Override
+	public void writeContext(Player player, Arguments args, Context context) {
+		Argument firstArg = args.get(FIRST_VALUE_ALIASES);
+		Argument secondArg = args.get(SECOND_VALUE_ALIASES);
+
+		final Context workingContext = Tooltips.getPlayerTooltipData(player).getWorkingContext();
+
+		firstArg = firstArg.process(player, workingContext);
+
+		if (secondArg == null) {
+			context.put("compare.first", firstArg.getAsString());
+			return;
+		}
+
+		secondArg = secondArg.process(player, workingContext);
+		context.put("compare.second", secondArg.getAsString());
+		context.put("compare.first", firstArg.getAsString());
+	}
+
+	@Override
 	public Validity valid(Arguments args) {
 
 		if (args.areEmpty())
