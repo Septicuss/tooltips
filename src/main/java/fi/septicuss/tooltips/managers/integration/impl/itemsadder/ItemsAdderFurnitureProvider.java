@@ -41,7 +41,7 @@ public class ItemsAdderFurnitureProvider implements FurnitureProvider {
             return null;
         }
 
-        final String id = furniture.getId();
+        final String id = furniture.getNamespacedID();
         final String name = furniture.getDisplayName();
 
         return new FurnitureWrapper(this.identifier(), id, name);
