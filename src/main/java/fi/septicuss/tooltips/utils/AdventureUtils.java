@@ -46,7 +46,9 @@ public class AdventureUtils {
         COLOR_CHAR_MAP.put('e', "<yellow>");
         COLOR_CHAR_MAP.put('f', "<white>");
         COLOR_CHAR_MAP.put('r', "<reset>");
-        COLOR_CHAR_MAP.put('l', "<b>");
+        COLOR_CHAR_MAP.put('l', "");
+        COLOR_CHAR_MAP.put('o', "");
+        COLOR_CHAR_MAP.put('k', "");
     }
 
     public static void sendMessage(CommandSender sender, String message) {
