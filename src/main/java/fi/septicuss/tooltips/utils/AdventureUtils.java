@@ -95,6 +95,7 @@ public class AdventureUtils {
                 case 'e' -> builder.append("<yellow>");
                 case 'f' -> builder.append("<white>");
                 case 'r' -> builder.append("<reset>");
+                case 'l', 'm', 'o', 'n', 'k' -> {}
                 case 'x' -> {
                     if (i + 13 >= chars.length
                             || !isLegacyColorCode(chars[i+2])
