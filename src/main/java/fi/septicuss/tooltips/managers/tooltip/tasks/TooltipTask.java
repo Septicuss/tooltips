@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.tooltip.tasks;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.actions.ActionProperties;
 import fi.septicuss.tooltips.managers.preset.actions.DefaultTooltipAction;
@@ -151,15 +152,18 @@ public class TooltipTask extends BukkitRunnable {
         }
 
         final List<String> commands = Text.processText(player, actions.getCommandsForAction(action));
-        commands.forEach(command -> {
-            final String consoleCommand = command.replace("%player%", player.getName());
 
-            if (ActionCommands.isValidCommand(consoleCommand)) {
-                ActionCommands.runCommand(player, presetId, consoleCommand);
-                return;
-            }
+        Bukkit.getScheduler().runTask(Tooltips.get(), () -> {
+            commands.forEach(command -> {
+                final String consoleCommand = command.replace("%player%", player.getName());
 
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), consoleCommand);
+                if (ActionCommands.isValidCommand(consoleCommand)) {
+                    ActionCommands.runCommand(player, presetId, consoleCommand);
+                    return;
+                }
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), consoleCommand);
+            });
         });
 
     }
