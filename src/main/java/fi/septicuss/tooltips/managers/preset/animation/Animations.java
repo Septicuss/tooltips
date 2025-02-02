@@ -5,6 +5,7 @@ import fi.septicuss.tooltips.managers.condition.argument.Argument;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
+import fi.septicuss.tooltips.utils.Placeholders;
 import fi.septicuss.tooltips.utils.Utils;
 import org.bukkit.entity.Player;
 
@@ -241,6 +242,7 @@ public class Animations {
                         value = Utils.removeQuotes(value);
                     }
 
+                    value = Placeholders.replacePlaceholders(player, Functions.parse(player, data.getCurrentPreset(), value));
                     arguments.add(key, new Argument(Functions.parse(player, data.getCurrentPreset(), value)));
                 } else {
                     arguments.add(token.strip(), new Argument("true"));
