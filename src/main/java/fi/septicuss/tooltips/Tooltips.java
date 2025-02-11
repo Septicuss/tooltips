@@ -58,6 +58,8 @@ import fi.septicuss.tooltips.managers.preset.functions.impl.PreprocessFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.StaticFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.StripFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.UppercaseFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.variable.HasPVarFunction;
+import fi.septicuss.tooltips.managers.preset.functions.impl.variable.HasVarFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.variable.PVarFunction;
 import fi.septicuss.tooltips.managers.preset.functions.impl.variable.VarFunction;
 import fi.septicuss.tooltips.managers.schema.SchemaManager;
@@ -205,7 +207,9 @@ public class Tooltips extends JavaPlugin {
 
 		// Variables
 		Functions.add("var", new VarFunction());
+		Functions.add("hasvar", new HasVarFunction());
 		Functions.add("pvar", new PVarFunction());
+		Functions.add("haspvar", new HasPVarFunction());
 	}
 
 	private void registerAnimations() {
