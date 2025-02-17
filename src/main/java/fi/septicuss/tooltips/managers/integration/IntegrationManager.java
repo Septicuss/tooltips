@@ -122,7 +122,7 @@ public class IntegrationManager {
         return Optional.empty();
     }
 
-    private boolean isPresent(String plugin) {
+    public boolean isPresent(String plugin) {
         return (Bukkit.getPluginManager().getPlugin(plugin) != null);
     }
 

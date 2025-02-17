@@ -10,10 +10,12 @@ import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 
 public class NexoFurnitureProvider implements FurnitureProvider {
+
     @Nullable
     @Override
     public FurnitureWrapper getFurniture(Entity entity) {
@@ -41,6 +43,21 @@ public class NexoFurnitureProvider implements FurnitureProvider {
         return this.getWrapperFromMechanic(mechanic);
     }
 
+    @Override
+    public boolean hasCustomRaytrace() {
+        try {
+            NexoFurniture.class.getMethod("findTargetFurniture", Player.class);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public FurnitureWrapper getTargetFurniture(Player player) {
+        return this.getFurniture(NexoFurniture.findTargetFurniture(player));
+    }
+
     private FurnitureWrapper getWrapperFromMechanic(final FurnitureMechanic mechanic) {
         final String id = mechanic.getItemID();
         final String name = this.getFurnitureName(id);
@@ -51,7 +68,6 @@ public class NexoFurnitureProvider implements FurnitureProvider {
 
         return new FurnitureWrapper(this.identifier(), id, name);
     }
-
 
     private String getFurnitureName(final String itemId) {
         final ItemBuilder builder = NexoItems.itemFromId(itemId);

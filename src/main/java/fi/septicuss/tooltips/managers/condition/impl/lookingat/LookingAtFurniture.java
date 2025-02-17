@@ -55,6 +55,15 @@ public class LookingAtFurniture implements Condition {
 
         final MultiString finalizedId = id;
 
+        for (var provider : integrationManager.getFurnitureProviders().values()) {
+            if (provider.hasCustomRaytrace()) {
+                final var furniture = provider.getTargetFurniture(player);
+                if (furniture != null) {
+                    return furniture;
+                }
+            }
+        }
+
         var rayTrace = Rays.furnitureRayTrace(player, distance);
 
         if (rayTrace == null) {
