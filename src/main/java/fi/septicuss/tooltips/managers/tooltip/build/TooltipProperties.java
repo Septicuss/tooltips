@@ -7,15 +7,17 @@ public class TooltipProperties {
 
 	private Theme theme;
 	private String color;
+	private boolean shadow;
 	private int horizontalShift;
 
 	protected TooltipProperties() {
 
 	}
 
-	protected TooltipProperties(Theme theme, String color, int horizontalShift) {
+	protected TooltipProperties(Theme theme, String color, boolean shadow, int horizontalShift) {
 		this.theme = theme;
 		this.color = color;
+		this.shadow = shadow;
 		this.horizontalShift = horizontalShift;
 	}
 
@@ -27,16 +29,20 @@ public class TooltipProperties {
 		return color;
 	}
 
+	public boolean hasShadow() {
+		return shadow;
+	}
+
 	public int getHorizontalShift() {
 		return horizontalShift;
 	}
 
 	public static TooltipProperties from(Preset preset) {
-		return new TooltipProperties(preset.getTheme(), preset.getColor(), preset.getHorizontalShift());
+		return new TooltipProperties(preset.getTheme(), preset.getColor(), preset.hasShadow(), preset.getHorizontalShift());
 	}
 
 	public static TooltipProperties from(Theme theme) {
-		return new TooltipProperties(theme, "#ffffff", 0);
+		return new TooltipProperties(theme, "#ffffff", true, 0);
 	}
 
 }

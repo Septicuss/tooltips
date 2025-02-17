@@ -31,6 +31,7 @@ public class Preset implements Validatable {
      */
     private Theme theme;
     private String color = "white";
+    private boolean shadow = true;
     private int horizontalShift = 0;
 
     /**
@@ -70,6 +71,7 @@ public class Preset implements Validatable {
             this.text = parent.getText();
             this.theme = parent.getTheme();
             this.color = parent.getColor();
+            this.shadow = parent.hasShadow();
             this.horizontalShift = parent.getHorizontalShift();
             this.fadeIn = parent.getFadeIn();
             this.stay = parent.getStay();
@@ -126,6 +128,7 @@ public class Preset implements Validatable {
         if (displaySection != null) {
             /* Other */
             color = displaySection.getString("color", color);
+            shadow = displaySection.getBoolean("shadow", shadow);
             horizontalShift = displaySection.getInt("horizontal-shift", (horizontalShift == 0 ? 0 : horizontalShift));
         }
 
@@ -243,4 +246,9 @@ public class Preset implements Validatable {
     public int getPriority() {
         return this.priority;
     }
+
+    public boolean hasShadow() {
+        return this.shadow;
+    }
+
 }
