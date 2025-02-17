@@ -47,7 +47,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<adventure.core.version>4.17.0</adventure.core.version>
+		<adventure.core.version>4.19.0</adventure.core.version>
 		<adventure.bukkit.version>4.3.0</adventure.bukkit.version>
 	</properties>
 
@@ -247,6 +247,12 @@
 			<artifactId>AxGensAPI</artifactId>
 			<version>13</version>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.betonquest</groupId>
