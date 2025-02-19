@@ -14,7 +14,7 @@ public class StripFunction implements Function {
     @Override
     public String handle(Player player, FunctionContext context, List<Argument> args) {
         if (args.isEmpty()) return "";
-        return Animations.stripAnimations(Functions.parse(player, context.preset(), args.get(0).getAsString()));
+        return Animations.stripAnimations(Functions.parseSingleLineWithContext(player, context.preset(), args.get(0).getAsString(), context.context()));
     }
 
 }

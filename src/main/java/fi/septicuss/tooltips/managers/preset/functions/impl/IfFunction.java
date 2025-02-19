@@ -15,7 +15,7 @@ public class IfFunction implements Function {
     public String handle(Player player, FunctionContext context, List<Argument> args) {
         if (args.isEmpty() || args.size() < 3) return "";
 
-        final Argument conditionArgument = args.get(0).process(player);
+        final Argument conditionArgument = args.get(0).process(player, context.context());
         final String string = conditionArgument.getAsString();
 
         final Expr.Builder expressionBuilder = new Expr.Builder();
@@ -29,10 +29,10 @@ public class IfFunction implements Function {
         }
 
         if (result) {
-            return args.get(1).process(player).getAsString();
+            return args.get(1).process(player, context.context()).getAsString();
         }
 
-        return args.get(2).process(player).getAsString();
+        return args.get(2).process(player, context.context()).getAsString();
     }
 
     private boolean needsParsing(Expr.Builder expressionBuilder, String value) {

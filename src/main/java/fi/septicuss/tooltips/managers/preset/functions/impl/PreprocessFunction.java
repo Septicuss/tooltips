@@ -15,7 +15,7 @@ public class PreprocessFunction implements Function {
         if (args.isEmpty()) return "";
 
         final Argument argument = args.get(0);
-        return Functions.parse(player, context.preset(), argument.getAsString());
+        return Functions.parseSingleLineWithContext(player, context.preset(), argument.getAsString(), context.context());
     }
 
 }

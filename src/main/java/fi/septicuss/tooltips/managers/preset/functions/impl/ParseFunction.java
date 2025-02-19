@@ -22,7 +22,7 @@ public class ParseFunction implements Function {
         final Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) return "";
 
-        return Text.processText(target, string);
+        return Text.processTextWithContext(target, string, context.context());
     }
 
 

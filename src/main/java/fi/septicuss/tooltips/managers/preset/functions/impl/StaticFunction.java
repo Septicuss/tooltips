@@ -26,7 +26,7 @@ public class StaticFunction implements Function {
             joined = Utils.removeQuotes(joined);
         }
 
-        return Functions.parse(player, context.preset(), joined);
+        return Functions.parseSingleLineWithContext(player, context.preset(), joined, context.context());
     }
 
     @Override

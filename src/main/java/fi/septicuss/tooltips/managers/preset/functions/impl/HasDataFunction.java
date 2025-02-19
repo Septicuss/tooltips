@@ -32,7 +32,7 @@ public class HasDataFunction implements Function {
         final ConfigurationSection data = getPresetDataSection(preset);
         if (data == null) return FALSE;
 
-        String path = args.get(0).process(player).getAsString();
+        String path = args.get(0).process(player, context.context()).getAsString();
         int index = -1;
 
         // ...[x] used for indexing lists

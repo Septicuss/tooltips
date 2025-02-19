@@ -21,7 +21,7 @@ public class HasContextFunction implements Function {
     @Override
     public String handle(Player player, FunctionContext context, List<Argument> args) {
         if (args.isEmpty()) return "";
-        final String key = args.get(0).process(player).getAsString();
+        final String key = args.get(0).process(player, context.context()).getAsString();
         final PlayerTooltipData tooltipData = plugin.getTooltipManager().getPlayerTooltipData(player);
 
         final Context tooltipContext = tooltipData.getActiveContext();
