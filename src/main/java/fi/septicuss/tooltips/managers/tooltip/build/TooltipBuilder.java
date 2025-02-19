@@ -10,7 +10,6 @@ import fi.septicuss.tooltips.managers.tooltip.build.text.TextLine;
 import fi.septicuss.tooltips.utils.font.Spaces;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.ShadowColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,7 +149,7 @@ public class TooltipBuilder {
                 builder.append(Spaces.getOffset(missing));
         }
 
-        final Component component = builder.build().shadowColor(tooltipProperties.hasShadow() ? null : ShadowColor.none());
+        final Component component = builder.build();
         return new Tooltip(component);
     }
 

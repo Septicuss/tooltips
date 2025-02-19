@@ -22,7 +22,6 @@ public class AdventureUtils {
                     .resolver(StandardTags.rainbow())
                     .resolver(StandardTags.gradient())
                     .resolver(StandardTags.transition())
-                    .resolver(StandardTags.shadowColor())
                     .build()
             ).build();
     public static GsonComponentSerializer GSONSERIALIZER = GsonComponentSerializer.gson();
