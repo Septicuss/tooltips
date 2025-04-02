@@ -59,7 +59,8 @@ public class LookingAtFurniture implements Condition {
             if (provider.hasCustomRaytrace()) {
                 final var furniture = provider.getTargetFurniture(player);
                 if (furniture != null) {
-                    return furniture;
+                    final boolean outcome = (finalizedId == null || finalizedId.contains(furniture.id()));
+                    return outcome ? furniture : null;
                 }
             }
         }
