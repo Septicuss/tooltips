@@ -1,6 +1,7 @@
 package fi.septicuss.tooltips.managers.condition.impl.lookingat;
 
 import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.argument.Arguments;
 import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
 import fi.septicuss.tooltips.utils.Utils;
@@ -16,28 +17,14 @@ public class LookingAtEntity implements Condition {
 	
 	@Override
 	public boolean check(Player player, Arguments args) {
-		
-		int distance = 3;
-		EnumOptions<EntityType> entities = null;
+		return this.entity(player, args) != null;
+	}
 
-		if (args.has(DISTANCE))
-			distance = args.get(DISTANCE).getAsInt();
-		
-		if (args.has(TYPE))
-			entities = args.get(TYPE).getAsEnumOptions(EntityType.class);
-		
-		var rayTrace = Utils.getRayTraceResult(player, distance);
-		
-		if (rayTrace == null || rayTrace.getHitEntity() == null) 
-			return false;
-		
-		if (entities == null)
-			return true;
-
-		Entity entity = rayTrace.getHitEntity();
-		
-		if (entity == null) return false;
-		return entities.contains(entity.getType());
+	@Override
+	public void writeContext(Player player, Arguments args, Context context) {
+		Entity entity = this.entity(player, args);
+		if (entity != null)
+			context.put("lookingatentity.name", entity.getName());
 	}
 
 	@Override
@@ -56,6 +43,30 @@ public class LookingAtEntity implements Condition {
 		}
 		
 		return Validity.TRUE;
+	}
+
+	private Entity entity(Player player, Arguments args) {
+		int distance = 3;
+		EnumOptions<EntityType> entities = null;
+
+		if (args.has(DISTANCE))
+			distance = args.get(DISTANCE).getAsInt();
+
+		if (args.has(TYPE))
+			entities = args.get(TYPE).getAsEnumOptions(EntityType.class);
+
+		var rayTrace = Utils.getRayTraceResult(player, distance);
+
+		if (rayTrace == null || rayTrace.getHitEntity() == null)
+			return null;
+
+		if (entities == null)
+			return null;
+
+		Entity entity = rayTrace.getHitEntity();
+
+		if (entity == null) return null;
+		return entities.contains(entity.getType()) ? entity : null;
 	}
 
 	@Override
