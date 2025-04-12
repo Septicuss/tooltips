@@ -11,4 +11,5 @@ public class DefaultTooltipAction {
     public static String RIGHT_CLICK_ENTITY = "right-click-entity";
     public static String ON_SHOW = "on-show";
     public static String ON_STOP_SHOWING = "on-stop-showing";
+    public static String ON_SNEAK = "on-sneak";
 }
