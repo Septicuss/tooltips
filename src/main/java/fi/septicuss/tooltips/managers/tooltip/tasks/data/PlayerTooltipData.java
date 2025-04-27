@@ -229,13 +229,14 @@ public class PlayerTooltipData {
         for (UUID uuid : this.animations) {
             final ParsedAnimation animation = Animations.get(uuid);
             if (animation == null) continue;
-            if (animation.finished()) continue;
 
             // Unaffected by order
             if (animation.id() == -1) {
                 animation.tick(player);
                 continue;
             }
+
+            if (animation.finished()) continue;
 
             if (previousAnimation == null || previousAnimation.finished()) {
                 previousAnimation = animation;

@@ -1,8 +1,8 @@
 package fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation;
 
 import fi.septicuss.tooltips.Tooltips;
-import org.betonquest.betonquest.api.PlayerConversationStartEvent;
-import org.betonquest.betonquest.api.profiles.OnlineProfile;
+import net.kyori.adventure.text.Component;
+import org.betonquest.betonquest.api.profile.OnlineProfile;
 import org.betonquest.betonquest.conversation.Conversation;
 import org.betonquest.betonquest.conversation.ConversationIO;
 import org.bukkit.Bukkit;
@@ -53,7 +53,7 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
     }
 
     @EventHandler
-    public void onConversationStart(PlayerConversationStartEvent event) {
+    public void onConversationStart(org.betonquest.betonquest.api.bukkit.event.PlayerConversationStartEvent event) {
         final UUID uuid = event.getProfile().getPlayerUUID();
 
         // Player already in a Tooltips conversation
@@ -64,11 +64,13 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
     }
 
 
+
     @Override
-    public void setNpcResponse(String npcName, String text) {
+    public void setNpcResponse(Component npcName, Component response) {
         final TooltipsConversationData data = getData();
         data.setNPCName(npcName);
-        data.setText(text);
+        data.setText(response);
+
     }
 
     @Override
