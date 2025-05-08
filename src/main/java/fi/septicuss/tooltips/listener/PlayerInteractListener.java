@@ -4,6 +4,7 @@ import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.preset.actions.DefaultTooltipAction;
 import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 import fi.septicuss.tooltips.managers.tooltip.TooltipManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,9 +17,14 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 public class PlayerInteractListener implements Listener {
 
 	private final Tooltips plugin;
+	private final Set<UUID> lock = new HashSet<>();
 
 	public PlayerInteractListener(Tooltips plugin) {
 		this.plugin = plugin;
@@ -56,8 +62,18 @@ public class PlayerInteractListener implements Listener {
 			manager.runActions(DefaultTooltipAction.RIGHT_CLICK_AIR, player);
 			manager.runActions(DefaultTooltipAction.RIGHT_CLICK, player);
 		}
-		
+
 		if (eventAction == Action.RIGHT_CLICK_BLOCK) {
+			// Lock interaction for 1 tick
+			UUID uuid = player.getUniqueId();
+
+			if (lock.contains(uuid))
+				return;
+
+			lock.add(uuid);
+			Bukkit.getScheduler().runTask(plugin, () -> lock.remove(uuid));
+
+			// Run actions
 			manager.runActions(DefaultTooltipAction.RIGHT_CLICK_BLOCK, player);
 			manager.runActions(DefaultTooltipAction.RIGHT_CLICK, player);
 		}
