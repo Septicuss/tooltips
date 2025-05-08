@@ -11,6 +11,7 @@ import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.T
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
+import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoListener;
 import fi.septicuss.tooltips.managers.integration.impl.oraxen.OraxenFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.packetevents.PacketEventsPacketProvider;
 import fi.septicuss.tooltips.managers.integration.impl.papi.TooltipsExpansion;
@@ -34,11 +35,14 @@ import java.util.Optional;
 
 public class IntegrationManager {
 
+    private final Tooltips plugin;
     private final HashMap<String, FurnitureProvider> furnitureProviders = new HashMap<>();
     private final HashMap<String, AreaProvider> areaProviders = new HashMap<>();
     private PacketProvider packetProvider;
 
+
     public IntegrationManager(Tooltips plugin) {
+        this.plugin = plugin;
     }
 
     public void registerDefaultIntegrations() {
@@ -51,6 +55,7 @@ public class IntegrationManager {
 
         if (isPresent("Nexo")) {
             this.addFurnitureProvider(new NexoFurnitureProvider());
+            this.plugin.getServer().getPluginManager().registerEvents(new NexoListener(plugin), plugin);
         }
 
         if (isPresent("Oraxen")) {
