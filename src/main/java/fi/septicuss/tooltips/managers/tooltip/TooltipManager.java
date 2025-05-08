@@ -12,11 +12,17 @@ import fi.septicuss.tooltips.managers.tooltip.tasks.ConditionTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.TooltipTask;
 import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import fi.septicuss.tooltips.utils.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,6 +42,9 @@ public class TooltipManager {
 	private final Map<UUID, PlayerTooltipData> playerTooltipData = new ConcurrentHashMap<>();
 	private final Map<String, Preset> presets = new LinkedHashMap<>();
 	private final Map<String, StatementHolder> holders = new LinkedHashMap<>();
+
+	// Lock
+	private final Map<String, Set<UUID>> actionLock = new HashMap<>();
 
 	public TooltipManager(Tooltips plugin) {
 		this.tooltipBuilder = new TooltipBuilder(plugin.getIconManager());
@@ -104,8 +113,32 @@ public class TooltipManager {
 	}
 
 	public void runActions(String action, Player player) {
-		if (this.tooltipTask != null)
-			this.tooltipTask.runActions(action, player);
+		if (this.tooltipTask == null)
+			return;
+
+        if (this.isLocked(action, player.getUniqueId()))
+            return;
+
+        this.lock(action, player.getUniqueId());
+
+		this.tooltipTask.runActions(action, player);
+	}
+
+	private boolean isLocked(String action, UUID uuid) {
+		return this.actionLock.getOrDefault(action, Collections.emptySet()).contains(uuid);
+	}
+
+	private void lock(String action, UUID uuid) {
+		// Add to lock
+        this.actionLock.computeIfAbsent(action, s -> new HashSet<>()).add(uuid);
+
+        // Remove from lock on next tick
+		Bukkit.getScheduler().runTask(plugin, () -> {
+            Set<UUID> set = this.actionLock.get(action);
+            if (set != null && set.remove(uuid) && set.isEmpty()) {
+                this.actionLock.remove(action);
+            }
+		});
 	}
 
 	public Map<String, Preset> getPresets() {

@@ -24,7 +24,6 @@ import java.util.UUID;
 public class PlayerInteractListener implements Listener {
 
 	private final Tooltips plugin;
-	private final Set<UUID> lock = new HashSet<>();
 
 	public PlayerInteractListener(Tooltips plugin) {
 		this.plugin = plugin;
@@ -64,16 +63,6 @@ public class PlayerInteractListener implements Listener {
 		}
 
 		if (eventAction == Action.RIGHT_CLICK_BLOCK) {
-			// Lock interaction for 1 tick
-			UUID uuid = player.getUniqueId();
-
-			if (lock.contains(uuid))
-				return;
-
-			lock.add(uuid);
-			Bukkit.getScheduler().runTask(plugin, () -> lock.remove(uuid));
-
-			// Run actions
 			manager.runActions(DefaultTooltipAction.RIGHT_CLICK_BLOCK, player);
 			manager.runActions(DefaultTooltipAction.RIGHT_CLICK, player);
 		}
