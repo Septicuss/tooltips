@@ -15,10 +15,7 @@ import fi.septicuss.tooltips.listener.PlayerInteractListener;
 import fi.septicuss.tooltips.listener.PlayerMovementListener;
 import fi.septicuss.tooltips.managers.condition.ConditionManager;
 import fi.septicuss.tooltips.managers.condition.impl.Compare;
-import fi.septicuss.tooltips.managers.condition.impl.equals.BlockNbtEquals;
-import fi.septicuss.tooltips.managers.condition.impl.equals.BlockStateEquals;
-import fi.septicuss.tooltips.managers.condition.impl.equals.EntityNbtEquals;
-import fi.septicuss.tooltips.managers.condition.impl.equals.ItemNbtEquals;
+import fi.septicuss.tooltips.managers.condition.impl.equals.*;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtBlock;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtCitizen;
 import fi.septicuss.tooltips.managers.condition.impl.lookingat.LookingAtEntity;
@@ -178,6 +175,7 @@ public class Tooltips extends JavaPlugin {
 				new Location(),
 				new StandingOn(),
 				new ItemNbtEquals(),
+				new ItemsAdderIdEquals(),
 				new EntityNbtEquals(),
 				new BlockNbtEquals(),
 				new BlockStateEquals(),
