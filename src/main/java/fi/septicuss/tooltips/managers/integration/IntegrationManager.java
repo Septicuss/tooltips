@@ -7,6 +7,7 @@ import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.EndCon
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.NextOptionCommand;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.SelectOptionCommand;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIO;
+import fi.septicuss.tooltips.managers.integration.impl.craftengine.CraftEngineFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
@@ -61,6 +62,10 @@ public class IntegrationManager {
 
         if (isPresent("MythicCrucible")) {
             this.addFurnitureProvider(new CrucibleFurnitureProvider());
+        }
+
+        if (isPresent("CraftEngine")) {
+            this.addFurnitureProvider(new CraftEngineFurnitureProvider());
         }
 
         if (isPresent("WorldGuard")) {
