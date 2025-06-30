@@ -94,7 +94,7 @@ public class Rays {
             return false;
         };
 
-        final RayTraceResult result = world.rayTrace(origin, direction, distance, FluidCollisionMode.NEVER, true, 0.6, furniturePredicate);
+        final RayTraceResult result = world.rayTrace(origin, direction, distance, FluidCollisionMode.NEVER, true, 0, furniturePredicate);
         Rays.cacheFurnitureResult(hash, result);
 
         return result;
