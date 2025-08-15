@@ -100,6 +100,7 @@ public class Tooltips extends JavaPlugin {
 	private static Tooltips INSTANCE;
 	private static Logger LOGGER;
 	private static boolean USE_SPACES;
+	private static boolean USE_SHADOWS;
 
 	private BukkitAudiences adventure;
 	private IntegrationManager integrationManager;
@@ -269,6 +270,7 @@ public class Tooltips extends JavaPlugin {
 		FileSetup.setupFiles(this);
 
 		USE_SPACES = this.getConfig().getBoolean("use-spaces", true);
+		USE_SHADOWS = this.getConfig().getBoolean("use-shadows", false);
 
 		this.schemaManager = new SchemaManager();
 		this.iconManager = new IconManager();
@@ -354,6 +356,10 @@ public class Tooltips extends JavaPlugin {
 
 	public static Logger logger() {
 		return LOGGER;
+	}
+
+	public boolean isUseShadows() {
+		return USE_SHADOWS;
 	}
 	
 	public boolean isUseSpaces() {

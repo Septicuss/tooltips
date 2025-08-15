@@ -1,5 +1,6 @@
 package fi.septicuss.tooltips.managers.tooltip.build;
 
+import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.icon.IconManager;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.theme.Theme;
@@ -10,6 +11,11 @@ import fi.septicuss.tooltips.managers.tooltip.build.text.TextLine;
 import fi.septicuss.tooltips.utils.font.Spaces;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.ShadowColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
+import net.kyori.adventure.util.ARGBLike;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,6 +153,11 @@ public class TooltipBuilder {
 
             if (missing != 0)
                 builder.append(Spaces.getOffset(missing));
+        }
+
+        // Disable shadows
+        if (!Tooltips.get().isUseShadows()) {
+            builder.style(Style.style().shadowColor(ShadowColor.none()).build());
         }
 
         final Component component = builder.build();

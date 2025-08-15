@@ -14,3 +14,7 @@ furniture-plugin: automatic
 # This determines, which negative space mode is used. Set to 'false' for versions before 
 # 1.19 and 'true' for 1.19+
 use-spaces: true
+
+# Set this to 'true' to have text shadows enabled in tooltips. Recommended to keep
+# at 'false' for 1.21.8+
+use-shadows: false
