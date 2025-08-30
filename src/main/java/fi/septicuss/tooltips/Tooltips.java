@@ -9,6 +9,7 @@ import fi.septicuss.tooltips.commands.subcommands.ListVarsCommand;
 import fi.septicuss.tooltips.commands.subcommands.ReloadCommand;
 import fi.septicuss.tooltips.commands.subcommands.SendPresetCommand;
 import fi.septicuss.tooltips.commands.subcommands.SendThemeCommand;
+import fi.septicuss.tooltips.commands.subcommands.StopDialogueCommand;
 import fi.septicuss.tooltips.commands.subcommands.VarsCommand;
 import fi.septicuss.tooltips.listener.PlayerConnectionListener;
 import fi.septicuss.tooltips.listener.PlayerInteractListener;
@@ -249,6 +250,7 @@ public class Tooltips extends JavaPlugin {
 		tooltipsCommand.register("vars", new VarsCommand());
 		tooltipsCommand.register("listvars", new ListVarsCommand());
 		tooltipsCommand.register("debug", new DebugCommand(this));
+		tooltipsCommand.register("stopdialogue", new StopDialogueCommand());
 
 		final PluginCommand tooltipsPluginCommand = Objects.requireNonNull(super.getCommand("tooltips"));
 		tooltipsPluginCommand.setExecutor(tooltipsCommand);

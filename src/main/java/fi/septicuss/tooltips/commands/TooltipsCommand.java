@@ -53,6 +53,7 @@ public class TooltipsCommand implements CommandExecutor, TabCompleter {
 		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>sendtheme {player} {theme id} (text)");
 		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>vars {varcommand} (args)");
 		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>listvars {scope}");
+		AdventureUtils.sendMessage(sender, ChatColor.WHITE + "- " + Colors.PLUGIN + "/tt <white>stopdialogue {player}");
 		return true;
 	}
 
