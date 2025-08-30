@@ -47,8 +47,8 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<adventure.core.version>4.24.0</adventure.core.version>
-		<adventure.bukkit.version>4.4.1</adventure.bukkit.version>
+		<adventure.core.version>4.19.0</adventure.core.version>
+		<adventure.bukkit.version>4.3.0</adventure.bukkit.version>
 	</properties>
 
 	<repositories>
