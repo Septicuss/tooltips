@@ -3,13 +3,16 @@ package fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation;
 import fi.septicuss.tooltips.Tooltips;
 import net.kyori.adventure.text.Component;
 import org.betonquest.betonquest.api.profile.OnlineProfile;
+import org.betonquest.betonquest.api.quest.QuestException;
 import org.betonquest.betonquest.conversation.Conversation;
 import org.betonquest.betonquest.conversation.ConversationIO;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,13 +20,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- *
- */
 public class TooltipsConversationIO implements ConversationIO, Listener {
 
     private static final Map<UUID, TooltipsConversationData> CONVERSATION_DATA = new HashMap<>();
     private static final Set<UUID> CONVERSATIONS = new HashSet<>();
+
     private static boolean STOP = false;
     private final Conversation conversation;
     private final Player player;
@@ -63,18 +64,15 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
 
     }
 
-
-
     @Override
     public void setNpcResponse(Component npcName, Component response) {
         final TooltipsConversationData data = getData();
         data.setNPCName(npcName);
         data.setText(response);
-
     }
 
     @Override
-    public void addPlayerOption(String option) {
+    public void addPlayerOption(Component option, ConfigurationSection configurationSection) throws QuestException {
         if (option == null) return;
 
         final TooltipsConversationData data = getData();
@@ -97,38 +95,48 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
     }
 
     @Override
-    public void end() {
+    public void end(Runnable runnable) {
+        // Already in the process of ending
         if (this.ending) {
             return;
         }
 
+        // Set as ending
         this.ending = true;
 
-        Bukkit.getScheduler().runTaskTimer(Tooltips.get(), (task) -> {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+
+        // Wait until actual end signal is sent
+        scheduler.runTaskTimer(Tooltips.get(), (task) -> {
+
+            // Used to stop tasks after plugin stops
             if (STOP) {
-                HandlerList.unregisterAll(TooltipsConversationIO.this);
+                HandlerList.unregisterAll(this);
                 task.cancel();
+                runnable.run();
                 return;
             }
 
             final boolean online = player.isOnline();
             final boolean end = (STOP || !online || getData().shouldEnd());
 
+            // Should not end yet
             if (!end) {
                 return;
             }
 
-            Bukkit.getScheduler().runTaskLater(Tooltips.get(), () -> {
-                HandlerList.unregisterAll(TooltipsConversationIO.this);
-
+            // Schedule conversation to end
+            scheduler.runTaskLater(Tooltips.get(), () -> {
+                HandlerList.unregisterAll(this);
                 CONVERSATION_DATA.remove(player.getUniqueId());
                 this.removeActiveConversation();
+                runnable.run();
             }, 5L);
+
+            // Cancel this task
             task.cancel();
 
         }, 0L, 1L);
-
-
     }
 
     public void addActiveConversation() {

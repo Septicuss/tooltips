@@ -70,8 +70,8 @@ public class TooltipsConversationData {
         return options;
     }
 
-    public void addOption(String option) {
-        this.options.add(option);
+    public void addOption(Component option) {
+        this.options.add(AdventureUtils.MINIMESSAGE.serialize(option).replace("\\", ""));
     }
 
     public void clearOptions() {
