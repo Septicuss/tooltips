@@ -1,6 +1,7 @@
 package fi.septicuss.tooltips.utils;
 
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -15,15 +16,26 @@ import java.util.Map;
 public class AdventureUtils {
 
     public static PlainTextComponentSerializer PLAINTEXT = PlainTextComponentSerializer.plainText();
-    public static MiniMessage MINIMESSAGE = MiniMessage.builder()
-            .tags(TagResolver.builder()
-                    .resolver(StandardTags.color())
-                    .resolver(StandardTags.reset())
-                    .resolver(StandardTags.rainbow())
-                    .resolver(StandardTags.gradient())
-                    .resolver(StandardTags.transition())
-                    .build()
-            ).build();
+    public static MiniMessage MINIMESSAGE;
+
+    static {
+        var tags = TagResolver.builder()
+                .resolver(StandardTags.color())
+                .resolver(StandardTags.reset())
+                .resolver(StandardTags.rainbow())
+                .resolver(StandardTags.gradient())
+                .resolver(StandardTags.transition());
+
+        if (Tooltips.get().isUseShadows()) {
+            tags.resolver(StandardTags.shadowColor());
+        }
+
+        MINIMESSAGE = MiniMessage.builder()
+                .tags(tags.build()
+                ).build();
+
+    }
+
     public static GsonComponentSerializer GSONSERIALIZER = GsonComponentSerializer.gson();
 
     private static final Map<Character, String> COLOR_CHAR_MAP = new HashMap<>();

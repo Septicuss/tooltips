@@ -103,6 +103,19 @@ public class Tooltips extends JavaPlugin {
 	private static boolean USE_SPACES;
 	private static boolean USE_SHADOWS;
 
+
+	static {
+		boolean useShadowsTemp = true;
+		try {
+			// Try to load the problematic class/method
+			Class.forName("net.kyori.adventure.text.minimessage.tag.standard.StandardTags")
+					.getMethod("shadowColor");
+		} catch (Throwable t) {
+			useShadowsTemp = false;
+		}
+		USE_SHADOWS = useShadowsTemp;
+	}
+
 	private BukkitAudiences adventure;
 	private IntegrationManager integrationManager;
 	private TitleManager titleManager;
