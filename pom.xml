@@ -112,6 +112,10 @@
 			<id>betonquest-repo</id>
 			<url>https://nexus.betonquest.org/repository/betonquest/</url>
 		</repository>
+		<repository>
+			<id>craftengine-repo</id>
+			<url>https://repo.momirealms.net/releases/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -258,6 +262,18 @@
 			<groupId>org.betonquest</groupId>
 			<artifactId>betonquest</artifactId>
 			<version>3.0.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.momirealms</groupId>
+			<artifactId>craft-engine-core</artifactId>
+			<version>0.0.58</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.momirealms</groupId>
+			<artifactId>craft-engine-bukkit</artifactId>
+			<version>0.0.58</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

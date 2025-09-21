@@ -7,12 +7,9 @@ import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.EndCon
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.NextOptionCommand;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.SelectOptionCommand;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIO;
-import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIOFactory;
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
-import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoListener;
-import fi.septicuss.tooltips.managers.integration.impl.oraxen.OraxenFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.packetevents.PacketEventsPacketProvider;
 import fi.septicuss.tooltips.managers.integration.impl.papi.TooltipsExpansion;
 import fi.septicuss.tooltips.managers.integration.impl.protocollib.ProtocolLibPacketProvider;
@@ -26,8 +23,6 @@ import org.betonquest.betonquest.BetonQuest;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -39,7 +34,6 @@ public class IntegrationManager {
     private final HashMap<String, FurnitureProvider> furnitureProviders = new HashMap<>();
     private final HashMap<String, AreaProvider> areaProviders = new HashMap<>();
     private PacketProvider packetProvider;
-
 
     public IntegrationManager(Tooltips plugin) {
         this.plugin = plugin;
@@ -68,6 +62,10 @@ public class IntegrationManager {
 
         if (isPresent("MythicCrucible")) {
             this.addFurnitureProvider(new CrucibleFurnitureProvider());
+        }
+
+        if (isPresent("CraftEngine")) {
+            this.addFurnitureProvider(new CraftEngineFurnitureProvider());
         }
 
         if (isPresent("WorldGuard")) {
