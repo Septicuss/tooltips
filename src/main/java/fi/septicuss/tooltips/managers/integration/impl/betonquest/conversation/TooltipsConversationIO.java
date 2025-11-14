@@ -65,6 +65,11 @@ public class TooltipsConversationIO implements ConversationIO, Listener {
     }
 
     @Override
+    public void begin() {
+
+    }
+
+    @Override
     public void setNpcResponse(Component npcName, Component response) {
         final TooltipsConversationData data = getData();
         data.setNPCName(npcName);
