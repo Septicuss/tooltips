@@ -44,7 +44,7 @@ public class TooltipManager {
 	private final Map<String, StatementHolder> holders = new LinkedHashMap<>();
 
 	// Lock
-	private final Map<String, Set<UUID>> actionLock = new HashMap<>();
+	private final ConcurrentHashMap<String, Set<UUID>> actionLock = new ConcurrentHashMap<>();
 
 	public TooltipManager(Tooltips plugin) {
 		this.tooltipBuilder = new TooltipBuilder(plugin.getIconManager());
@@ -130,7 +130,7 @@ public class TooltipManager {
 
 	private void lock(String action, UUID uuid) {
 		// Add to lock
-        this.actionLock.computeIfAbsent(action, s -> new HashSet<>()).add(uuid);
+        this.actionLock.computeIfAbsent(action, s -> ConcurrentHashMap.newKeySet()).add(uuid);
 
         // Remove from lock on next tick
 		Bukkit.getScheduler().runTask(plugin, () -> {
