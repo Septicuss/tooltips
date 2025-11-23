@@ -2,6 +2,7 @@ package fi.septicuss.tooltips;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import fi.septicuss.tooltips.api.TooltipsAPI;
 import fi.septicuss.tooltips.commands.TooltipsCommand;
 import fi.septicuss.tooltips.commands.subcommands.DebugCommand;
 import fi.septicuss.tooltips.commands.subcommands.EvalCommand;
@@ -14,6 +15,7 @@ import fi.septicuss.tooltips.commands.subcommands.VarsCommand;
 import fi.septicuss.tooltips.listener.PlayerConnectionListener;
 import fi.septicuss.tooltips.listener.PlayerInteractListener;
 import fi.septicuss.tooltips.listener.PlayerMovementListener;
+import fi.septicuss.tooltips.managers.condition.Condition;
 import fi.septicuss.tooltips.managers.condition.ConditionManager;
 import fi.septicuss.tooltips.managers.condition.impl.Compare;
 import fi.septicuss.tooltips.managers.condition.impl.equals.BlockNbtEquals;
@@ -203,6 +205,12 @@ public class Tooltips extends JavaPlugin {
 				new Permission(),
 				new LookingAtAxGen()
 		);
+
+		// Register conditions registered via the API
+		if (!TooltipsAPI.getConditionQueue().isEmpty()) {
+			this.conditionManager.register(TooltipsAPI.getConditionQueue().toArray(new Condition[0]));
+		}
+
 	}
 
 	private void registerFunctions() {

@@ -2,6 +2,7 @@ package fi.septicuss.tooltips.api;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.condition.Condition;
+import fi.septicuss.tooltips.managers.condition.ConditionManager;
 import fi.septicuss.tooltips.managers.preset.Preset;
 import fi.septicuss.tooltips.managers.preset.functions.Function;
 import fi.septicuss.tooltips.managers.preset.functions.Functions;
@@ -13,13 +14,26 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class TooltipsAPI {
 
+    private static final Set<Condition> conditionQueue = new HashSet<>();
+
     public static void addCondition(@Nonnull Condition condition) {
+        if (Tooltips.get() == null || Tooltips.get().getConditionManager() == null) {
+            conditionQueue.add(condition);
+            return;
+        }
+
         Tooltips.get().getConditionManager().register(condition);
+    }
+
+    // Internal
+    public static Set<Condition> getConditionQueue() {
+        return conditionQueue;
     }
 
     public static void removeCondition(@Nonnull String name) {
