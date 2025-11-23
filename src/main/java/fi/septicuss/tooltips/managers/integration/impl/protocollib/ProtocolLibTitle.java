@@ -53,13 +53,8 @@ public class ProtocolLibTitle extends Title<ProtocolLibPacketProvider> {
             if (player == null || !player.isOnline())
                 return;
 
-            try {
-                for (PacketContainer packet : this.packets) {
-                    protocolManager.sendServerPacket(player, packet);
-                }
-            } catch (InvocationTargetException e) {
-                Tooltips.warn("Failed to send title packets");
-                e.printStackTrace();
+            for (PacketContainer packet : this.packets) {
+                protocolManager.sendServerPacket(player, packet);
             }
         });
 
