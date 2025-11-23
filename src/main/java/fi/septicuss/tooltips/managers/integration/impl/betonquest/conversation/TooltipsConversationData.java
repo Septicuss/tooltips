@@ -93,7 +93,7 @@ public class TooltipsConversationData {
     }
 
     public boolean isLast() {
-        return this.conversation.isEnded();
+        return !this.conversation.isActive();
     }
 
     public void reset() {

@@ -6,6 +6,7 @@ import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.T
 import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommand;
 import fi.septicuss.tooltips.utils.validation.Validity;
 import org.betonquest.betonquest.BetonQuest;
+import org.betonquest.betonquest.api.feature.ConversationApi;
 import org.betonquest.betonquest.api.profile.OnlineProfile;
 import org.betonquest.betonquest.conversation.Conversation;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class EndConversationCommand  implements ActionCommand {
         if (profile == null)
             return;
 
-        Conversation conversation = Conversation.getConversation(profile);
+        Conversation conversation = BetonQuest.getInstance().getFeatureApi().conversationApi().getActive(profile);
 
         if (conversation != null) {
             conversation.endConversation();
