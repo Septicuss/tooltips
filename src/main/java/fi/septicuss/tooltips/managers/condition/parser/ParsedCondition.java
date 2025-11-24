@@ -33,11 +33,15 @@ public class ParsedCondition {
 
 		final Validity validity = condition.valid(args);
 
+		if (validity == null) {
+			Tooltips.warn("condition-" + conditionName + "-" + presetName, "Condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName) + " returned a null Validity.");
+			return false;
+		}
+
 		if (!validity.isValid()) {
-			Tooltips.warn("condition-" + conditionName + "-" + presetName, "Failed to parse condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName) + "");
-			if (validity.hasReason()) {
-				Tooltips.warn("condition-" + conditionName + "-" + presetName, "  -> " + validity.getReason());
-			}
+			String reason = validity.hasReason() ? validity.getReason() : "No reason provided.";
+			Tooltips.warn("condition-" + conditionName + "-" + presetName, "Failed to validate condition " + Utils.quote(conditionName) + " in preset " + Utils.quote(presetName));
+			Tooltips.warn("condition-" + conditionName + "-" + presetName + "-reason", "  -> " + reason);
 			return false;
 		}
 
