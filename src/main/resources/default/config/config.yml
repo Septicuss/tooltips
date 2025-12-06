@@ -8,7 +8,7 @@ copy-resource-pack:
    path: ''
 
 # Which furniture plugin is used if there are multiple
-# Options: Automatic, Oraxen, ItemsAdder, MythicCrucible
+# Options: Automatic, Oraxen, ItemsAdder, MythicCrucible, CraftEngine
 furniture-plugin: automatic 
 
 # This determines, which negative space mode is used. Set to 'false' for versions before 
