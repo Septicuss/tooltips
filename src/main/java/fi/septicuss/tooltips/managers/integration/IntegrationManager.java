@@ -9,6 +9,7 @@ import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.Select
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIO;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIOFactory;
 import fi.septicuss.tooltips.managers.integration.impl.craftengine.CraftEngineFurnitureProvider;
+import fi.septicuss.tooltips.managers.integration.impl.craftengine.CraftEngineListener;
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
@@ -72,6 +73,7 @@ public class IntegrationManager {
 
         if (isPresent("CraftEngine")) {
             this.addFurnitureProvider(new CraftEngineFurnitureProvider());
+            this.plugin.getServer().getPluginManager().registerEvents(new CraftEngineListener(plugin), plugin);
         }
 
         if (isPresent("WorldGuard")) {
