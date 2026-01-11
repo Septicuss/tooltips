@@ -102,7 +102,7 @@
 		<repository>
 			<id>nexomc</id>
 			<name>Nexo Custom Repository</name>
-			<url>https://repo.nexomc.com/snapshots/</url>
+			<url>https://repo.nexomc.com/releases/</url>
 		</repository>
 		<repository>
 			<id>betonquest-repo</id>
@@ -184,7 +184,7 @@
 		<dependency>
 			<groupId>com.nexomc</groupId>
 			<artifactId>nexo</artifactId>
-			<version>1.16.0-dev.3</version>
+			<version>1.17.0</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
