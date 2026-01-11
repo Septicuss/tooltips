@@ -8,14 +8,12 @@ import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 import fi.septicuss.tooltips.managers.tooltip.build.element.BackgroundElement;
 import fi.septicuss.tooltips.managers.tooltip.build.element.TextLineElement;
 import fi.septicuss.tooltips.managers.tooltip.build.text.TextLine;
+import fi.septicuss.tooltips.utils.CompatibilityUtils;
 import fi.septicuss.tooltips.utils.font.Spaces;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
-import net.kyori.adventure.util.ARGBLike;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,8 +153,11 @@ public class TooltipBuilder {
                 builder.append(Spaces.getOffset(missing));
         }
 
-        // Disable shadows
-        if (!Tooltips.get().isUseShadows()) {
+        // If shadows are supported and disabled in config, set the tooltip text shadow to none.
+        final boolean shadowsSupported = CompatibilityUtils.SUPPORTS_SHADOWS;
+        final boolean disableShadows = !Tooltips.get().useShadows();
+
+        if (shadowsSupported && disableShadows) {
             builder.style(Style.style().shadowColor(ShadowColor.none()).build());
         }
 
