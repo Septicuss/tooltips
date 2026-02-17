@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MultiString {
 
-	private List<String> strings;
+	private final List<String> strings;
 
 	public MultiString(List<String> strings) {
 		this.strings = strings;
@@ -16,7 +16,15 @@ public class MultiString {
 		if (other == null) return false;
 		return strings.contains(other);
 	}
-	
+
+	public boolean containsAnyCase(String other) {
+		if (other == null) return false;
+		for (String string : strings)
+			if (string.equalsIgnoreCase(other))
+				return true;
+		return false;
+	}
+
 	public List<String> getStrings() {
 		return strings;
 	}

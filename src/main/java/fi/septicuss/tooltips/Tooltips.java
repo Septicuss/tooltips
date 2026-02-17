@@ -130,7 +130,7 @@ public class Tooltips extends JavaPlugin {
 				new Gamemode(),
 				new Sneaking(),
 				new Compare(),
-				new LookingAtBlock(),
+				new LookingAtBlock(this.integrationManager),
 				new LookingAtFurniture(this.integrationManager),
 				new LookingAtEntity(),
 				new LookingAtMythicMob(),

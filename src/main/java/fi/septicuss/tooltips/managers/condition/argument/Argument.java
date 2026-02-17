@@ -3,6 +3,7 @@ package fi.septicuss.tooltips.managers.condition.argument;
 import fi.septicuss.tooltips.managers.condition.Context;
 import fi.septicuss.tooltips.managers.condition.type.EnumOptions;
 import fi.septicuss.tooltips.managers.condition.type.LocationArgument;
+import fi.septicuss.tooltips.managers.condition.type.MultiString;
 import fi.septicuss.tooltips.utils.Text;
 import org.bukkit.entity.Player;
 
@@ -58,6 +59,13 @@ public class Argument {
 	
 	public LocationArgument getAsLocationArgument(Player player) {
 		return LocationArgument.of(player, value);
+	}
+
+	/**
+	 * Split with a comma
+	 */
+	public MultiString getAsMultiString() {
+		return MultiString.of(value);
 	}
 
 	public boolean isNumber() {

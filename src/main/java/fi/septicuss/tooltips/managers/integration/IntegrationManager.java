@@ -10,15 +10,19 @@ import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.T
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIOFactory;
 import fi.septicuss.tooltips.managers.integration.impl.craftengine.CraftEngineFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
+import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderBlockProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
+import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoBlockProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoListener;
 import fi.septicuss.tooltips.managers.integration.impl.oraxen.OraxenFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.packetevents.PacketEventsPacketProvider;
 import fi.septicuss.tooltips.managers.integration.impl.papi.TooltipsExpansion;
 import fi.septicuss.tooltips.managers.integration.impl.protocollib.ProtocolLibPacketProvider;
+import fi.septicuss.tooltips.managers.integration.impl.vanilla.VanillaBlockProvider;
 import fi.septicuss.tooltips.managers.integration.impl.worldguard.WorldGuardAreaProvider;
 import fi.septicuss.tooltips.managers.integration.providers.AreaProvider;
+import fi.septicuss.tooltips.managers.integration.providers.BlockProvider;
 import fi.septicuss.tooltips.managers.integration.providers.FurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.providers.PacketProvider;
 import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
@@ -31,14 +35,18 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
 
 public class IntegrationManager {
 
     private final Tooltips plugin;
+
     private final HashMap<String, FurnitureProvider> furnitureProviders = new HashMap<>();
     private final HashMap<String, AreaProvider> areaProviders = new HashMap<>();
+    private final HashMap<String, BlockProvider> blockProviders = new HashMap<>();
     private PacketProvider packetProvider;
 
     public IntegrationManager(Tooltips plugin) {
@@ -46,6 +54,9 @@ public class IntegrationManager {
     }
 
     public void registerDefaultIntegrations() {
+
+        // Register vanilla Minecraft providers
+        this.addBlockProvider(new VanillaBlockProvider());
 
         if (isPresent("packetevents")) {
             this.setPacketProvider(new PacketEventsPacketProvider());
@@ -55,6 +66,7 @@ public class IntegrationManager {
 
         if (isPresent("Nexo")) {
             this.addFurnitureProvider(new NexoFurnitureProvider());
+            this.addBlockProvider(new NexoBlockProvider());
             this.plugin.getServer().getPluginManager().registerEvents(new NexoListener(plugin), plugin);
         }
 
@@ -64,6 +76,7 @@ public class IntegrationManager {
 
         if (isPresent("ItemsAdder")) {
             this.addFurnitureProvider(new ItemsAdderFurnitureProvider());
+            this.addBlockProvider(new ItemsAdderBlockProvider());
         }
 
         if (isPresent("MythicCrucible")) {
@@ -180,6 +193,26 @@ public class IntegrationManager {
 
     public void removeAreaProvider(String id) {
         this.areaProviders.remove(id);
+    }
+
+    public BlockProvider getVanillaBlockProvider() {
+        return this.blockProviders.get("minecraft");
+    }
+
+    public BlockProvider getBlockProvider(String id) {
+        return this.blockProviders.get(id);
+    }
+
+    public Collection<BlockProvider> getBlockProviders() {
+        return Collections.unmodifiableCollection(this.blockProviders.values());
+    }
+
+    public void addBlockProvider(BlockProvider blockProvider) {
+        this.blockProviders.put(blockProvider.identifier(), blockProvider);
+    }
+
+    public void removeBlockProvider(String id) {
+        this.blockProviders.remove(id);
     }
 
     public PacketProvider getPacketProvider() {
