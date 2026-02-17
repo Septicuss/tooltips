@@ -2,8 +2,8 @@ package fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation;
 
 import fi.septicuss.tooltips.Tooltips;
 import net.kyori.adventure.text.Component;
+import org.betonquest.betonquest.api.QuestException;
 import org.betonquest.betonquest.api.profile.OnlineProfile;
-import org.betonquest.betonquest.api.quest.QuestException;
 import org.betonquest.betonquest.conversation.Conversation;
 import org.betonquest.betonquest.conversation.ConversationIO;
 import org.bukkit.Bukkit;
