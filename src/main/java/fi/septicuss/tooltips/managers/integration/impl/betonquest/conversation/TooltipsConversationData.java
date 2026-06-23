@@ -2,81 +2,46 @@ package fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation;
 
 import fi.septicuss.tooltips.utils.AdventureUtils;
 import net.kyori.adventure.text.Component;
+import org.betonquest.betonquest.api.profile.OnlineProfile;
 import org.betonquest.betonquest.conversation.Conversation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TooltipsConversationData {
 
+    private final OnlineProfile onlineProfile;
     private final Conversation conversation;
-    private final List<String> options = new ArrayList<>();
-    // Conversation data
+
+    private TooltipsConversationStage stage;
     private String npcName;
-    private String text;
-    private int selectedOption;
+    private String npcResponse;
+    private final List<String> options = new ArrayList<>();
 
-    // Conversation state
-    /**
-     * Whether all necessary data has been received from BQ.
-     */
-    private boolean ready;
-    /**
-     * Controls whether to end this conversation
-     */
-    private boolean end;
+    private boolean ready = false;
+    private boolean ending = false;
+    private int selectedOption = 0;
 
-    public TooltipsConversationData(Conversation conversation) {
+    public TooltipsConversationData(OnlineProfile onlineProfile, Conversation conversation) {
+        this.onlineProfile = onlineProfile;
         this.conversation = conversation;
     }
 
-    public Conversation getConversation() {
-        return conversation;
-    }
-
-    public String getNPCName() {
-        return npcName;
-    }
-
-    public void setNPCName(Component npcName) {
-        this.npcName = AdventureUtils.MINIMESSAGE.serialize(npcName).replace("\\", "");
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(Component text) {
-        this.text = AdventureUtils.MINIMESSAGE.serialize(text).replace("\\", "");
-    }
-
-    public boolean isReady() {
-        return ready;
-    }
-
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
-
-    public void end() {
-        this.end = true;
-    }
-
-    public boolean shouldEnd() {
-        return this.end;
-    }
-
-    public List<String> getOptions() {
-        return options;
-    }
-
-    public void addOption(Component option) {
-        this.options.add(AdventureUtils.MINIMESSAGE.serialize(option).replace("\\", ""));
-    }
-
-    public void clearOptions() {
+    public void reset() {
+        this.ready = false;
+        this.npcName = null;
+        this.npcResponse = null;
         this.options.clear();
-        this.selectedOption = 0;
+    }
+
+    public void display() {
+        this.stage = new TooltipsConversationStage(
+                this.npcName,
+                this.npcResponse,
+                this.options
+        );
+        this.ready = true;
     }
 
     public void nextOption() {
@@ -88,17 +53,44 @@ public class TooltipsConversationData {
         }
     }
 
+    public void passPlayerAnswer(int answerIndex) {
+        conversation.passPlayerAnswer(answerIndex);
+    }
+
+    public void setNpcResponse(Component npcName, Component npcResponse) {
+        this.npcName = AdventureUtils.MINIMESSAGE.serialize(npcName).replace("\\", "");
+        this.npcResponse = AdventureUtils.MINIMESSAGE.serialize(npcResponse).replace("\\", "");
+    }
+
+    public void addPlayerOption(Component option) {
+        this.options.add(AdventureUtils.MINIMESSAGE.serialize(option).replace("\\", ""));
+    }
+
+    public @Nullable TooltipsConversationStage getStage() {
+        return stage;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public boolean isEnding() {
+        return ending;
+    }
+
+    public void setEnding() {
+        this.ending = true;
+    }
+
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public OnlineProfile getOnlineProfile() {
+        return onlineProfile;
+    }
+
     public int getSelectedOption() {
-        return this.selectedOption;
-    }
-
-    public boolean isLast() {
-        return !this.conversation.isActive();
-    }
-
-    public void reset() {
-        this.npcName = null;
-        this.text = null;
-        this.options.clear();
+        return selectedOption;
     }
 }

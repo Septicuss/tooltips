@@ -257,7 +257,7 @@
 		<dependency>
 			<groupId>org.betonquest</groupId>
 			<artifactId>betonquest</artifactId>
-			<version>3.0.0-20260203.232427-574</version>
+			<version>3.0.1-20260614.184527-1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
