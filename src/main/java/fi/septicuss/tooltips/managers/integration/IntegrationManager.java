@@ -2,43 +2,46 @@ package fi.septicuss.tooltips.managers.integration;
 
 import fi.septicuss.tooltips.Tooltips;
 import fi.septicuss.tooltips.managers.integration.impl.axgens.LookingAtAxGen;
-import fi.septicuss.tooltips.managers.integration.impl.betonquest.BetonQuestCondition;
-import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.EndConversationCommand;
-import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.NextOptionCommand;
-import fi.septicuss.tooltips.managers.integration.impl.betonquest.actions.SelectOptionCommand;
+import fi.septicuss.tooltips.managers.integration.impl.betonquest.BetonQuestIntegration;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIO;
-import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIOFactory;
 import fi.septicuss.tooltips.managers.integration.impl.craftengine.CraftEngineFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.crucible.CrucibleFurnitureProvider;
+import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderBlockProvider;
 import fi.septicuss.tooltips.managers.integration.impl.itemsadder.ItemsAdderFurnitureProvider;
+import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoBlockProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.nexo.NexoListener;
 import fi.septicuss.tooltips.managers.integration.impl.oraxen.OraxenFurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.impl.packetevents.PacketEventsPacketProvider;
 import fi.septicuss.tooltips.managers.integration.impl.papi.TooltipsExpansion;
 import fi.septicuss.tooltips.managers.integration.impl.protocollib.ProtocolLibPacketProvider;
+import fi.septicuss.tooltips.managers.integration.impl.vanilla.VanillaBlockProvider;
 import fi.septicuss.tooltips.managers.integration.impl.worldguard.WorldGuardAreaProvider;
 import fi.septicuss.tooltips.managers.integration.providers.AreaProvider;
+import fi.septicuss.tooltips.managers.integration.providers.BlockProvider;
 import fi.septicuss.tooltips.managers.integration.providers.FurnitureProvider;
 import fi.septicuss.tooltips.managers.integration.providers.PacketProvider;
 import fi.septicuss.tooltips.managers.integration.wrappers.FurnitureWrapper;
-import fi.septicuss.tooltips.managers.preset.actions.command.ActionCommands;
-import org.betonquest.betonquest.BetonQuest;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class IntegrationManager {
 
     private final Tooltips plugin;
+
     private final HashMap<String, FurnitureProvider> furnitureProviders = new HashMap<>();
     private final HashMap<String, AreaProvider> areaProviders = new HashMap<>();
+    private final HashMap<String, BlockProvider> blockProviders = new HashMap<>();
+    private final Set<String> registeredDependencies = new HashSet<>();
     private PacketProvider packetProvider;
 
     public IntegrationManager(Tooltips plugin) {
@@ -47,35 +50,48 @@ public class IntegrationManager {
 
     public void registerDefaultIntegrations() {
 
+        // Register vanilla Minecraft providers
+        this.addBlockProvider(new VanillaBlockProvider());
+
         if (isPresent("packetevents")) {
             this.setPacketProvider(new PacketEventsPacketProvider());
+            registeredDependencies.add("packetevents");
         } else if (isPresent("ProtocolLib")) {
             this.setPacketProvider(new ProtocolLibPacketProvider());
+            registeredDependencies.add("ProtocolLib");
         }
 
         if (isPresent("Nexo")) {
             this.addFurnitureProvider(new NexoFurnitureProvider());
+            this.addBlockProvider(new NexoBlockProvider());
             this.plugin.getServer().getPluginManager().registerEvents(new NexoListener(plugin), plugin);
+            registeredDependencies.add("Nexo");
         }
 
         if (isPresent("Oraxen")) {
             this.addFurnitureProvider(new OraxenFurnitureProvider());
+            registeredDependencies.add("Oraxen");
         }
 
         if (isPresent("ItemsAdder")) {
             this.addFurnitureProvider(new ItemsAdderFurnitureProvider());
+            this.addBlockProvider(new ItemsAdderBlockProvider());
+            registeredDependencies.add("ItemsAdder");
         }
 
         if (isPresent("MythicCrucible")) {
             this.addFurnitureProvider(new CrucibleFurnitureProvider());
+            registeredDependencies.add("MythicCrucible");
         }
 
         if (isPresent("CraftEngine")) {
             this.addFurnitureProvider(new CraftEngineFurnitureProvider());
+            registeredDependencies.add("CraftEngine");
         }
 
         if (isPresent("WorldGuard")) {
             this.addAreaProvider(new WorldGuardAreaProvider());
+            registeredDependencies.add("WorldGuard");
         }
 
         if (isPresent("AxGens")) {
@@ -87,35 +103,30 @@ public class IntegrationManager {
             if (expansion.isRegistered())
                 expansion.unregister();
             expansion.register();
+            registeredDependencies.add("PlaceholderAPI");
         }
 
         if (isPresent("BetonQuest")) {
-            Plugin betonQuestPlugin = Bukkit.getPluginManager().getPlugin("BetonQuest");
 
-            if (betonQuestPlugin == null || !betonQuestPlugin.isEnabled())
-                return;
-
-            PluginDescriptionFile description = betonQuestPlugin.getDescription();
-            String version = description.getVersion();
-
-            if (!version.startsWith("3")) {
-                Tooltips.warn("This version of Tooltips is only compatible with BetonQuest version larger than 3");
+            if (!areClassesPresent(
+                    "org.betonquest.betonquest.conversation.ConversationIOFactory",
+                    "org.betonquest.betonquest.kernel.registry.feature.ConversationIORegistry",
+                    "org.betonquest.betonquest.api.profile.OnlineProfile"
+            )) {
+                Tooltips.warn("This version of Tooltips is not compatible with your BetonQuest version. Integration not loaded.");
                 return;
             }
 
-            BetonQuest.getInstance().getFeatureRegistries().conversationIO().register("tooltips", new TooltipsConversationIOFactory());
-            Tooltips.get().getConditionManager().register(new BetonQuestCondition());
-            ActionCommands.addCommand("selectoption", new SelectOptionCommand());
-            ActionCommands.addCommand("endconversation", new EndConversationCommand());
-            ActionCommands.addCommand("nextoption", new NextOptionCommand());
+            BetonQuestIntegration.initialize(plugin);
+            registeredDependencies.add("BetonQuest");
         }
 
     }
 
     public void disable() {
 
-        if (isPresent("BetonQuest")) {
-            TooltipsConversationIO.endConversations();
+        if (registeredDependencies.contains("BetonQuest")) {
+            BetonQuestIntegration.disable();
         }
 
     }
@@ -144,6 +155,17 @@ public class IntegrationManager {
             return Optional.ofNullable(provider.getFurniture(entity));
         }
         return Optional.empty();
+    }
+
+    public boolean areClassesPresent(String... classes) {
+        for (String className : classes) {
+            try {
+                Class.forName(className, false, getClass().getClassLoader());
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean isPresent(String plugin) {
@@ -180,6 +202,26 @@ public class IntegrationManager {
 
     public void removeAreaProvider(String id) {
         this.areaProviders.remove(id);
+    }
+
+    public BlockProvider getVanillaBlockProvider() {
+        return this.blockProviders.get("minecraft");
+    }
+
+    public BlockProvider getBlockProvider(String id) {
+        return this.blockProviders.get(id);
+    }
+
+    public Collection<BlockProvider> getBlockProviders() {
+        return Collections.unmodifiableCollection(this.blockProviders.values());
+    }
+
+    public void addBlockProvider(BlockProvider blockProvider) {
+        this.blockProviders.put(blockProvider.identifier(), blockProvider);
+    }
+
+    public void removeBlockProvider(String id) {
+        this.blockProviders.remove(id);
     }
 
     public PacketProvider getPacketProvider() {

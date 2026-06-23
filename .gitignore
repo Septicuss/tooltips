@@ -66,3 +66,4 @@ local.properties
 /.idea
 *.iml
 /.run
+/.claude

@@ -1,7 +1,6 @@
 package fi.septicuss.tooltips.utils;
 
 import fi.septicuss.tooltips.Tooltips;
-import fi.septicuss.tooltips.managers.tooltip.Tooltip;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -26,7 +25,8 @@ public class AdventureUtils {
                 .resolver(StandardTags.gradient())
                 .resolver(StandardTags.transition());
 
-        if (Tooltips.get().isUseShadows()) {
+        // Allow using shadow color tag only if shadows are supported
+        if (CompatibilityUtils.SUPPORTS_SHADOWS) {
             tags.resolver(StandardTags.shadowColor());
         }
 

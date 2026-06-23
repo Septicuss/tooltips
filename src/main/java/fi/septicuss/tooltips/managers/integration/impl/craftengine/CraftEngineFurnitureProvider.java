@@ -18,6 +18,7 @@ import net.momirealms.craftengine.core.util.CustomDataType;
 import net.momirealms.craftengine.core.util.Key;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 public class CraftEngineFurnitureProvider implements FurnitureProvider {
@@ -53,6 +54,21 @@ public class CraftEngineFurnitureProvider implements FurnitureProvider {
         BlockDefinition definition = blockState.owner().value();
         String blockName = blockState.settings().getCustomData(BLOCK_NAME_KEY);
         return new FurnitureWrapper(this.identifier(), definition.id().asString(), blockName != null ? blockName : definition.translationKey());
+    }
+
+    @Override
+    public FurnitureWrapper getTargetFurniture(Player player) {
+        BukkitFurniture target = CraftEngineFurniture.rayTrace(player, 10.0);
+        if (target == null) {
+            return null;
+        }
+        final String id = target.id().asString();
+        return new FurnitureWrapper(this.identifier(), id, id);
+    }
+
+    @Override
+    public boolean hasCustomRaytrace() {
+        return true;
     }
 
     @Override

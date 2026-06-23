@@ -3,6 +3,7 @@ package fi.septicuss.tooltips.commands.subcommands;
 import fi.septicuss.tooltips.commands.TooltipsSubCommand;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationData;
 import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversationIO;
+import fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation.TooltipsConversations;
 import fi.septicuss.tooltips.utils.AdventureUtils;
 import fi.septicuss.tooltips.utils.Colors;
 import org.bukkit.Bukkit;
@@ -30,14 +31,13 @@ public class StopDialogueCommand implements TooltipsSubCommand {
             return;
         }
 
-        if (!TooltipsConversationIO.isInConversation(targetPlayer)) {
+        final TooltipsConversationData data = TooltipsConversations.get(targetPlayer.getUniqueId());
+        if (data == null) {
             AdventureUtils.sendMessage(sender, Colors.WARN + "[!] Player " + targetPlayer.getName() + " is not in a dialogue.");
             return;
         }
 
-        TooltipsConversationData data = TooltipsConversationIO.getData(targetPlayer);
         data.getConversation().endConversation();
-        data.end();
 
         AdventureUtils.sendMessage(sender, Colors.PLUGIN + "Stopping dialogue for player " + targetPlayer.getName() + ".");
     }

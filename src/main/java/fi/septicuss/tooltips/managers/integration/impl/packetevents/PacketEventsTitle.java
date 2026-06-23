@@ -1,12 +1,12 @@
 package fi.septicuss.tooltips.managers.integration.impl.packetevents;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.util.adventure.AdventureSerializer;
 import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetTitleSubtitle;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetTitleText;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSetTitleTimes;
 import fi.septicuss.tooltips.managers.title.Title;
-import fi.septicuss.tooltips.utils.AdventureUtils;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ public class PacketEventsTitle extends Title<PacketEventsPacketProvider> {
     public void preparePackets() {
         packets.clear();
         packets.add(new WrapperPlayServerSetTitleTimes(getFadeIn(), getStay(), getFadeOut()));
-        packets.add(new WrapperPlayServerSetTitleText(AdventureUtils.GSONSERIALIZER.deserialize(getTitleJson())));
-        packets.add(new WrapperPlayServerSetTitleSubtitle(AdventureUtils.GSONSERIALIZER.deserialize(getSubtitleJson())));
+        packets.add(new WrapperPlayServerSetTitleText(getTitleJson()));
+        packets.add(new WrapperPlayServerSetTitleSubtitle(getSubtitleJson()));
     }
 
     @Override

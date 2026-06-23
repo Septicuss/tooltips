@@ -1,158 +1,113 @@
 package fi.septicuss.tooltips.managers.integration.impl.betonquest.conversation;
 
 import fi.septicuss.tooltips.Tooltips;
+import fi.septicuss.tooltips.managers.preset.Preset;
+import fi.septicuss.tooltips.managers.tooltip.tasks.data.PlayerTooltipData;
 import net.kyori.adventure.text.Component;
+import org.betonquest.betonquest.api.QuestException;
 import org.betonquest.betonquest.api.profile.OnlineProfile;
-import org.betonquest.betonquest.api.quest.QuestException;
 import org.betonquest.betonquest.conversation.Conversation;
 import org.betonquest.betonquest.conversation.ConversationIO;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+public class TooltipsConversationIO implements ConversationIO {
 
-public class TooltipsConversationIO implements ConversationIO, Listener {
-
-    private static final Map<UUID, TooltipsConversationData> CONVERSATION_DATA = new HashMap<>();
-    private static final Set<UUID> CONVERSATIONS = new HashSet<>();
-
-    private static boolean STOP = false;
+    private final Tooltips plugin;
     private final Conversation conversation;
-    private final Player player;
-    private boolean ending = false;
+    private final OnlineProfile onlineProfile;
 
-    public TooltipsConversationIO(Conversation conversation, OnlineProfile onlineProfile) {
+    public TooltipsConversationIO(Tooltips plugin, Conversation conversation, OnlineProfile onlineProfile) {
+        this.plugin = plugin;
         this.conversation = conversation;
-        this.player = onlineProfile.getPlayer();
-
-        this.getData();
-        this.addActiveConversation();
-
-        Bukkit.getPluginManager().registerEvents(this, Tooltips.get());
-    }
-
-    public static TooltipsConversationData getData(Player player) {
-        return CONVERSATION_DATA.get(player.getUniqueId());
-    }
-
-    public static boolean isInConversation(Player player) {
-        return CONVERSATIONS.contains(player.getUniqueId());
-    }
-
-    public static void endConversations() {
-        STOP = true;
-        CONVERSATIONS.clear();
-    }
-
-    @EventHandler
-    public void onConversationStart(org.betonquest.betonquest.api.bukkit.event.PlayerConversationStartEvent event) {
-        final UUID uuid = event.getProfile().getPlayerUUID();
-
-        // Player already in a Tooltips conversation
-        if (uuid.equals(this.player.getUniqueId())) {
-            event.setCancelled(true);
-        }
-
+        this.onlineProfile = onlineProfile;
     }
 
     @Override
     public void begin() {
-
+        TooltipsConversations.track(this.onlineProfile, this.conversation);
     }
 
     @Override
     public void setNpcResponse(Component npcName, Component response) {
-        final TooltipsConversationData data = getData();
-        data.setNPCName(npcName);
-        data.setText(response);
+        TooltipsConversationData conversationData = getConversationData();
+        if (conversationData == null) return;
+
+        conversationData.setNpcResponse(npcName, response);
     }
 
     @Override
-    public void addPlayerOption(Component option, ConfigurationSection configurationSection) throws QuestException {
-        if (option == null) return;
+    public void addPlayerOption(Component option, ConfigurationSection properties) throws QuestException {
+        TooltipsConversationData conversationData = getConversationData();
+        if (conversationData == null) return;
 
-        final TooltipsConversationData data = getData();
-        data.setReady(false);
-        data.addOption(option);
+        conversationData.addPlayerOption(option);
     }
 
     @Override
     public void display() {
-        final TooltipsConversationData data = getData();
-        data.setReady(true);
+        TooltipsConversationData conversationData = getConversationData();
+        if (conversationData == null) return;
 
-        Tooltips.get().getTooltipManager().runActions("beton-ready", player);
+        conversationData.display();
     }
 
     @Override
     public void clear() {
-        final TooltipsConversationData data = getData();
-        data.clearOptions();
+        TooltipsConversationData conversationData = getConversationData();
+        if (conversationData == null) return;
+
+        conversationData.reset();
     }
 
     @Override
-    public void end(Runnable runnable) {
-        // Already in the process of ending
-        if (this.ending) {
-            return;
+    public void end(Runnable callback) {
+        TooltipsConversationData data = getConversationData();
+        if (data == null) return;
+        if (data.isEnding()) return;
+
+        data.setEnding();
+        callback.run();
+
+        int fadeoutTicks = 65;
+
+        // Extract the stay time from preset
+        Integer extractedStay = extractPresetStay();
+        if (extractedStay != null && extractedStay != 0)
+            fadeoutTicks = extractedStay;
+
+        // Stopping after fadeout so that player can read last slide
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            TooltipsConversations.untrack(onlineProfile.getPlayerUUID());
+        }, fadeoutTicks);
+    }
+
+    private Integer extractPresetStay() {
+        PlayerTooltipData data = plugin.getTooltipManager().getPlayerTooltipData(onlineProfile.getPlayer());
+        if (data == null) {
+            return null;
         }
 
-        // Set as ending
-        this.ending = true;
+        String checkedPresetId = data.getCheckedPreset();
+        if (checkedPresetId == null) {
+            return null;
+        }
+        Preset preset = plugin.getPresetManager().getPreset(checkedPresetId);
+        if (preset == null) {
+            return null;
+        }
 
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-
-        // Wait until actual end signal is sent
-        scheduler.runTaskTimer(Tooltips.get(), (task) -> {
-
-            // Used to stop tasks after plugin stops
-            if (STOP) {
-                HandlerList.unregisterAll(this);
-                task.cancel();
-                runnable.run();
-                return;
-            }
-
-            final boolean online = player.isOnline();
-            final boolean end = (STOP || !online || getData().shouldEnd());
-
-            // Should not end yet
-            if (!end) {
-                return;
-            }
-
-            // Schedule conversation to end
-            scheduler.runTaskLater(Tooltips.get(), () -> {
-                HandlerList.unregisterAll(this);
-                CONVERSATION_DATA.remove(player.getUniqueId());
-                this.removeActiveConversation();
-                runnable.run();
-            }, 5L);
-
-            // Cancel this task
-            task.cancel();
-
-        }, 0L, 1L);
+        return preset.getStay();
     }
 
-    public void addActiveConversation() {
-        CONVERSATIONS.add(player.getUniqueId());
+    private @Nullable TooltipsConversationData getConversationData() {
+        if (!TooltipsConversations.isTracked(onlineProfile.getPlayerUUID())) {
+            conversation.endConversation();
+            return null;
+        }
+
+        return TooltipsConversations.get(onlineProfile.getPlayerUUID());
     }
 
-    public void removeActiveConversation() {
-        CONVERSATIONS.remove(player.getUniqueId());
-    }
-
-    public TooltipsConversationData getData() {
-        return CONVERSATION_DATA.computeIfAbsent(this.player.getUniqueId(), uuid -> new TooltipsConversationData(this.conversation));
-    }
 }
