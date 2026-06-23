@@ -85,8 +85,14 @@ public class IntegrationManager {
         }
 
         if (isPresent("CraftEngine")) {
-            this.addFurnitureProvider(new CraftEngineFurnitureProvider());
-            registeredDependencies.add("CraftEngine");
+            if (areClassesPresent(
+                    "net.momirealms.craftengine.core.entity.furniture.setting.FurnitureSettingsModifierFactory"
+            )) {
+                this.addFurnitureProvider(new CraftEngineFurnitureProvider());
+                registeredDependencies.add("CraftEngine");
+            } else {
+                Tooltips.warn("This version of Tooltips is not compatible with your CraftEngine version. Integration not loaded.");
+            }
         }
 
         if (isPresent("WorldGuard")) {
@@ -107,18 +113,17 @@ public class IntegrationManager {
         }
 
         if (isPresent("BetonQuest")) {
-
-            if (!areClassesPresent(
+            if (areClassesPresent(
                     "org.betonquest.betonquest.conversation.ConversationIOFactory",
                     "org.betonquest.betonquest.kernel.registry.feature.ConversationIORegistry",
                     "org.betonquest.betonquest.api.profile.OnlineProfile"
             )) {
+                BetonQuestIntegration.initialize(plugin);
+                registeredDependencies.add("BetonQuest");
+            } else {
                 Tooltips.warn("This version of Tooltips is not compatible with your BetonQuest version. Integration not loaded.");
-                return;
             }
 
-            BetonQuestIntegration.initialize(plugin);
-            registeredDependencies.add("BetonQuest");
         }
 
     }
