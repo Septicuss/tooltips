@@ -18,10 +18,10 @@ public class SelectOptionCommand implements ActionCommand {
         final TooltipsConversationStage stage = data.getStage();
         if (stage == null) return;
 
-        int answer = 1;
+        int answer = 0;
 
         if (arguments.has("1")) {
-            answer = arguments.get("1").getAsInt() + 1;
+            answer = arguments.get("1").getAsInt();
         }
 
         // No options to choose from, end conversation
@@ -30,8 +30,11 @@ public class SelectOptionCommand implements ActionCommand {
             return;
         }
 
-        answer = Math.max(answer, stage.options().size());
-        data.passPlayerAnswer(answer);
+        // Cap the answer to the total amount of answers
+        answer = Math.min(answer, stage.options().size() - 1);
+
+        // Pass along
+        data.passPlayerAnswer(answer + 1);
     }
 
     @Override
