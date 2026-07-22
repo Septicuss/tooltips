@@ -13,7 +13,7 @@ public class SelectOptionCommand implements ActionCommand {
     @Override
     public void run(Player player, Arguments arguments) {
         final TooltipsConversationData data = TooltipsConversations.get(player.getUniqueId());
-        if (data == null || !data.isReady()) return;
+        if (data == null || !data.isReady() || data.isEnding()) return;
 
         final TooltipsConversationStage stage = data.getStage();
         if (stage == null) return;

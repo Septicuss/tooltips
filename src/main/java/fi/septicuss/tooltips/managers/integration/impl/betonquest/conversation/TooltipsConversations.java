@@ -16,18 +16,23 @@ public final class TooltipsConversations {
 
     private TooltipsConversations() { }
 
-    public static void track(OnlineProfile profile, Conversation conversation) {
+    /**
+     * @return True if successfully started tracking conversation, false if not
+     */
+    public static boolean track(OnlineProfile profile, TooltipsConversationData data) {
         final UUID playerId = profile.getPlayerUUID();
 
         // Check if player is already being tracked
         if (isTracked(playerId)) {
-            untrack(playerId);
+            TooltipsConversationData oldData = get(playerId);
+            if (oldData == null || !oldData.isEnding()) {
+                untrack(playerId);
+            }
+            return false;
         }
 
-        CONVERSATIONS.put(playerId, new TooltipsConversationData(
-                profile,
-                conversation
-        ));
+        CONVERSATIONS.put(playerId, data);
+        return true;
     }
 
     public static boolean isTracked(UUID playerId) {
